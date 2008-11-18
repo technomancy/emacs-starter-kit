@@ -16,26 +16,26 @@ to add to elpa:
 
 * cheat
 * gist
+* lisppaste
 * scpaste
 * magit
 * yaml (make rinari require it)
 
-* nxhtml
+* nxhtml (remove bundled deps)
 * rinari
 * jabber (need to contact maintainers)
+* pg
 
-already in elpa; install by default:
+Check the list of elpa packages periodically to make sure they're all
+up to date:
 * idle-highlight
 * js2-mode
-* css (included by nxhtml?)
+* css
 * ert
 
 maybe include:
-* install-elisp/oddmuse?
-* lisppaste
-* pastie
-* pcmpl-rake
-* pg
+* pcmpl-rake (or put it in another file; it's only 2 functions)
+* should yasnippet be included in rinari?
 
 to write/finish:
 * mublog
