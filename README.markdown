@@ -7,9 +7,9 @@ working environment for anyone using Emacs.
 ## Installation
 
 1. Install Emacs
-** Use your package manager if you have one.
-** Otherwise, Mac users should get it [from Apple](http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html).
-** Windows users can get it [from GNU](http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip).
+   Use your package manager if you have one.
+   Otherwise, Mac users should get it [from Apple](http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html).
+   Windows users can get it [from GNU](http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip).
 2. Move this directory to ~/.emacs.d
 3. Launch Emacs!
 
