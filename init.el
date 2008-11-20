@@ -33,7 +33,9 @@
              (car (current-time))))
       (let ((generated-autoload-file autoload-file))
         (message "Updating autoloads...")
-        (update-directory-autoloads dotfiles-dir)))
+        (update-directory-autoloads dotfiles-dir
+                                    (concat dotfiles-dir "/elpa")
+                                    (concat dotfiles-dir "/elpa-to-submit"))))
   (load autoload-file))
 
 ;; Some libraries don't have the necessary autoloads set up.
