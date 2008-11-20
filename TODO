@@ -7,12 +7,12 @@ look up http://www.emacswiki.org/cgi-bin/emacs-en/CommandLogMode
 
 to add to elpa:
 * ruby-mode (sent)
-* inf-ruby
+* inf-ruby (sent)%
 * ruby-electric
+* ruby-compilation
 
 * color-theme (zenburn + vivid chalk)
 * htmlize
-* ruby-compilation
 
 * cheat
 * gist
