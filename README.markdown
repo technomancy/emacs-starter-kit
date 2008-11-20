@@ -13,6 +13,15 @@ working environment for anyone using Emacs.
 2. Move this directory to ~/.emacs.d
 3. Launch Emacs!
 
+If you are missing some autoloads after an update (should manifest
+itself as "void function: foobar" errors) try deleting your
+loaddefs.el file and restarting Emacs.
+
+If you want to keep your regular ~/.emacs.d in place and just launch a
+single instance using the starter kit, try the following invocation:
+
+  $ emacs -q -l ~/src/emacs-starter-kit/init.el
+
 ## ELPA
 
 Libraries from ELPA (http://tromey.com/elpa) are preferred when

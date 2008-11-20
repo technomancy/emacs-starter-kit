@@ -2,6 +2,11 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
+;; Until this makes it into ELPA:
+(autoload 'ruby-mode "ruby-mode" "" t)
+(autoload 'inf-ruby "inf-ruby" "" t)
+(autoload 'run-ruby "inf-ruby" "" t)
+
 (eval-after-load 'ruby-mode
   '(progn
      (require 'inf-ruby)
