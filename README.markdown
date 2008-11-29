@@ -14,8 +14,7 @@ working environment for anyone using Emacs.
 3. Launch Emacs!
 
 If you are missing some autoloads after an update (should manifest
-itself as "void function: foobar" errors) try deleting your
-loaddefs.el file and restarting Emacs.
+itself as "void function: foobar" errors) try M-x regen-autoloads.
 
 If you want to keep your regular ~/.emacs.d in place and just launch a
 single instance using the starter kit, try the following invocation:
@@ -27,6 +26,8 @@ single instance using the starter kit, try the following invocation:
 Libraries from ELPA (http://tromey.com/elpa) are preferred when
 available since dependencies are handled automatically, and the burden
 to update them is removed from the user.
+
+See TODO for a list of libraries that are pending submission to ELPA.
 
 ## Contributing
 

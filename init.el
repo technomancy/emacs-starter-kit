@@ -26,7 +26,11 @@
 ;; Autoloads can be regenerated for you automatically if the file is
 ;; too old:
 
-(let ((autoload-file (concat dotfiles-dir "loaddefs.el")))
+(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
+
+(defun regen-autoloads ()
+  "Regenerate the autoload definitions file and load it."
+  (interactive)
   (if (or (not (file-exists-p autoload-file))
           ;; TODO: make this more readable
           (< (+ (car (nth 5 (file-attributes autoload-file))) 20)

@@ -6,8 +6,6 @@ Add bleeding-edge package support to elpa?
 look up http://www.emacswiki.org/cgi-bin/emacs-en/CommandLogMode
 
 to add to elpa:
-* ruby-mode (sent)
-* inf-ruby (sent)%
 * ruby-electric
 * ruby-compilation
 
@@ -24,10 +22,13 @@ to add to elpa:
 * nxhtml (remove bundled deps)
 * rinari
 * jabber (need to contact maintainers)
+* slime
 * pg
 
 Check the list of elpa packages periodically to make sure they're all
 up to date:
+* ruby-mode
+* inf-ruby
 * idle-highlight
 * js2-mode
 * css
@@ -41,3 +42,7 @@ to write/finish:
 * mublog
 * ri
 * submit ruby fixes to flymake
+
+Bug fixes:
+get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
+ruby-compilation.el should auto-kill the buffer on successful test runs; only leave it open on error/fail
