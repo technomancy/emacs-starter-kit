@@ -20,6 +20,16 @@
 ;; We never want to edit Rubinius bytecode
 (add-to-list 'completion-ignored-extensions ".rbc")
 
+;; Clear the compilation buffer between test runs.
+(eval-after-load 'ruby-compilation
+  '(progn
+     (defadvice ruby-do-run-w/compilation (before kill-buffer (name cmdlist))
+       (let ((comp-buffer-name (format "*%s*" name)))
+         (when (get-buffer comp-buffer-name)
+           (with-current-buffer comp-buffer-name
+             (delete-region (point-min) (point-max))))))
+     (ad-activate 'ruby-do-run-w/compilation)))
+
 ;; TODO: set up ri
 ;; TODO: electric
 ;; TODO: flymake
