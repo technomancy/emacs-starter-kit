@@ -30,6 +30,8 @@
              (delete-region (point-min) (point-max))))))
      (ad-activate 'ruby-do-run-w/compilation)))
 
+(add-hook 'ruby-mode-hook 'my-coding-hook)
+
 ;; TODO: set up ri
 ;; TODO: electric
 ;; TODO: flymake
