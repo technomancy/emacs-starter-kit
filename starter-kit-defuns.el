@@ -60,6 +60,7 @@
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (make-local-variable 'column-number-mode)
   (column-number-mode t)
+  (setq save-place t)
   (auto-fill-mode) ;; in comments only
   (if window-system (hl-line-mode t))
   (pretty-lambdas)
@@ -131,7 +132,6 @@
     (if (get-buffer buffer)
         (switch-to-buffer buffer)
       (funcall function))))
-
 
 (provide 'starter-kit-defuns)
 ;;; starter-kit-defuns.el ends here
