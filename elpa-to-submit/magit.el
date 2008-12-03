@@ -1512,6 +1512,7 @@ in log buffer."
 	(when remote
 	  (magit-insert-unpushed-commits remote branch))))))
 
+;;;###autoload
 (defun magit-status (dir)
   (interactive (list (magit-read-top-dir)))
   (save-some-buffers)

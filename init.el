@@ -9,44 +9,14 @@
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
-;; Temporary debugging stuff:
+;; Load path etc:
 
-(toggle-debug-on-error)
-;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
-(require 'cl)
-(defun handle-shift-selection (&rest args))
-
-;; Load path
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
 (add-to-list 'load-path (concat dotfiles-dir "/elpa"))
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
-
-;; Autoloads can be regenerated for you automatically if the file is
-;; too old:
-
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-
-(defun regen-autoloads ()
-  "Regenerate the autoload definitions file and load it."
-  (interactive)
-  (if (or (not (file-exists-p autoload-file))
-          ;; TODO: make this more readable
-          (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
-             (car (current-time))))
-      (let ((generated-autoload-file autoload-file))
-        (message "Updating autoloads...")
-        (update-directory-autoloads dotfiles-dir
-                                    (concat dotfiles-dir "/elpa-to-submit"))))
-  (load autoload-file))
-
-;; Some libraries don't have the necessary autoloads set up.
-
-(autoload 'lisppaste-paste-region "lisppaste" "" t)
-(autoload 'jabber-connect "jabber" "" t)
-(autoload 'cheat "cheat" "" t)
-(autoload 'magit-status "magit" "" t)
 
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session:
@@ -58,7 +28,7 @@
 (require 'ansi-color)
 (require 'recentf)
 
-;; Load up ELPA:
+;; Load up ELPA, the package manager:
 
 (require 'package)
 (package-initialize)
@@ -72,6 +42,8 @@
 (require 'starter-kit-registers)
 (require 'starter-kit-eshell)
 (require 'starter-kit-ruby)
+
+(regen-autoloads)
 
 ;; You can keep system-specific customizations here:
 
