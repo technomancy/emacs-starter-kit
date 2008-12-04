@@ -1007,6 +1007,7 @@ This is an exact copy of line-number-at-pos for use in emacs21."
   (interactive)
   (message "markdown-mode, version %s" markdown-mode-version))
 
+;;;###autoload
 (define-derived-mode markdown-mode text-mode "Markdown"
   "Major mode for editing Markdown files."
   ;; Font lock.
@@ -1021,7 +1022,8 @@ This is an exact copy of line-number-at-pos for use in emacs21."
   ;; Cause use of ellipses for invisible text.
   (add-to-invisibility-spec '(outline . t)))
 
-;(add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
 
 (provide 'markdown-mode)
 
