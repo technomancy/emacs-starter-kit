@@ -64,7 +64,7 @@
   (auto-fill-mode) ;; in comments only
   (if window-system (hl-line-mode t))
   (pretty-lambdas)
-  (idle-highlight))
+  (if (functionp 'idle-highlight) (idle-highlight)))
 
 (defun untabify-buffer ()
   (interactive)
