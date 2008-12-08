@@ -110,14 +110,13 @@
 (defun regen-autoloads ()
   "Regenerate the autoload definitions file if necessary and load it."
   (interactive)
-  (if (or (not (file-exists-p autoload-file))
-          ;; TODO: make this more readable
-          (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
-             (car (current-time))))
-      (let ((generated-autoload-file autoload-file))
+  (let ((autoload-dir (concat dotfiles-dir "/elpa-to-submit"))
+        (generated-autoload-file autoload-file))
+    (if (or (not (file-exists-p autoload-file))
+            (some (lambda (f) (file-newer-than-file-p f autoload-file))
+                  (directory-files autoload-dir t "\\.el$")))
         (message "Updating autoloads...")
-        (update-directory-autoloads dotfiles-dir
-                                    (concat dotfiles-dir "/elpa-to-submit"))))
+      (update-directory-autoloads)))
   (load autoload-file))
 
 ;; TODO: fix this
@@ -145,10 +144,6 @@
     (if (get-buffer buffer)
         (switch-to-buffer buffer)
       (funcall function))))
-
-(if (eq window-system 'x)
-    (defun handle-shift-selection (&rest args)
-      "Fix a bug that occurs when caps-lock is remapped to ctrl in X."))
 
 (provide 'starter-kit-defuns)
 ;;; starter-kit-defuns.el ends here
