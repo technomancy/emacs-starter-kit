@@ -107,12 +107,14 @@
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
-(defun regen-autoloads ()
+(defun regen-autoloads (&optional force-regen)
   "Regenerate the autoload definitions file if necessary and load it."
-  (interactive)
+  (interactive "p")
+  (setq reg force-regen)
   (let ((autoload-dir (concat dotfiles-dir "/elpa-to-submit"))
         (generated-autoload-file autoload-file))
-    (when (or (not (file-exists-p autoload-file))
+    (when (or (> force-regen 1) ;; prefix arg used
+              (not (file-exists-p autoload-file))
               (some (lambda (f) (file-newer-than-file-p f autoload-file))
                     (directory-files autoload-dir t "\\.el$")))
       (message "Updating autoloads...")
