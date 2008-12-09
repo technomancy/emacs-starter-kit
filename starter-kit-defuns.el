@@ -112,11 +112,11 @@
   (interactive)
   (let ((autoload-dir (concat dotfiles-dir "/elpa-to-submit"))
         (generated-autoload-file autoload-file))
-    (if (or (not (file-exists-p autoload-file))
-            (some (lambda (f) (file-newer-than-file-p f autoload-file))
-                  (directory-files autoload-dir t "\\.el$")))
-        (message "Updating autoloads...")
-      (update-directory-autoloads)))
+    (when (or (not (file-exists-p autoload-file))
+              (some (lambda (f) (file-newer-than-file-p f autoload-file))
+                    (directory-files autoload-dir t "\\.el$")))
+      (message "Updating autoloads...")
+      (update-directory-autoloads autoload-dir)))
   (load autoload-file))
 
 ;; TODO: fix this
