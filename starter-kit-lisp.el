@@ -17,10 +17,10 @@
                   (delete-file (concat buffer-file-name "c"))))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
-			'(("(\\|)" . 'paren-face)))
+			`((,(rx (or "(" ")"))  paren-face)))
 
 (font-lock-add-keywords 'scheme-mode
-			'(("(\\|)" . 'paren-face)))
+			`((,(rx (or "(" ")"))  paren-face)))
 
 (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
 
