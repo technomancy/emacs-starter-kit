@@ -45,11 +45,12 @@
 
 (regen-autoloads)
 
-;; You can keep system-specific customizations here:
+;; You can keep system- or user-specific customizations here:
 
-(setq system-specific-config
-      (concat dotfiles-dir system-name ".el"))
-(if (file-exists-p system-specific-config)
-    (load system-specific-config))
+(setq system-specific-config (concat dotfiles-dir system-name ".el")
+      user-specific-config (concat dotfiles-dir user-login-name ".el"))
+
+(if (file-exists-p system-specific-config) (load system-specific-config))
+(if (file-exists-p user-specific-config) (load user-specific-config))
 
 ;;; init.el ends here

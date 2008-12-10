@@ -18,6 +18,8 @@
       transient-mark-mode t
       color-theme-is-global t
       imenu-auto-rescan t
+      delete-by-moving-to-trash t
+      shift-select-mode nil
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
@@ -71,8 +73,8 @@
 (delete 'try-expand-list hippie-expand-try-functions-list)
 
 ;; Don't clutter up directories with files~
-(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
-      auto-save-default nil)
+(setq backup-directory-alist `(("." . ,(expand-file-name
+                                        (concat dotfiles-dir "backups")))))
 
 ;; nxhtml stuff
 (setq mumamo-chunk-coloring 'submode-colored
