@@ -4,12 +4,7 @@
 
 (setq eshell-cmpl-cycle-completions nil
       eshell-save-history-on-exit t
-      eshell-cmpl-dir-ignore (rx bos (or (and "." (opt "."))
-                                         "CVS"
-                                         ".svn"
-                                         ".git")
-                                 "/"
-                                 eos))
+      eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
 
 (eval-after-load 'esh-opt
   '(progn
@@ -23,9 +18,9 @@
      (add-to-list 'eshell-visual-commands "ssh")
      (add-to-list 'eshell-visual-commands "tail")
      (add-to-list 'eshell-command-completions-alist
-                  `("gunzip" ,(rx "gz" eos)))
+                  '("gunzip" "gz\\'"))
      (add-to-list 'eshell-command-completions-alist
-                  `("tar" ,(rx (group (or ".tar" ".tgz" ".tar.gz" eos)))))
+                  '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))
      (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)))
 
 (provide 'starter-kit-eshell)
