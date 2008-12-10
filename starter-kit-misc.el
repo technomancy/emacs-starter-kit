@@ -20,8 +20,11 @@
       imenu-auto-rescan t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
+      whitespace-style '(trailing lines space-before-tab
+                                  indentation space-after-tab)
+      whitespace-line-column 100
       ediff-window-setup-function 'ediff-setup-windows-plain
-      save-place-file (convert-standard-filename "~/.emacs.d/places"))
+      save-place-file (concat dotfiles-dir "places"))
 
 ;; Set this to whatever browser you use:
 (setq browse-url-browser-function 'browse-url-firefox)

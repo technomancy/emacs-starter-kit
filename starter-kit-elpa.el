@@ -9,10 +9,11 @@
                                "css-mode"
                                "ert"
                                ;; To submit:
+;;;                                "haml"
+;;;                                "sass"
 ;;;                                "clojure-mode"
 ;;;                                "cheat"
 ;;;                                "gist"
-;;;                                "lisppaste"
 ;;;                                "magit"
 ;;;                                "yaml"
 ;;;                                "paredit"

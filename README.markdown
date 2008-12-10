@@ -34,7 +34,8 @@ submission to ELPA.
 
 If you know your way around Emacs, please try out the starter kit as a
 replacement for your regular dotfiles for a while. If there's anything
-you just can't live without, add it or let me know so I can add it.
+you just can't live without, add it or let me know so I can add
+it. Take a look at what happens in init.el to get started.
 
 Also: see the file TODO.
 
