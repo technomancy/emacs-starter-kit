@@ -29,7 +29,7 @@
 (global-set-key "\C-\M-r" 'isearch-backward)
 
 ;; Jump to a definition in the current file. (This is awesome.)
-(global-set-key "\C-x\C-i" 'ido-goto-symbol)
+(global-set-key "\C-x\C-i" 'ido-imenu)
 
 ;; File finding
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
@@ -49,7 +49,7 @@
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "C-c s") 'my-eval-and-replace)
+(define-key lisp-mode-shared-map (kbd "C-c s") 'eval-and-replace)
 (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
 
 ;; Start eshell or switch to it if it's active.

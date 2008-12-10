@@ -3,8 +3,8 @@
 ;; Part of the Emacs Starter Kit
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
-(add-hook 'lisp-mode-hook 'my-coding-hook)
+(add-hook 'emacs-lisp-mode-hook 'coding-hook)
+(add-hook 'lisp-mode-hook 'coding-hook)
 
 (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
 
