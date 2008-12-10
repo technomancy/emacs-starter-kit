@@ -2,17 +2,10 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
-;; Until this makes it into ELPA:
-(autoload 'ruby-mode "ruby-mode" "" t)
-(autoload 'inf-ruby "inf-ruby" "" t)
-(autoload 'run-ruby "inf-ruby" "" t)
-
 (eval-after-load 'ruby-mode
   '(progn
      (require 'inf-ruby)
      (require 'ruby-compilation)
-
-     (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
      (define-key ruby-mode-map (kbd "C-c l") "lambda")))
 
 (global-set-key (kbd "C-h r") 'ri)
