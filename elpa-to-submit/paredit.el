@@ -236,6 +236,7 @@ Signal an error if no clause matches."
 (defvar paredit-mode-map (make-sparse-keymap)
   "Keymap for the paredit minor mode.")
 
+;;;###autoload
 (define-minor-mode paredit-mode
   "Minor mode for pseudo-structurally editing Lisp code.
 \\<paredit-mode-map>"

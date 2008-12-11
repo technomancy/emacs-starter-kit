@@ -9,6 +9,7 @@
                                "css-mode"
                                "ert"
                                ;; To submit:
+;;;                                "paredit"
 ;;;                                "haml"
 ;;;                                "sass"
 ;;;                                "clojure-mode"
