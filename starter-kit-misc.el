@@ -14,7 +14,6 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global t
-      imenu-auto-rescan t
       delete-by-moving-to-trash t
       shift-select-mode nil
       truncate-partial-width-windows nil
@@ -62,6 +61,7 @@
 
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
+(set-default 'imenu-auto-rescan t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
