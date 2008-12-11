@@ -9,9 +9,6 @@
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
 
-;; Sometimes backspace gets messed up in terminals; try to fix it.
-(when (not window-system) (keyboard-translate ?\C-h ?\C-?))
-
 (setq visible-bell t
       font-lock-maximum-decoration t
       inhibit-startup-message t

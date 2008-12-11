@@ -18,8 +18,6 @@
 ;; We never want to edit Rubinius bytecode
 (add-to-list 'completion-ignored-extensions ".rbc")
 
-(add-hook 'ruby-mode-hook 'my-coding-hook)
-
 ;;; Rake
 
 (defun pcomplete/rake ()
