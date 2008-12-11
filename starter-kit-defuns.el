@@ -59,7 +59,9 @@
   (auto-fill-mode) ;; in comments only
   (if window-system (hl-line-mode t))
   (pretty-lambdas)
-  (if (functionp 'idle-highlight) (idle-highlight)))
+  ;; TODO: this breaks in js2-mode!
+  ;;(if (functionp 'idle-highlight) (idle-highlight))
+  )
 
 (defun untabify-buffer ()
   (interactive)

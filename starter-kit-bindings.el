@@ -46,13 +46,6 @@
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1))) ;; back one
 (global-set-key "\C-x\C-o" (lambda () (interactive) (other-window 2))) ;; forward two
 
-;; Lisp
-(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
-(define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "C-c s") 'eval-and-replace)
-(define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
-
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
 
@@ -67,6 +60,9 @@
 
 ;; Help should search more than just commands
 (global-set-key (kbd "C-h a") 'apropos)
+
+;; Should be able to eval-and-replace anywhere.
+(global-set-key (kbd "C-c e") 'eval-and-replace)
 
 ;; Applications
 
