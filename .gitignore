@@ -1,2 +1,4 @@
 loaddefs.el*
 backups/*
+*elc
+places

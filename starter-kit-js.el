@@ -17,11 +17,14 @@
       '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
          1 font-lock-warning-face t)))
 
-     (defun js-lambda () (interactive) (insert "function () {\n};")
-       (backward-char 6))
+     (defun js-lambda () (interactive) (insert "function () {\n}")
+       (backward-char 5))
 
      (define-key js2-mode-map (kbd "C-c l") 'js-lambda)
      (define-key js2-mode-map "\C-\M-h" 'backward-kill-word)
+     (define-key js2-mode-map (kbd "TAB") (lambda () (interactive)
+                                            (indent-for-tab-command)
+                                            (back-to-indentation)))
 
      (add-hook 'js2-mode-hook 'coding-hook)
      (setq js2-bounce-indent-flag nil
