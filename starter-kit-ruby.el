@@ -82,6 +82,7 @@ exec-to-string command, but it works and seems fast"
                                   'flymake-display-err-menu-for-current-line)
                    (flymake-mode t))))))
 
+
 ;; TODO: set up ri
 ;; TODO: electric
 
