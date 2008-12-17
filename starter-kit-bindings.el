@@ -14,10 +14,7 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 
 ;; Perform general cleanup.
-(global-set-key (kbd "C-c n") (lambda () (interactive)
-                                (indent-buffer)
-                                (delete-trailing-whitespace)
-                                (untabify-buffer)))
+(global-set-key (kbd "C-c n") 'cleanup-buffer)
 
 ;; Turn on the menu bar for exploring new modes
 (global-set-key [f1] 'menu-bar-mode)

@@ -8,9 +8,9 @@
 
 (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
 
-(when (boundp 'paredit-mode)
-  (add-hook emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-  (add-hook lisp-mode-hook (lambda () (paredit-mode +1))))
+(when (functionp 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+  (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1))))
 
 (defun emacs-lisp-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
