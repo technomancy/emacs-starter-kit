@@ -1,18 +1,13 @@
 TODO:
 
-Start custom ELPA server
-
 Submit the packages in starter-kit-elpa.el to ELPA.
 
-Check each of starter-kit-packages periodically to make sure they're
-all up to date.
+Greg Newman is working on Python helpers.
 
 maybe include:
-* pcmpl-rake (or put it in another file; it's only 2 functions)
 * should yasnippet be included in rinari?
 
 to write/finish:
-* mublog
 * ri
 * submit ruby fixes to flymake
 

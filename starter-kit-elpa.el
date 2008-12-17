@@ -2,22 +2,20 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
-(defvar starter-kit-packages '("idle-highlight"
-                               "ruby-mode"
-                               "inf-ruby"
-                               "js2-mode"
-                               "css-mode"
-                               "ert"
+(setq starter-kit-packages (list 'idle-highlight
+                                   'ruby-mode
+                                   'inf-ruby
+                                   'js2-mode
+                                   'css-mode
                                ;; To submit:
+;;;                                "magit"
 ;;;                                "paredit"
+;;;                                "clojure-mode"
+;;;                                "yaml"
 ;;;                                "haml"
 ;;;                                "sass"
-;;;                                "clojure-mode"
 ;;;                                "cheat"
 ;;;                                "gist"
-;;;                                "magit"
-;;;                                "yaml"
-;;;                                "paredit"
 ;;;                                "html-fontify"
 ;;;                                "color-theme"
 ;;;                                "color-theme-zenburn"
@@ -28,5 +26,18 @@
 ;;;                                "jabber"
 ;;;                                "slime"
 ;;;                                "swank-clojure"
-                               )
+                                   )
   "Libraries that should be installed by default.")
+
+(defun starter-kit-elpa-install ()
+  "Install all starter-kit packages that aren't installed."
+  (interactive)
+  (dolist (package starter-kit-packages)
+    (unless (functionp package)
+      (package-install package))))
+
+;; On your first run, this should pull in all the base packages.
+;; But you might not be online, so ignore errors.
+(ignore-errors
+  (message "Checking base list of packages...")
+  (starter-kit-elpa-install))
