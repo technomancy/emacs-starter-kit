@@ -11,6 +11,7 @@
      (require 'em-prompt)
      (require 'em-term)
      (require 'em-cmpl)
+     (require 'eshell-vc)
      (setenv "PAGER" "cat")
      (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
      (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
