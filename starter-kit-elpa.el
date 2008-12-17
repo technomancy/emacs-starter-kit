@@ -2,7 +2,7 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
-(setq starter-kit-packages (list 'idle-highlight
+(defvar starter-kit-packages (list 'idle-highlight
                                    'ruby-mode
                                    'inf-ruby
                                    'js2-mode
@@ -41,3 +41,5 @@
 (ignore-errors
   (message "Checking base list of packages...")
   (starter-kit-elpa-install))
+
+(provide 'starter-kit-elpa)
