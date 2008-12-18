@@ -15,6 +15,7 @@
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
+(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/jabber"))
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
@@ -48,6 +49,11 @@
 
 (regen-autoloads)
 (load custom-file 'noerror)
+
+;; More complicated packages that haven't made it into ELPA yet:
+
+(autoload 'jabber-connect "jabber" "" t)
+;; TODO: rinari, nxhtml, slime
 
 ;; You can keep system- or user-specific customizations here:
 

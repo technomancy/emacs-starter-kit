@@ -7,6 +7,7 @@
                                    'inf-ruby
                                    'js2-mode
                                    'css-mode
+                                   'nxml
                                ;; To submit:
 ;;;                                "magit"
 ;;;                                "paredit"
@@ -33,7 +34,8 @@
   "Install all starter-kit packages that aren't installed."
   (interactive)
   (dolist (package starter-kit-packages)
-    (unless (functionp package)
+    (unless (member package package-activated-list)
+      (message "Installing %s" (symbol-name package))
       (package-install package))))
 
 ;; On your first run, this should pull in all the base packages.
