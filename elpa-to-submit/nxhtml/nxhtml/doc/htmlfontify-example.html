@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title></title>
+<style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+ --></style>
+<style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.comment-face-1419   { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.comment-face-1419 a { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.comment-delimiter-face-1418   { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.comment-delimiter-face-1418 a { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.help-argument-name-1420   { color: rgb(0, 0, 255);  font-style: italic;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-size: 10pt;  text-decoration: none; }
+span.help-argument-name-1420 a { color: rgb(0, 0, 255);  font-style: italic;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-size: 10pt;  text-decoration: underline; }
+span.button-0004   { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+span.button-0004 a { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.completion-tooltip-face-1437   { color: rgb(0, 0, 0);  background: rgb(255, 255, 255);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.completion-tooltip-face-1437 a { color: rgb(0, 0, 0);  background: rgb(255, 255, 255);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.completion-dynamic-face-1436   { color: rgb(0, 0, 0);  background: rgb(255, 165, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.completion-dynamic-face-1436 a { color: rgb(0, 0, 0);  background: rgb(255, 165, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.compilation-warning-1435   { color: rgb(255, 165, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.compilation-warning-1435 a { color: rgb(255, 165, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.compilation-line-number-1434   { color: rgb(184, 134, 11);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.compilation-line-number-1434 a { color: rgb(184, 134, 11);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.compilation-info-1433   { color: rgb(0, 205, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.compilation-info-1433 a { color: rgb(0, 205, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.compilation-error-1430   { color: rgb(255, 0, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.compilation-error-1430 a { color: rgb(255, 0, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.compilation-column-number-1429   { color: rgb(34, 139, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.compilation-column-number-1429 a { color: rgb(34, 139, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.comint-highlight-prompt-1428   { color: rgb(0, 0, 139);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.comint-highlight-prompt-1428 a { color: rgb(0, 0, 139);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.button-0004   { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+span.button-0004 a { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.default-0273   { color: rgb(250, 235, 215);  font-size: 105%;  text-decoration: none; }
+span.default-0273 a { color: rgb(250, 235, 215);  font-size: 105%;  text-decoration: underline; }
+span.default-0272   { background: rgb(250, 235, 215);  font-size: 105%;  text-decoration: none; }
+span.default-0272 a { background: rgb(250, 235, 215);  font-size: 105%;  text-decoration: underline; }
+span.default-0271   { color: rgb(250, 240, 230);  font-size: 105%;  text-decoration: none; }
+span.default-0271 a { color: rgb(250, 240, 230);  font-size: 105%;  text-decoration: underline; }
+span.default-0270   { background: rgb(250, 240, 230);  font-size: 105%;  text-decoration: none; }
+span.default-0270 a { background: rgb(250, 240, 230);  font-size: 105%;  text-decoration: underline; }
+span.default-0269   { color: rgb(253, 245, 230);  font-size: 105%;  text-decoration: none; }
+span.default-0269 a { color: rgb(253, 245, 230);  font-size: 105%;  text-decoration: underline; }
+span.default-0268   { background: rgb(253, 245, 230);  font-size: 105%;  text-decoration: none; }
+span.default-0268 a { background: rgb(253, 245, 230);  font-size: 105%;  text-decoration: underline; }
+span.default-0267   { color: rgb(255, 250, 240);  font-size: 105%;  text-decoration: none; }
+span.default-0267 a { color: rgb(255, 250, 240);  font-size: 105%;  text-decoration: underline; }
+span.default-0266   { background: rgb(255, 250, 240);  font-size: 105%;  text-decoration: none; }
+span.default-0266 a { background: rgb(255, 250, 240);  font-size: 105%;  text-decoration: underline; }
+span.default-0265   { color: rgb(220, 220, 220);  font-size: 105%;  text-decoration: none; }
+span.default-0265 a { color: rgb(220, 220, 220);  font-size: 105%;  text-decoration: underline; }
+span.default-0264   { background: rgb(220, 220, 220);  font-size: 105%;  text-decoration: none; }
+span.default-0264 a { background: rgb(220, 220, 220);  font-size: 105%;  text-decoration: underline; }
+span.default-0263   { color: rgb(245, 245, 245);  font-size: 105%;  text-decoration: none; }
+span.default-0263 a { color: rgb(245, 245, 245);  font-size: 105%;  text-decoration: underline; }
+span.default-0262   { background: rgb(245, 245, 245);  font-size: 105%;  text-decoration: none; }
+span.default-0262 a { background: rgb(245, 245, 245);  font-size: 105%;  text-decoration: underline; }
+span.default-0261   { color: rgb(248, 248, 255);  font-size: 105%;  text-decoration: none; }
+span.default-0261 a { color: rgb(248, 248, 255);  font-size: 105%;  text-decoration: underline; }
+span.default-0260   { background: rgb(248, 248, 255);  font-size: 105%;  text-decoration: none; }
+span.default-0260 a { background: rgb(248, 248, 255);  font-size: 105%;  text-decoration: underline; }
+span.default-0259   { color: rgb(255, 250, 250);  font-size: 105%;  text-decoration: none; }
+span.default-0259 a { color: rgb(255, 250, 250);  font-size: 105%;  text-decoration: underline; }
+span.default-0258   { background: rgb(255, 250, 250);  font-size: 105%;  text-decoration: none; }
+span.default-0258 a { background: rgb(255, 250, 250);  font-size: 105%;  text-decoration: underline; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.default-1432   { text-decoration: underline;  color: rgb(176, 48, 96);  font-weight: 700;  font-size: 164%; }
+span.default-1432 a { text-decoration: underline;  color: rgb(176, 48, 96);  font-weight: 700;  font-size: 164%; }
+span.default-1431   { color: rgb(176, 48, 96);  font-weight: 700;  font-size: 164%;  text-decoration: none; }
+span.default-1431 a { color: rgb(176, 48, 96);  font-weight: 700;  font-size: 164%;  text-decoration: underline; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.custom-button-0022   { border-width: 1px;  border-style: outset;  color: rgb(0, 0, 0);  background: rgb(211, 211, 211);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.custom-button-0022 a { border-width: 1px;  border-style: outset;  color: rgb(0, 0, 0);  background: rgb(211, 211, 211);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.bold-0248   { background: rgb(173, 255, 47);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.bold-0248 a { background: rgb(173, 255, 47);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.match-1438   { background: rgb(255, 255, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.match-1438 a { background: rgb(255, 255, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.underline-1413   { color: rgb(184, 134, 11);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  text-decoration: underline;  font-size: 10pt; }
+span.underline-1413 a { color: rgb(184, 134, 11);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  text-decoration: underline;  font-size: 10pt; }
+span.underline-0219   { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+span.underline-0219 a { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+span.underline-1412   { color: rgb(0, 205, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  text-decoration: underline;  font-size: 10pt; }
+span.underline-1412 a { color: rgb(0, 205, 0);  font-weight: 700;  font-family: outline-courier new;  font-stretch: normal;  font-style: normal;  text-decoration: underline;  font-size: 10pt; }
+ --></style><style type="text/css"><!--
+body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default   { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.default a { font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.comment-face-1419   { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.comment-face-1419 a { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.comment-delimiter-face-1418   { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.comment-delimiter-face-1418 a { color: rgb(178, 34, 34);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.string-face-1441   { color: rgb(188, 143, 143);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.string-face-1441 a { color: rgb(188, 143, 143);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.match-1438   { background: rgb(255, 255, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: none; }
+span.match-1438 a { background: rgb(255, 255, 0);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt;  text-decoration: underline; }
+span.keyword-face-1440   { color: rgb(160, 32, 240);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: none; }
+span.keyword-face-1440 a { color: rgb(160, 32, 240);  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  font-size: 10pt;  text-decoration: underline; }
+span.underline-1439   { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+span.underline-1439 a { text-decoration: underline;  font-family: outline-courier new;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: rgb(0, 0, 0);  font-size: 10pt; }
+ --></style>
+  </head>
+  <body style="background: #000000; color: #ff9900; padding:2em; margin:4em; margin-top:2em;">
+
+<h1>Example of htmlfontify.el output</h1>
+
+<p style="font-size: 1.3em; width: 35em;">
+  The following is an example of the output you can get with htmlfontify.el.
+  The version used here is shipped with <a href="nxhtml.html" style="color: #ffbb33; ">nXhtml</a>.
+  (A new version from the original author is on its way.)
+</p>
+
+<table border="0" cellpadding="0" cellspacing="0" style="border: solid rgb(0, 84, 227); width:44.800000000000004em; background:white;">
+<tr>
+<td style="background-color:rgb(0, 84, 227); color:rgb(255, 255, 255);border: none; padding:4px; vertical-align: middle;"><img alt="Emacs Icon (patched)" src="img/emacsP16.png" width="16" height="16" />&nbsp;&nbsp;Emacs - Frame Dump</td>
+</tr>
+<tr>
+<td style="vertical-align:top;"><table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td style="vertical-align:top;"><table border="0" cellpadding="0" cellspacing="0">
+<tr><td style="vertical-align:top;"><div style="width:22.514999999999997em; height:15.079999999999998em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+<pre><span class="comment-delimiter-face-1418">;; </span><span class="comment-face-1419">This buffer is for notes you don't want to save, and for Lisp evaluation.
+</span><span class="comment-delimiter-face-1418">;; </span><span class="comment-face-1419">If you want to create a file, visit that file with C-x C-f,
+</span><span class="comment-delimiter-face-1418">;; </span><span class="comment-face-1419">then enter the text in that file's own buffer.
+</span>
+</pre>
+
+ </div>
+<div style="width:22.515em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)--   <b>*scratch*</b>    (Lisp Interaction Abbrev hs) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+<td style="vertical-align:top;"><div style="width:23.084999999999997em; height:15.079999999999998em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre>cadr is a compiled Lisp function in `<span class="button-0004">subr.el</span>'.
+(cadr <span class="help-argument-name-1420">x</span>)
+
+Return the car of the cdr of <span class="help-argument-name-1420">x</span>.
+
+<span class="button-0004">[back]</span>
+</pre>
+
+ </div>
+<div style="width:23.085em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)%%   <b>*Help*</b>    (Help View Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top;"><table border="0" cellpadding="0" cellspacing="0">
+<tr><td style="vertical-align:top;"><div style="width:22.514999999999997em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre><span class="button-0004">comint-highlight-prompt</span>                       <span class="comint-highlight-prompt-1428">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">compilation-column-number</span>                     <span class="compilation-column-number-1429">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">compilation-error</span>                             <span class="compilation-error-1430">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">compilation-info</span>                              <span class="compilation-info-1433">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">compilation-line-number</span>                       <span class="compilation-line-number-1434">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">compilation-warning</span>                           <span class="compilation-warning-1435">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">completion-dynamic-face</span>                       <span class="completion-dynamic-face-1436">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+<span class="button-0004">completion-tooltip-face</span>                       <span class="completion-tooltip-face-1437">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+</pre>
+
+
+<div style="margin-top:2em; color: red; text-align: center; "> Truncated to line 11 - 19! </div>
+</div>
+<div style="width:22.515em; color:rgb(0, 0, 0); background:rgb(191, 191, 191); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)%%   <b>*Faces*</b>    (Help View Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+<td style="vertical-align:top;"><div style="width:23.084999999999997em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre><span class="default-0258">snow                  </span><span class="default-0259"> snow                                                                                                                        </span>#fffafa
+<span class="default-0260">ghost white           </span><span class="default-0261"> GhostWhite                                                                                                                  </span>#f8f8ff
+<span class="default-0262">white smoke           </span><span class="default-0263"> WhiteSmoke                                                                                                                  </span>#f5f5f5
+<span class="default-0264">gainsboro             </span><span class="default-0265"> gainsboro                                                                                                                   </span>#dcdcdc
+<span class="default-0266">floral white          </span><span class="default-0267"> FloralWhite                                                                                                                 </span>#fffaf0
+<span class="default-0268">old lace              </span><span class="default-0269"> OldLace                                                                                                                     </span>#fdf5e6
+<span class="default-0270">linen                 </span><span class="default-0271"> linen                                                                                                                       </span>#faf0e6
+<span class="default-0272">antique white         </span><span class="default-0273"> AntiqueWhite                                                                                                                </span>#faebd7
+</pre>
+
+
+<div style="margin-top:2em; color: red; text-align: center; "> Truncated to line 1 - 9! </div>
+</div>
+<div style="width:23.085em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)%%   <b>*Colors*</b>    (Help View Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top;"><div style="width:47.025em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre><span class="default-1431">________________________
+</span><span class="default-1432">Program and Value Search</span>
+
+When you use Emacs on MS Windows you sometimes want to fetch values
+and program locations from MS Windows.  Many of these values are
+stored in the MS Windows Registry.  Since Emacs is written to be used
+on many platforms (with the emphasis on GPL platforms) the effort to
+let Emacs read the Registry directly has not been made.  Below you can
+</pre>
+
+
+<div style="margin-top:2em; color: red; text-align: center; "> Truncated to line 29 - 37! </div>
+</div>
+<div style="width:47.025em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)**   <b>*Customize EmacsW32*</b>    (Custom Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+</tr>
+<tr>
+<td style="vertical-align:top;"><div style="width:47.025em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre>  Add quick printing to File menu (htmlize-view-print-visible): <span class="bold-0248">t</span>
+  Keep default print entries in File menu (w32-print-menu-show-print): <span class="bold-0248">nil</span>
+  Keep default ps print entries in File menu (w32-print-menu-show-ps-print): <span class="bold-0248">nil</span>
+  Use keyboard Window keys as Emacs META (w32-meta-style): <span class="bold-0248">w32-lr</span>
+  Underlined accelerators in menu bar (menuacc-active): <span class="bold-0248">t</span>
+  Inferior shell + path for unix style programs (w32shell-shell): <span class="bold-0248">cmd</span>
+
+  <span class="custom-button-0022"> Set all to w32 style! </span> <span class="custom-button-0022"> Reset all to default! </span> <span class="custom-button-0022"> Customize EmacsW32 ... </span>
+</pre>
+
+
+<div style="margin-top:2em; color: red; text-align: center; "> Truncated to line 13 - 21! </div>
+</div>
+<div style="width:47.025em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)**   <b>*Customize EmacsW32*</b>    (Custom Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+</tr>
+<tr>
+<td style="vertical-align:top;"><table border="0" cellpadding="0" cellspacing="0">
+<tr><td style="vertical-align:top;"><div style="width:22.514999999999997em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre>-*- mode: grep; default-directory: &quot;c:/emacs/p/070604/EmacsW32/nxml/util/&quot; -*-
+Grep started at Fri Dec 28 22:54:06
+
+grep -i -nH -e &quot;hfy-tmpfont-stack&quot; *.el
+<span class="underline-1412">htmlfontify.el</span><span class="underline-0219">:</span><span class="underline-1413">596</span><span class="underline-0219">:</span>(defvar <span class="match-1438">hfy-tmpfont-stack</span> nil
+<span class="underline-1412">htmlfontify.el</span><span class="underline-0219">:</span><span class="underline-1413">999</span><span class="underline-0219">:</span>           (entry (assoc key <span class="match-1438">hfy-tmpfont-stack</span>))
+<span class="underline-1412">htmlfontify.el</span><span class="underline-0219">:</span><span class="underline-1413">1003</span><span class="underline-0219">:</span>        (setq tag               (format &quot;%04d&quot; (length <span class="match-1438">hfy-tmpfont-stack</span>))
+<span class="underline-1412">htmlfontify.el</span><span class="underline-0219">:</span><span class="underline-1413">1005</span><span class="underline-0219">:</span>              <span class="match-1438">hfy-tmpfont-stack</span> (cons entry <span class="match-1438">hfy-tmpfont-stack</span>)))
+</pre>
+
+
+<div style="margin-top:2em; color: red; text-align: center; "> Truncated to line 1 - 9! </div>
+</div>
+<div style="width:22.515em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)%%   <b>*grep*</b>    (Grep Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+<td style="vertical-align:top;"><div style="width:23.084999999999997em; height:12.76em; border: 1px solid rgb(212, 208, 200); overflow:auto; padding:4px;">
+
+
+    <script type="text/javascript">
+      // <![CDATA[
+
+function getObj(name) {
+    if (document.getElementById) {
+        this.obj = document.getElementById(name);
+        this.style = document.getElementById(name).style;
+    }
+}
+function hfy_toggle_display(name) {
+    var x = new getObj("hfy_invis_" + name);
+    var flag = x.style.display == 'inline';
+    x.style.display = (flag) ? 'none' : 'inline'
+}
+
+      // ]]>
+    </script>
+
+<pre><span class="underline-1439">5 matches for &quot;hfy-tmpfont-stack&quot; in buffer: htmlfontify.el
+</span>    596:(<span class="keyword-face-1440">defvar</span> <span class="match-1438">hfy-tmpfont-stack</span> nil
+    999:           (entry (assoc key <span class="match-1438">hfy-tmpfont-stack</span>))
+   1003:        (setq tag               (format <span class="string-face-1441">&quot;%04d&quot;</span> (length <span class="match-1438">hfy-tmpfont-stack</span>))
+   1005:              <span class="match-1438">hfy-tmpfont-stack</span> (cons entry <span class="match-1438">hfy-tmpfont-stack</span>)))
+   1228:        <span class="comment-delimiter-face-1418">;;</span><span class="comment-face-1419">(</span><span class="match-1438">hfy-tmpfont-stack</span><span class="comment-face-1419"> nil)</span>
+</pre>
+
+ </div>
+<div style="width:23.085em; color:rgb(51, 51, 51); background:rgb(229, 229, 229); white-space:pre; overflow:hidden; font-family:monospace;">-- (Unix)%%   <b>*Occur*</b>    (Occur Abbrev) --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:1px; color:rgb(0,0,0); ">
+<span style="background:rgb(255, 215, 0); color:rgb(0,0,0); ">&nbsp;M-x </span>&nbsp;hfyview-frame</td>
+</tr>
+</table>
+</body>
+</html>

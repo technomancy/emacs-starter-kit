@@ -1,0 +1,27 @@
+namespace py = "http://genshi.edgewall.org/"
+
+genshi.expr-type    = xsd:string { minLength = "1" }
+genshi.with-type    = xsd:string { minLength = "1" }
+genshi.choose-type  = xsd:string
+genshi.def-type   = xsd:string
+genshi.xpath-type = xsd:anyURI
+
+genshi.attrib = attribute py:if        { genshi.expr-type   }?,
+                attribute py:choose    { genshi.choose-type }?,
+                attribute py:when      { genshi.expr-type   }?,
+                attribute py:otherwise { genshi.expr-type   }?,
+                attribute py:for       { genshi.expr-type   }?,
+                attribute py:def       { genshi.def-type    }?,
+                attribute py:match     { genshi.xpath-type  }?,
+                attribute py:with      { genshi.with-type   }?,
+                attribute py:attrs     { genshi.expr-type   }?,
+                attribute py:content   { genshi.expr-type   }?,
+                attribute py:replace   { genshi.expr-type   }?,
+                attribute py:strip     { genshi.expr-type   }?
+
+genshi.if.attlist   = attribute expr { genshi.expr-type }
+genshi.for.attlist  = attribute each { genshi.expr-type }
+genshi.def.attlist  = attribute each { genshi.expr-type }
+genshi.with.attlist = attribute vars { genshi.with-type }
+
+               

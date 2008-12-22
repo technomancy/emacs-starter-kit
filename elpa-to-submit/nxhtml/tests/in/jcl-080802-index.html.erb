@@ -1,0 +1,16 @@
+<h2>Mensajes recibidos</h2>
+<p class="small" style="color:red;margin: 10px">
+  Solo se muestran los ultimos 10 mensajes, aquí hay que añadir
+  paginación y ¿lógica?.
+</p>
+<div id="received-messages" class="message-list">
+  <% for message in @messages %>
+    <div id="received-message-<%= message.id -%>" class="received-message">
+      <span class="header"><%= message.sender.roster_name %> escribió a fecha <%= message.created_at -%></span>
+      <div class="content">
+        <%=h truncate(message.message, 100) %>
+      </div>
+      <%= link_to "Mostrar", message_path(message) %>
+</div>
+<% end %>
+</div>

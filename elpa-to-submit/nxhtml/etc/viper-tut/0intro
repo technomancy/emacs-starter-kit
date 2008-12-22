@@ -1,0 +1,59 @@
+Viper tutorial #0: Introduction
+
+This Viper tutorial is based on the vi tutorial VILEARN.  Some things
+works differently in Emacs and corresponding parts of the tutorial has
+been changed for this.  There has also been added some basic
+information about Emacs that are useful to get started if you already
+are a vi user.
+
+This tutorial is a hands-on-tutorial for Viper.  If you want more
+information about Viper, please read the VIPER-MANUAL.
+
+Note that if you are using Viper you probably still want to know quite
+a bit about Emacs to use Emacs efficiently.  Therefore you can also
+run the Emacs tutorial from here - with special support for
+Viper. This is part 6 below. You should run this part also to get to
+know which Emacs standard key bindings are shadowed by Viper.
+
+The tutorial consists of these parts:
+
+    0 Introduction
+      (this file)
+
+    1 Basic Editing
+      Covers the handful of commands required to both navigate all
+      five tutorials and do basic editing.
+
+    2 Moving Efficiently
+      Covers all of the cursor positioning commands. These are the
+      commands used later as arguments to editing commands.
+
+    3 Cutting and Pasting
+      Introduces the first compound commands, numbering, and copy
+      buffers.
+
+    4 Inserting Techniques
+      Continues the discussion of compound commands, while completing
+      the list of insertion commands first discussed in tutorial one.
+
+    5 Tricks and Timesavers
+      This is less a tutorial than a description of common vi commands
+      which don't fit correctly into normal logic.
+
+    6 Emacs Tutorial for Viper Users
+      Even Viper users use a lot of keys from Emacs.  Therefore you can
+      run the Emacs tutorial here too.  It will show you which keys in
+      the tutorial that are changed because you are using Viper.  This
+      depends of which Viper state you are in, vi state or some insert
+      state.  If you switch Viper state the tutorial will immediately
+      show which keys are affected.
+
+
+BUGS
+Vilearn has the remark that it "Still doesn't cover variables, ex
+commands, or tags.  At least one more tutorial is necessary for a
+complete introduction to vi." - I do not think you have to learn those
+parts to use Viper. There are other ways to do these things in Emacs!
+
+For more information about vilearn see the the README-FILE.
+

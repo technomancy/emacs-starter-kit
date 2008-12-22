@@ -1,0 +1,3 @@
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <typeId id="XHTML" uri="qtmstr-xhtml.rnc" />
+</locatingRules>

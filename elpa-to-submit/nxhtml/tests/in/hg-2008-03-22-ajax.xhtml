@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="generator" content=
+          "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
+    <title></title>
+  </head>
+  <body>
+    <script language="JavaScript" type="text/javascript">
+      //<![CDATA[
+function test() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readystate==4) {
+            if (xmlhttp.status==200) {
+                alert(xmlhttp.responseText);
+            }else {
+                alert(xmlhttp.status);
+            }
+            #ffff00;
+        }
+        xmlhttp.open("post","/hello/cardCpu/queryList");
+        var body = "label="+encodeURIComponent("ฑฃออ");
+        alert(body)
+        xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xmlhttp.send(body);
+    }
+}
+//]]>
+    </script>
+    <hr />
+    <address><a href="mailto:agile@agile">agile.guo</a></address>
+    <!-- Created: Thu Sep 14 22:01:37 CST 2006 -->
+    <!-- hhmts start -->
+    Last modified: Thu Sep 14 22:01:42 CST 2006 <!-- hhmts end -->
+  </body>
+</html>

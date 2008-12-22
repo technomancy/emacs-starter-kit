@@ -1,0 +1,22 @@
+AddDescription "Enhancements to David Ponce's swbuff" swbuff-y.el
+AddDescription "Functions for interactive resize of windows" bw-interactive.el
+AddDescription "(Obsolete - included in Emacs 22)" bw-base.el
+AddDescription "View current buffer as html in web browser" htmlize-view.el
+AddDescription "Finding source code inside a function from *Backtrace* buffer" backtr.el
+
+AddDescription "Helpers for inferior shells on w32" w32shell.el
+AddDescription "Edit MS Windows cmd and bat files" cmd-mode.el
+
+AddDescription "My current .emacs" .emacs
+
+AddDescription "Package specific information for install.el" instpack.el
+AddDescription "Installed elisp packages activation" instactv.el
+AddDescription "Package to ease installation of Elisp packages" install.el
+
+AddDescription "Downloading URLs to file" url-dl.el
+
+# Directories
+AddDescription "Things not quite ready yet" test
+AddDescription "Elisp packages installation" inst
+AddDescription "nxhtml-mode" nxhtml
+AddDescription "MS Windows specific stuff" w32

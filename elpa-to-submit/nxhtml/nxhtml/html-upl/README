@@ -1,0 +1,111 @@
+# README file for ftpsync.pl
+
+
+Contents:
+=========
+
+- Overview
+- Why use ftpsync.pl instead of mirror, sitecopy, ...?
+- Requirements/Restrictions
+- Bug reports, Contact
+- License
+- Updates
+
+
+Overview:
+---------
+
+ftpsync.pl synchronizes a local directory tree and a remote FTP directory tree.
+
+It was initally written to automize web publishing, but might be useful for 
+some other purposes, like mirroring not-too-large public sites, data
+replication, and more.
+
+Call "ftpsync.pl -h" to get a short parameter explanation.
+
+
+Why use ftpsync.pl instead of mirror, sitecopy, ...?
+----------------------------------------------------
+
+Yes, there are similar projects, so some comments on them:
+
+Compared to mirror, ftpsync.pl is capable of PUTing, not only GETing stuff
+(Don't blame me if mirror is able to PUT, I could'nt find a way).
+
+Compared to sitecopy, ftpsync.pl has no problems, if the remote site has been
+changed since its last run by other tools and activites. Unless network
+problems or bugs occur, ftpsync.pl does a reliable synchronization.
+
+Compared to both, ftpsync.pl is very lightweight ;-))
+
+
+Requirements / Restrictions:
+----------------------------
+
+- Perl 5.6+
+  ftpsync.pl was initially developed on  Perl 5.6.0-81 on SuSE Linux 7.2,
+  older Perl 5.x version might work. Test reports welcome at ftpsync@ibcl.at!
+
+- File::Find, IO::Handle
+  IMHO parts of the basic perl package.
+
+- Net::FTP
+  Part of the perl-libnet package.
+  
+- UNIX like operating systems on local system
+  Porting to DOS based systems should be easily done by changing the 
+  directory separator.
+  
+- Perhaps, the script does not work with all FTP servers
+  It is beeing tested only against UNIX based FTP servers.
+
+
+Bug-Reports, Contact:
+---------------------
+
+Besides ftpsync.sourceforge.net, ftpsync@ibcl.at is a good target for comments
+of any kind.
+
+
+License:
+--------
+
+FTPSync.pl is GNU/GPL software and eMail ware.
+
+
+FTPSync.pl as GNU/GPL software:
+-------------------------------
+
+FTPSync.pl (ftpsync.pl) is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+See attached file COPYING.
+
+
+FTPSync.pl as eMail ware:
+-------------------------
+
+FTPSync.pl is also eMail-Ware, which means that the initial author 
+(Christoph Lechleitner) would like to get an eMail (to ftpsync@ibcl.at), 
+- if anyone uses the script on production level,
+- if anyone distributes or advertises it in any way,
+- if anyone starts to (try to) improve it.
+
+
+Updates
+-------
+
+The software and updates should be available from 
+http://ftpsync.sourceforge.net/
+http://www.ibcl.at/ossw/FTPSync

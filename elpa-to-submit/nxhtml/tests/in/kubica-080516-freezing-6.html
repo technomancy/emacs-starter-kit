@@ -1,0 +1,58 @@
+{% load transdigest helpers %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://dublincore.org/documents/dcq-html/">
+        <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+        <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+        <link rel="stylesheet" type="text/css" href="{% media_url %}/homepage/css/web0.5.css" media="screen" />
+
+        <title>{% block title %}{% translate "WELCOME_TO_POINTTEC" %}{% endblock %}</title>
+        <meta name="DC.title" content="Homepage of point TEC" />
+        <meta name="DC.creator" content="Marek Kubica" />
+        <meta name="DC.subject" content="Presentation of products" />
+        <meta name="DC.publisher" content="point TEC" />
+        <meta name="DC.rights" content="copyright by point TEC" />
+        {% block htmlhead %}
+
+        {% endblock %}
+        <style type="text/css">
+        	{ % block pagestyle % }
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	img {
+		border: 0
+	}
+
+	html, body {
+		height: 100%;
+	}
+
+	#distance {
+		width: 1px;
+		height: 50%;
+		margin-bottom: -175px;
+	}
+	#container {
+		position: relative;
+		margin: 0 auto;
+		height: 370px;
+		width: 500px;
+		background-color: #ffffff;
+	}
+	/* the horizontal bars */
+	#flashcontent * div {
+		background-color: #292926;
+	}
+
+	#pointer {
+		display: block;
+		margin: 0 auto;
+	}
+
+        	{ % endblock % }
+        </style>

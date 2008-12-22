@@ -1,0 +1,11 @@
+namespace xi = "http://www.w3.org/2001/XInclude"
+namespace local = ""
+
+xinclude.include.attlist =
+    attribute href     { xsd:anyURI }?,
+    attribute parse    { xsd:string }?,
+    attribute xpointer { xsd:string }?,
+    attribute encoding { xsd:string }?,
+    attribute accept   { xsd:string }?,
+    attribute accept-language { xsd:string }?
+

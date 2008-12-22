@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>nXhtml - The old Way Multiple Modes</title>
+    <link href="wd/grapes/nxhtml-grapes.css" rel="StyleSheet" type="text/css" />
+    <style type="text/css">
+      #special {
+          background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="rgtcol">
+        <h1 id="mainheader">nXhtml - The old Way Multiple Modes</h1>
+        <p style="color:#a00">
+          This file describes the old way to work with multiple major
+          modes in nXhtml.  You can still use this if you want to.  To
+          do that move mumamo out of Emacs load-path before starting
+          Emacs.
+        </p>
+        <p>
+          To read about the current way please see <a
+          href="nxhtml.html">nXhtml - an Emacs Mode for XHTML</a>.
+        </p>
+
+        <h2 id="php">And What About PHP? (The old way)</h2>
+        <p>
+          I glad to say that I just got this working in a way I like it.
+          Though I would like some feedback. Here is how it works now:
+        </p>
+        <p>
+          When point is in a PHP part then the major mode is switched
+          to php-mode, with all that means.  Here you can see how that
+          looks:
+        </p>
+        <img alt="In PHP part" src="img/php-in-php.png" width="448" height="294" />
+        <p>
+          If you move the point outside of those &lt;?php ... ?> areas
+          then the mode is automatically switched to nxhtml-part-mode
+          instead.  Now you can use the power of nxhtml-part-mode and
+          do for example completion, like here:
+        </p>
+        <img alt="In XHTML part" src="img/php-in-xhtml.png" width="450" height="294" />
+        <p>
+          The switching is done with a short delay so that it does not
+          interfere with your normal editing. That's it. (But maybe
+          there should be a better php-mode?  Does someone has any
+          better than the one that comes with nXhtml now?)
+        </p>
+        <p>
+          To be honest this might not work in all cases.  What happens
+          behind the scenes is that nXhtml here adds invisible top and
+          bottom which has code that satisfies the XHTML DTD. By doing
+          that nXhtml can do completion and XHTML syntax
+          checking. However that does of course not work if it does
+          not fit your PHP code.
+        </p>
+        <p>
+          But ... - it can still work. Because you can customize what
+          the invisible header and footer should contain.
+        </p>
+        <p>
+          <b>Note:</b>
+          <a href="nxhtml-changes.html#bugs-affect-mode-switching"
+          >Bugs in Emacs 22 beta affects mode switching</a>.
+        </p>
+
+        <h2 id="part2">More About Multiple Modes (The old way)</h2>
+        <p>
+          In the case above, with PHP and XHTML, the two modes can
+          both handle all of the files. (At least if you just use
+          &lt;? ... ?> in the way specified by XHTML.)  If you have
+          embedded JavaScript or CSS the situation is different.  In
+          this case the whole file can still be valid XHTML, but it
+          surely can not be valid JavaScript or CSS.  Emacs modes
+          wants to take care of the whole file so it is hard for a
+          JavaScript or CSS Emacs mode to handle embedded code.
+        </p>
+        <p>
+          In nXhtml the solution to this problem is to just take care
+          of the relevant part of the file when editing embedded code
+          of this kind.  There is no automatic switching in this case
+          however.  You have to do it yourself, but it is easy.
+          First you position point inside the embedded area, like here:
+        </p>
+        <img alt="CSS embedded in XHTML" src="img/embedded-xhtml.png" width="448" height="294" />
+        <p>
+          To switch to edit just the embedded part you can type <em>C-c %</em>:
+        </p>
+        <img alt="Narrowed to embedded CSS" src="img/embedded-css.png" width="448" height="294" />
+        <p>
+          To get back to see the whole file again type <em>C-c %</em> again.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

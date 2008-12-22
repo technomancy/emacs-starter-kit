@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>nXhtml Short Tour</title>
+    <script type="text/javascript" src="js/smoothgallery/scripts/mootools.js"></script>
+    <script type="text/javascript" src="js/smoothgallery/scripts/jd.gallery.js"></script>
+    <link rel="stylesheet" href="js/smoothgallery/css/layout.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="js/smoothgallery/css/jd.gallery.css" type="text/css" media="screen"/>
+    <style type="text/css" media="screen">
+      /* <![CDATA[ */
+      #myGallery {
+	width: 660px;
+	height: 500px;
+      }
+      /* ]] */
+    </style>
+
+  </head>
+  <body>
+    <script type="text/javascript">
+      function startGallery() {
+          var myGallery = new gallery($('myGallery'), {
+              timed: true,
+              delay: 5000,
+              embedLinks: false,
+              showArrows: true,
+              showCarousel: true,
+              showInfopane: true,
+              showDescription: true,
+          });
+      }
+      window.onDomReady(startGallery);
+    </script>
+    <div id="myGallery"><!-- SmoothGallery -->
+      
+      <div class="imageElement">
+        <h3>Popup completion</h3>
+        <p>nXhtml can use popup style completion too (for XHTML)</p>
+        <a href="#" title="open image" class="open"></a>
+        <img src="img/popup-compl.png" class="full" alt="Popup completion" />
+        <img src="img/popup-compl.png" class="thumbnail" alt="Popup completion (thumbnail)" />
+        <div>
+          <p>
+            more about popup
+          </p>
+          <p>
+            more about popup
+          </p>
+        </div>
+      </div>
+      
+      <div class="imageElement">
+        <h3>Emacs style completion</h3>
+        <p>Emacs default style for completion uses the minibuffer and an Emacs window</p>
+        <a href="#" title="open image" class="open"></a>
+        <img src="img/emacs-style-completion.png" class="full" alt="Emacs style completion" />
+        <img src="img/emacs-style-completion.png" class="thumbnail" alt="Emacs style completion (thumbnail)" />
+        <div>du</div>
+      </div>
+    </div>
+
+    <div id="DescriptionDiv"
+         style="
+      text-align: center;
+         ">
+      desc div
+    </div>
+  </body>
+</html>

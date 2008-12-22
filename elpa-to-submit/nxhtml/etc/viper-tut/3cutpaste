@@ -1,0 +1,318 @@
+Viper tutorial #3: Copying, Cutting, and Pasting
+
+This lesson lasts 15-20 minutes.  This tutorial assumes full knowledge
+of tutorial #1, and familiarity with tutorial #2.  Lines which begin
+with  >>>  mark exercises you should try.
+
+When you want to exit this tutorial type  'Z''Z'  to exit and save your
+changes.  Or type  :q!<RETURN>  to exit without saving changes.
+Remember that typing  u  will UNDO your last change.
+
+
+CUTTING TEXT
+------------
+The delete command can be combined with any of the movement commands
+taught throughout tutorial #2.  The resulting command is of the form:
+
+    'd'movement	DELETE to where the movement command specifies
+
+Consider the following examples:
+
+	'd''w'	DELETE to the beginning of the next WORD
+	'd''$'	DELETE to the end of the line
+	'd'')'	DELETE to the beginning of the next sentence
+	'd''t'e	DELETE 'TIL the next  e
+	'd''d'	DELETE a line (dd is a special case of the d command)
+
+>>>  Experiment with  'd''w'  'd''$'  'd'')'  'd''t'e  'd''d'  on the paragraph provided below:
+
+    PRACTICE here.  Now is the time for all good users to learn the
+    editor.  The quick brown fox jumped over the seven lazy fish.  Now
+    is the time for all good users to learn the editor.  The quick
+    brown computer jumped over the seven lazy users.  END PRACTICE
+
+* EMACS-NOTICE: In Viper you can also use 'r' and 'R' for Emacs region and
+  Viper line extended region. This is very convenient together with
+  CUA-MODE where the region is visible (it is usually called the
+  selected text or something similar in other applications).
+
+
+PASTING TEXT
+------------
+When text is deleted it is put into a buffer which contains the most
+recently deleted text.  To paste the contents of this buffer elsewhere
+in the file use the  p  or  P  command.
+
+	'P'	(upper p) PUT the contents of the buffer before the cursor
+	'p'	(lower p) PUT the contents of the buffer after the cursor
+
+>>>  Try this sequence of commands on the practice lines below:
+>>>  	'd''d'  	to delete one line
+>>>	'j'	to move down a line
+>>>	'p'	(lower p) to PUT the deleted text after the cursor
+>>>	'}'	to move to the end of the paragraph
+>>>	'P'	(upper p) to PUT the deleted text before the cursor
+
+	PRACTICE line.  Cut and Paste this line to the bottom of the
+	paragraph.  Here is some filler, feel free to cut and paste the
+	text in this practice region.  Remember that  u  undoes the last
+	action.  END OF PRACTICE
+
+>>>  Try this sequence of commands at the beginning of a word:
+>>>	'd''w'  'w'  'P'
+
+The fastest way to swap two letters is to type:  'x''p'
+
+>>>  Use  xp  to correct the misspelled words below:
+
+	PRACTICE.  Thier weird quiet recieved an inconvenient shriek.
+	Thier belief is that to recieve grief from nieghbors outwieghs
+	all else.  Biege skies lead to wierd science.  END.
+
+
+NUMBERING
+---------
+Consider cutting and pasting 3 words.  Based on previous exercises you
+would type  'd''w' , move to the new location, and type  'p' , and repeat
+this procedure twice more.  There is an easier way to do this:
+
+>>>  Using the practice lines below, try the following sequence of commands:
+>>>    Move to the beginning of the first sentence.
+>>>    Type  'd''3''w'  to DELETE 3 WORDS.
+>>>    Type  'w'  to move ahead one WORD.
+>>>    Type  'P'  (upper p) to PUT the three words before the cursor.
+
+    PRACTICE Numbering vi commands is easy to do.  Now is the time for
+    all good users to learn the editor.  The quick brown fox jumped
+    over the seven lazy dogs.  Numbering vi commands is easy to do.
+    Now is the time for all good users to learn the editor. END PRACTICE
+
+>>>  Type  'd''2''d'  to DELETE 2 lines, using the practice paragraph above.
+>>>  Move to the top of the paragraph.
+>>>  Type  'p'  (lower p) to PUT the two lines after of the cursor.
+
+Numbering also works for movement commands.
+
+>>>  Now try  '4''w'  to move ahead 4 WORDs, on the lines provided above.
+>>>  Then use  '3''b'  to move BACK 3 words.
+
+When you type  '4''w'  THINK "4 words", when you type  d4w  think "delete 4
+words".  In general, we can write
+
+    #movement	repeat movement # times
+    d#movement	DELETE to where the  #movement  command specifies
+
+
+COPYING TEXT
+------------
+The YANK command works just like the DELETE command, except  'y'  is used
+instead of  'd'  .
+
+    'y'movement	YANK to where the movement command specifies
+
+YANK and DELETE are identical except that YANK only copies the specified
+text into the buffer.
+
+>>>  Try this sequence of commands on the practice lines below:
+>>>  	'y''y'  	to YANK a line (yy is a special case of the y command)
+>>>	'3''j'	to move down 3 lines
+>>>	'p'	(lower p) to PUT the yanked text after the cursor
+
+	PRACTICE line.  Copy and Paste this line to the bottom of the
+	paragraph.  Here is some filler, feel free to copy and paste the
+	text in this practice region.  Remember that  u  undoes the last
+	action.  END OF PRACTICE
+
+Please note that copy, cutting, and pasting large blocks of text may
+significantly alter the tutorial file.  Remember that you can always get
+a new copy of the tutorial file and that  u  UNDOes your last change.
+
+Here are some examples which show the similarity between  y  and  d .
+
+	'y''w'	YANK to the beginning of the next WORD
+	'y''$'	YANK to the end of the line
+	'y'')'	YANK to the beginning of the next sentence
+	'y''t'e	YANK 'TIL the next  e
+	'y''y'	YANK a line
+
+Here are some more examples using commands from tutorial #2.
+
+	'y''L'	YANK from here to the lowest point of the window
+	'y''/'and	YANK from here to the word "and"
+	'y''2''}'	YANK 2 paragraphs
+	'y''''a	YANK from here to the marked line "a" (mark line first)
+
+>>>  Experiment with  'y''w'  'y''t'e  'y''4''w'  'y''2''}'  'y''3''y'  and  'y''$'  on the paragraph
+>>>  provided below.  Copy text AND use  'p'  or  'P'  to paste it.
+
+	PRACTICE line.  Copy and Paste this line to the bottom of the
+	paragraph.  Here is some filler, feel free to copy and paste
+	the text in this practice region.  Remember that  u  undoes the
+        last action.  END OF PRACTICE
+
+
+NUMBERED BUFFERS
+----------------
+In all of the previous pasting exercises you've used the "un-named"
+buffer.  The un-named buffer contains the text you most recently cut or
+copied.  When you make a new cut or copy, the old contents of the
+un-named buffer are moved to one of the "numbered" buffers.  The
+buffers are numbered 1-9.  Each time you cut or copy text,
+
+	vi saves your current cut or copy in a buffer #1
+	vi saves your 2nd to last cut or copy in a buffer #2
+	The cut or copy before that is saved in a buffer #3 ...
+	vi saves your 8th oldest cut or copy in a buffer #8
+	vi saves your 9th oldest cut or copy in a buffer #9
+
+Note that buffer #1 is the same as the un-named buffer.  Here's how to
+paste from the numbered buffers:
+
+	"#P	(upper p) PUT contents of buffer # before the cursor
+	"#p	(lower p) PUT contents of buffer # after the cursor
+
+For example:
+
+	"1p	PUT buffer 1 after the cursor
+	"7p	PUT buffer 7 after the cursor
+
+>>>  Delete this 1st line with  dd
+>>>  Delete this 2nd line with  dd
+>>>  Delete this 3rd block with  d2d
+>>>    (2nd half of block 3)
+>>>  Delete this 4th block with  dd
+>>>  Now type   "1p   "2p   "3p   "4p
+
+If you are using vi and have made accidental deletions, just PUT the
+contents of each numbered buffer to recover the deleted text.
+
+
+NAMED BUFFERS
+-------------
+vi maintains the un-named and numbered buffers automatically.  You can
+maintain your own buffers named a-z.  That is, you can cut or copy text
+into buffer x and later paste the text from buffer x.
+
+    '"'aDELETE	DELETE text into buffer a
+    "aYANK	YANK text into buffer a
+    "aPUT	PUT text from buffer a
+
+Note, don't actually type 'DELETE', 'YANK', or 'PUT'; type one of the
+DELETE commands, YANK commands, or PUT commands.  See the examples below:
+
+	"ad}		DELETE paragraph into buffer a
+	"by3y		YANK 3 lines into buffer b
+	"cy200G    	YANK to line 200 into buffer c
+	"dp		PUT buffer d  after the cursor
+	"zP		PUT buffer z  before the cursor
+
+The contents of a named buffer are lost if:
+     1) you store new text in a buffer with the same name
+  or 2) you quit vi (using  'Z''Z'  or  :q!<RETURN>  )
+
+>>>  Delete this START line into buffer a  by typing  "add
+>>>  Paste buffer a  by typing  "ap
+
+>>>  Delete this INTERMEDIATE line into buffer b  by typing  "bdd
+>>>  Paste buffer b  by typing  "bp
+
+To put new material into buffer a
+>>>  Delete this FINAL line into buffer a  by typing  "add
+>>>  Paste buffer a  by typing  "ap
+
+
+SAVING WITHOUT QUITTING
+-----------------------
+With ZZ you save changes and kill the current buffer.  (In vi you also
+exit with 'Z''Z'.) With :w you can save and not quit vi.  It is a safe
+practice to save changes to a file regularly.  This reduces re-typing
+in the event your computer crashes.
+
+    :w<RETURN>	WRITE contents of the file (without quitting)
+		(type a colon, type w , then press the RETURN key)
+
+>>>  Try  :w  now.  Note the message at the bottom of the screen.
+
+
+PASTING BETWEEN FILES
+---------------------
+
+* EMACS-NOTICE: In Emacs there are no problems editing several
+  files. You can however do it in the more complicated vi way below if
+  you really want to ;-)
+
+This is an extremely useful procedure in vi.  Only one new command is
+required for pasting between files, the EDIT command
+
+    :e filename<RETURN>    Begin EDITing the file called "filename"
+
+The EDIT command allows you to edit another file without quitting vi.
+This is useful since named buffers are lost when you quit vi.
+
+Let's say you want to copy 6 lines from the file called "3temp" into
+this file which is named "3cutpaste":
+(Note that "3temp" has already been created for you)
+
+    1) WRITE "3cutpaste".  vi will not allow	:w (press RETURN)
+    you to edit another file without first
+    saving any changes you've made.
+
+    2) EDIT "3temp" without quitting vi.	:e 3temp (press RETURN)
+
+    3) YANK 6 lines from "3temp".		"ay6y
+
+    4) Return to "3cutpaste".			:e 3cutpaste (press RETURN)
+
+    5) PUT from buffer a			"ap
+
+Note that the un-named and numbered buffers are lost when the EDIT
+command is used.  Only named buffers are preserved with EDIT.
+
+>>>  Follow the 5-step procedure outlined above.  Don't be concerned
+>>>  with remembering all 5 steps, the instructions are repeated in
+>>>  "3temp".  Paste the text from "3temp" near this line of this file,
+>>>  "3cutpaste".
+
+You can use this 5-step procedure on any two files, with any cutting or
+copying action (here, y6y is the example).
+
+
+SUMMARY
+-------
+
+    #movement	repeat movement # times
+                * EMACS-NOTICE: You may also use 'r' or 'R' in Viper.
+
+    'd'movement	DELETE to where "movement" command specifies
+    'd'#movement	DELETE to where the  #movement  command specifies
+		(e.g.  'd''w'  'd''3''w' )
+
+    'y'movement	YANK to where "movement" command specifies
+    'y'#movement	YANK to where the  #movement  command specifies
+		(e.g.  'y''w'  'y''3''w' )
+
+	'P'	(upper p) PUT the contents of the buffer before the cursor
+	'p'	(lower p) PUT the contents of the buffer after the cursor
+
+	'"'#P	(upper p) PUT contents of buffer # before the cursor
+	'"'#p	(lower p) PUT contents of buffer # after the cursor
+		(e.g.  '"''2''p'  '"''7''P' )
+
+    '"'aDELETE	DELETE text into buffer a
+    '"'aYANK	YANK text into buffer a
+    '"'aPUT	PUT text from named buffer a
+		(Note, don't actually type 'DELETE', 'YANK', or 'PUT';
+		type one of the DELETE commands, YANK commands, or PUT
+		commands, e.g.  '"''a''d''}'  '"''b''y''3''y'  '"''c''y''2''0''0''G'  '"''d''p'  '"''z''P'  )
+
+    :w<RETURN>	WRITE contents of the file (without quitting)
+		(type a colon, type w , then press the RETURN key)
+
+    :e filename<RETURN>    Begin EDITing the file called "filename"
+
+
+You are now prepared to handle all cutting, copying and pasting tasks
+which may arise.  If you practice what you've learned you'll find editing
+in vi to be fast and convenient.
+
+Copyright (c) 1992 Jill Kliger and Wesley Craig.  All Rights Reserved.

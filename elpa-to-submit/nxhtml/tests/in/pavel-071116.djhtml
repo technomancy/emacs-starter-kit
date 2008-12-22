@@ -1,0 +1,31 @@
+ <html>
+{% extends "base.html" %}
+  <head>
+    <title>Muzikanti z lekce 4</title>
+  </head>
+  <body>
+    <table>
+      some text not within django block
+      {# some comment else #}
+      {% for muzikant in people %}
+      <tr>
+        <td>
+          {{ muzikant.name }}
+          <b>
+            {% comment %}
+              something else
+            {% if muzikant.nemamezeru %}*{% endif %} {% endcomment %}
+          </b>
+        </td>
+        <td>
+          <i {% if muzikant.ma_duraz %} style="font-weight: bold;"{% else %}{% endif %}>
+            {{ muzikant.genre|rjust|lower }}
+          </i>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% get_current_time "%Y-%M-%d %I:%M %p" as my_current_time %}
+    <p>The current time is {{ my_current_time }}.</p>
+  </body>
+</html>

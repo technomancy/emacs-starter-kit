@@ -1,0 +1,11 @@
+[% IF blah %]
+
+[%# test GET ]
+ # comment
+[% test %] and [% test %]
+
+[% test % test %]
+
+[%+ test -%]
+
+[% BLOCK %]

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>HEAD</title>
+    <link rel="stylesheet" href="html-toc/html-toc.css" type="text/css" />
+    <link rel="stylesheet" href="html-toc/html-toc-template.css" type="text/css" />
+    <script type="text/javascript" src="html-toc/html-toc.js"></script>
+    <script type="text/javascript" src="html-toc/html-toc-template.js"></script>
+    <script type="text/javascript">
+      var my_old_onload = window.onload;
+      function my_onload() {
+        HTML_WTOC_NS.onload_actions(%%PNUM%%);
+        if (undefined != my_old_onload) { my_old_onload(); }
+      }
+      window.onload =  my_onload;
+    </script>
+  </head>
+  <body>
+
+
+    <table summary="Page columns" cellspacing="0" border="0" cellpadding="0" xwidth="100%" >
+      <tr valign="top">
+        <td id="html-wtoc-id-toccol" class="html-wtoc-contcol">
+          <table summary="Contents column" id="html-wtoc-id-toc" class="html-wtoc-contcol"
+                 cellspacing="0" border="1" cellpadding="0" width="100%">
+            <tr valign="top">
+              <td colspan="2" height="50" >
+                <table summary="Logo" id="html-wtoc-id-logo">
+                  <tr>
+                    <td align="right" valign="bottom" >
+                      <a href="http://www.OurComments.org/Emacs/EmacsW32.html"
+                         ><img src="img/gnu-m-x-160.png" width="80" height="80"
+                         alt="Go to EmacsW32 Home Page"
+                         title="Go to EmacsW32 Home Page"
+                         onmouseover="transLbi(this, false);"
+                         onmouseout ="transLbi(this, true);"
+                         style="
+                         margin-top:10px;
+                         padding-left:20px;
+                         padding-right:20px;
+                         padding-top:10px;
+                         padding-bottom:10px;
+                         "
+                         border="0"
+                         /></a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              </tr><tr valign="top">
+              <td >
+                <table border="1">
+                  <tr>
+                    <td>%%TOC%%</td>
+                  </tr>
+                  <tr>
+                    <td id="nxhtml-link">
+                      <br />
+                      Built using Emacs
+                      <br />
+                      with nxhtml from
+                      <br />
+                      <a href="http://ourcomments.org/Emacs/Emacs.html"
+                         target="_blank">ourcomments.org</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              </tr><tr>
+              <td colspan="2" style="background-color:red;">
+                &nbsp;
+              </td>
+            </tr>
+          </table>
+          <table summary="Ensure table width"
+                 cellspacing="0" id="html-wtoc-id-tocwidth"><tr><td></td></tr></table>
+        </td>
+
+      </tr>
+    </table>
+  </body>
+</html>

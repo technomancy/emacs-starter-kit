@@ -53,7 +53,8 @@
 ;; More complicated packages that haven't made it into ELPA yet:
 
 (autoload 'jabber-connect "jabber" "" t)
-;; TODO: rinari, nxhtml, slime
+(load "elpa-to-submit/nxhtml/autostart")
+;; TODO: rinari, slime
 
 ;; You can keep system- or user-specific customizations here:
 

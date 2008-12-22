@@ -1,0 +1,17 @@
+2006-04-26    <lennart.borgman.073@student.lu.se>
+
+	* nxhtml.el (nxhtml-insert-skeleton-if-empty)
+	(nxhtml-insert-frame-skeleton): New functions.
+
+2006-04-25    <lennart.borgman.073@student.lu.se>
+
+	* nxhtml.el (nxhtml-coding-systems-complete)
+	(nxhtml-script-url-predicate, nxhtml-script-completion-pattern)
+	(nxhtml-image-url-predicate, nxhtml-image-completion-pattern)
+	(nxhtml-mailto-predicate, nxhtml-predicate-error)
+	(nxhtml-in-xml-attribute-value-regex)
+	(nxhtml-read-mail-url-history, nxhtml-read-web-url-history)
+	(nxhtml-read-url-history, nxhtml-read-url-type)
+	(nxhtml-read-url-type-help, nxhtml-read-url)
+	(rng-complete-attribute-value): New entries for completion.
+

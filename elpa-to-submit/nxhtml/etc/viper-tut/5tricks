@@ -1,0 +1,229 @@
+Viper tutorial #5: Tricks and Timesavers
+
+This lesson lasts 10-15 minutes.  You should have a strong
+understanding of tutorials #1-3 before working through these timesaving
+techniques.  Lines which begin with  >>>  mark exercises you should
+try.  When you want to exit this tutorial type  'Z''Z' .
+
+
+CASE CONVERSION
+---------------
+When you want to change an upper-case character to a lower-case
+character (or lower-case to upper-case) there is a single command which
+does both:
+
+        '~'     (tilde) Convert case of current character
+
+>>>  Move the cursor to be OVER the first character in the example
+>>>  line below.  Press  '~'  until you have changed the case of the
+>>>  entire line.  (  '~'  will advance to the right automatically).
+
+        bOB WENT TO pARIS, fRANCE, TO SEE THE #1 CYCLING EVENT.  end.
+
+Note that  '~'  only affects alphabetic characters.
+
+
+UNDOING
+-------
+* EMACS-NOTICE: Uppercase U does the same thing as lowercase u in
+  Viper so this part of the tutorial which was about U has been
+  removed.
+
+
+REPEAT LAST COMMAND
+-------------------
+Often you want to make the same change at multiple locations in the
+file.  To help accomplish this, vi remembers your previous action.
+
+        '.'       (dot) repeat last change
+
+>>> Go through the example below changing "FISH" to "TOAD":
+>>>     Go to the "F" in the first instance of "FISH"
+>>>     To change the word:  type  'c''w'  then type  TOAD  then press ESC
+>>>     Move the cursor to "F" in the second occurence of "FISH"
+>>>     Type  '.'  (dot)
+>>>     Move the cursor to "F" in the final occurence of "FISH"
+>>>     Type  '.'  (dot)
+>>>     Now move the cursor to each occurence of "CROW";  Type  '.'  (dot)
+
+        EXAMPLE:  The FISH fed the cat.  The CROW fed the cat.  Example
+        text is FISH to make interesting.  The man fed the CROW.  The
+        worm fed the FISH.  Example text is hard to make CROW.  END.
+
+>>> Go through the example above deleting all occurences of "TOAD":
+>>>     Move to the beginning of the EXAMPLE paragraph above.
+>>>     Type  '/''T''O''A''D'  and press RETURN (recall tutorial #2)
+>>>     Delete the word by typing  'd''w'
+>>>     Type  'n'  to move to the next occurence of "TOAD"
+>>>     Type  '.'  (dot) to repeat the  dw  command
+>>>     Use  'n''.'  to delete the remaining "TOAD"s
+
+Note that  '.'  only repeats changes, not cursor movements.
+
+* EMACS-NOTICE: In Emacs  '.'  also repeat undo and redo.
+
+* EMACS-NOTICE: Emacs KEYBOARD-MACROS are very powerful for repeating
+  whole sequences of keyboard commands.
+
+
+WINDOW ACTIONS
+--------------
+You are already familiar with the  C-u  (depress the control key and
+type u) and C-d  commands from tutorial #1.
+
+        C-d     Move DOWN one half-screen
+        C-u     Move UP one half-screen
+
+There are several related commands:
+
+        C-f     Move FORWARD one full-screen
+        C-b     Move BACKWARD one full-screen
+
+        C-e     Move the window down one line without moving cursor
+        C-y     Move the window up one line without moving cursor
+
+The  C-e  and  C-y  commands may seem obscure; however, notice that on
+the keyboard,  e and  y  are close to  d  and  u  respectively.  This
+should help you remember that  C-e  moves DOWN, and  C-y  moves UP.
+
+Recall the  'H'  'M'  'L'  (HIGH MIDDLE LOW) window commands from Tutorial 2.
+Consider a scenario where you want to yank from the current line to a
+line near the top of the window.  You could use  C-e  and  C-y  to
+position the text in the window before you use the  yH  command.
+
+The  'z'  command also moves the window without moving your cursor:
+
+    'z'<RETURN>   Position the current line to top of window
+        'z''.'      Position the current line to middle of window
+        'z''-'      Position the current line to bottom of window
+
+>>>     Move to this line.  Type  'z'  and press RETURN.  Notice that
+>>>     this text and the cursor have moved to the top of the window.
+>>>     Try  'z''-'  and  'z''.'  also.
+
+
+FILE AND DISPLAY CONTROL
+------------------------
+
+* EMACS-NOTICE: In vi C-g shows the status of the current file, but
+  C-g in Emacs in most situation stops what Emacs is doing. To get
+  information about the current file you can use C-c C-g instead when
+  Viper is in vi state.
+
+* EMACS-NOTICE: In vi C-l refreshes the screen, but C-l in Emacs calls
+  the command recenter.
+
+
+SUSPENDING VI
+-------------
+* EMACS-NOTICE: In vi C-z suspends vi. However in Viper C-z is by
+  default the VIPER-TOGGLE-KEY. To suspend or iconify Emacs use C-x
+  C-z.
+
+
+BANG COMMAND
+------------
+* EMACS-NOTICE: Emacs has builtin commands to sort etc.
+
+The exclamation point,  '!'  (aka BANG), command allows you to feed text
+to any Unix command.  The output of the Unix command replaces the
+original text.  Here is a useful Unix command to use from within vi:
+
+        !}fmt   Format the paragraph, joining and filling lines to
+                produce output lines of up to 72 characters
+
+>>>  Move to the example paragraph below. Type  !}fmt  and press
+>>>  RETURN.  Notice the paragraph will be reformatted such that
+>>>  the lines are of approximately equal length.
+
+        EXAMPLE:
+        So we grow together,
+        Like to a double cherry, seeming parted,
+        But yet an union in partition;
+        Two lovely berries moulded on one stem;
+        So, with two seeming bodies, but one heart;
+        END.
+
+Another useful command is:
+
+       !}sort   Sort lines of a paragraph alphabetically
+
+>>>  Move to the example text below. Type  !}sort  and press RETURN.
+
+        OBERON          king of the fairies.
+        PUCK            or Robin Goodfellow.
+        HERMIA          daughter to Egeus, in love with Lysander.
+        HELENA          in love with Demetrius.
+        LYSANDER        in love with Hermia.
+        DEMETRIUS       in love with Hermia.
+
+Remember, any Unix command may be used this way.
+
+
+SHIFTING TEXT
+-------------
+It is possible to shift large blocks of text right and left with the '>'
+and  '<'  commands.
+
+   '>'movement    Shift right to where the movement command specifies
+   '<'movement    Shift left to where the movement command specifies
+
+These commands work like the  'd'  command.  For example:
+
+        '>''}'      Shift right to the end of the paragraph
+        '<''}'      Shift left to the end of the paragraph
+        '>''>'      Shift the current line right
+        '<''<'      Shift the current line left
+
+>>>  Move the cursor to the first line of the paragraph below.
+>>>  Type  '>''>'  and  '<''<'  to shift the line back and forth.  Next
+>>>  try  '>''}'  to shift the paragraph to the right, then  '<''}'  to shift
+>>>  it left, then type  '.'  until all four lines start at the left edge.
+
+        THIS IS THE FIRST LINE OF EXAMPLE TEXT
+            IS
+    EXAMPLE
+                TEXT END
+
+
+SUMMARY
+-------
+
+        '~'       (tilde) Convert case of current character
+
+        'U'       * EMACS-NOTICE: Same as lowercase u undo in Viper.
+
+        '.'       (dot) repeat last change
+
+        C-d      Move DOWN one half-screen
+                (depress the control key and type d)
+
+        C-u      Move UP one half-screen
+                (depress the control key and type u)
+
+        C-f     Move FORWARD one full-screen
+        C-b     Move BACKWARD one full-screen
+
+        C-e     Move the window down one line without moving cursor
+        C-y     Move the window up one line without moving cursor
+
+    'z'<RETURN>   Position the current line to top of window
+        'z''.'      Position the current line to middle of window
+        'z''-'      Position the current line to bottom of window
+
+    C-c C-g     Show status of current file
+        C-l     Recenter
+
+        '!'}fmt   Format the paragraph, joining and filling lines to
+                produce output lines of up to 72 characters
+
+       '!'}sort   Sort lines of a paragraph alphabetically
+
+   '>'movement    Shift right to where the movement command specifies
+   '<'movement    Shift left to where the movement command specifies
+
+
+These commands should significantly speed up your editing. Have a nice
+day.  Tutorial 6 contains even more nifty commands.
+
+Copyright (c) 1992 Jill Kliger and Wesley Craig.  All Rights Reserved.

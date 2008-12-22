@@ -1,0 +1,91 @@
+body {
+	color: #ccc;
+	font-family: "Trebuchet MS", "Lucida Grande", Arial, Helvetica, sans-serif;
+	margin: 0 auto;
+	padding: 0;
+	font-size: 1.0em;
+	background: #111 url('../images/bg/gradient1.gif') top left repeat-x;
+}
+
+h1
+{
+	color: #fff;
+	font-size: 47px;
+	font-weight: bolder;
+	margin: 0 40px;
+	padding: 0.08em 0;
+}
+
+h1 sup
+{
+	color: #ddd;
+}
+
+h1 a
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+h1 .company, h1 a .company
+{
+	color: #d01a71;
+}
+
+h2
+{
+	color: #ddd;
+	font-size: 2.5em;
+}
+
+h3
+{
+	color: #fff;
+	font-size: 1.5em;
+}
+
+h4
+{
+	font-size: 1.3em;
+}
+
+.content
+{
+	margin: 0 20px;
+}
+
+.content a
+{
+	color: #fff;
+}
+
+
+.content p.linkage
+{
+	margin-top: 2em;
+	text-align: right;
+	font-size: 1.7em;
+	color: #ddd;
+}
+
+.content p.linkage a { color: #fff; }
+
+/*.content p.linkage a
+{
+	color: #fff;
+	background: url('../images/bg/biglink_off.gif') center right no-repeat;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+
+.content p.linkage a:hover
+{
+	background: url('../images/bg/biglink_on.gif') center right no-repeat;
+	font-style: italic;
+}*/
+
+#myGallery
+{
+	text-align: left;
+	margin: 0 auto;
+}

@@ -1,0 +1,248 @@
+/* Grapes, web template for business or for fun */
+/* By Dave Reeder, www.davereederdesign.com */
+
+body {margin: 0; padding: 0; background: #213205}
+
+/* * {margin: 0; padding: 0; border: 0; font-family:  Arial, Helvetica, sans-serif} */
+* {font-family:  Arial, Helvetica, sans-serif}
+
+/*----------------------------------------------Basic styles------------------------------------------------*/
+
+h1, h2, h3, h4 {font-family: Georgia, Georgia, serif; margin: 15px 0 0 5px; color: #fff; font-weight: normal; text-decoration: none}
+h1 em, h2 em, h3 em, h4 em {font-family: Georgia, Georgia, serif; font-weight: normal}  /* italic words in titles */
+
+h1 {xposition: absolute; right: 0px; top: 30px; font-size: 2.25em; letter-spacing: 0.1em; line-height: 1.00em; padding-right: 10px; border-right: 15px solid #fff}
+h1:first-letter {font-family: Georgia, Georgia, serif; font-size: 2.25em} /* styles the first letter of the main title to make it large */
+
+p#tagline {position: absolute; right: 0px; top: 125px; font-style: italic; color: #648D20; font-size: 0.90em}  /* sits under main title */
+
+h2 {font-size: 1.40em; letter-spacing: 0.05em}
+h3 {font-size: 1.00em; letter-spacing: 0.05em}
+
+p {
+/*     margin: 10px 10px 0 7px; */
+}
+p, ul, ol {
+    font-size: 0.75em; xline-height: 1.60em; color: #000; letter-spacing: 0.05em
+}
+dt {font-size: 0.9em;}
+ul li ul {font-size: 1em;}
+ul li ul {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+code {font-family: monospace; font-size: 1.20em; color: #E20000}
+
+/* p span {font-size: 1.50em; font-weight: bold} /\* shouting words *\/ */
+
+a:link, a:visited {
+    color: #792533;
+    /* font-weight: bold; */
+    /* I can see why a border-bottom was used, but I do not have time to
+       fix it now */
+    /* text-decoration: none; */
+    /*    border-bottom: 1px solid #792533; */
+}
+a:hover, a:active {color: #fff; border-color: #fff}
+
+#getit a {
+    text-decoration: none;
+}
+#getit a:visited {
+    color: #792533;
+}
+#getit a:hover, #getit a:active {
+    color: red;
+}
+#nxhtml-home a:hover, #nxhtml-home a:active {
+    color: red;
+}
+#nxhtml-home {
+    margin-bottom:3em;
+    background-color:white;
+    padding: 0.5em;
+}
+
+nul {list-style: inside square} /* general lists */
+nul ul {list-style: inside circle} /* general lists */
+
+acronym {font-weight: bold; border-bottom: 1px dashed #000; cursor: help}
+
+p, li, dt, dd {
+    margin-right: 1em;
+}
+li ul li {
+    margin-right: 0;
+}
+table, td {
+    margin: 0;
+    padding: 0;
+    cell-padding: 0;
+    //font-size:0.9em;
+}
+
+li p {
+    font-size: 1em;
+}
+
+/*-----------------------------------------------Layout DIVS------------------------------------------------*/
+
+#xgetit {
+    font-size: 0.6em;
+    float: left;
+    width: 20em;
+    background: white;
+    text-decoration: none;
+    padding: 0.5em;
+    padding-left: 1em;
+    margin-left: 1em;
+    margin-top: 1em;
+}
+/* * { text-decoration: none; } */
+#container {  /* keeps everything together */
+    position: absolute;
+    margin: 0 auto;
+    margin-top: 0;
+    /*               width: 620px; */
+    margin-right: 17%;
+    background: url(images/bkgrnd.gif) 0 0 repeat-y #CCCC33;  /* Important image, do not remove */
+    xoverflow: hidden;
+}
+
+#hdr {  /* div containing h1, nav and grapes image */
+    float: left;
+    width: 260px;
+    height: 250px;
+    background: url(images/grapes.jpg) 0 0 no-repeat #CCCC33  /* Image of Grapes */
+}
+
+#xmainhdr {
+    xfloat: right;
+    width: 100px;
+    height: 100px;
+}
+
+#lftcol table li a {
+    /* text-decoration: none; */
+}
+#lftcol {   /* left column */
+    /*             position: absolute; */
+    float: right;
+    /* left: 0px; */
+    /* top: 200px; */
+    /* margin-left: 50px;  /* leave this so that background image lines up with edge of this div */
+    margin-bottom: 50px; /* Quck fix for img menu */
+    margin-right: 1em;
+    background: transparent;
+}
+
+#rgtcol {
+    xfloat: left;
+    clear: both;
+    margin-left: 100px;
+    max-width: 600px;
+    padding-bottom: 30px; background: transparent; xoverflow: hidden;  /* right column */
+}
+
+.footer {
+    float: left;
+    width: 19em;
+    clear: both;
+}
+hr.footer {
+    width: 19em;
+    float: left;
+    text-align: left;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+p.footer {
+    margin-left: 1em;
+    margin-right: 1em;
+    color: #564;
+    //font-size: 0.8em;
+    //padding: 0;
+    //margin-bottom: 1em;
+    //padding-bottom: 1em;
+}
+
+#bttmbar {float: right; text-align: center; font-size: 0.70em; height: 4em; line-height: 4em; width: 570px; background: #CCCC33; border-top: 1px solid #D9D93C}
+
+#quote {    /* Quote box in left column */
+    float: left;
+    margin: 10px 0 20px 10px;
+    padding: 10px 0;
+    width: 170px;
+    text-align: center;
+    background: url(images/quote.gif) no-repeat 0 0
+}
+
+#quote p {color: #444; font-size: 0.80em; font-weight: bold; line-height: 2.00em}  /* Quote box text */
+
+
+/*---------------------------------------------Main Navigation-----------------------------------------------*/
+
+ul#nav {   /* navigation list */
+    margin: 53px 0 20px 0; /* the 53px is where the nav begins (margin top) */
+    padding: 0;
+    list-style: none inside
+}
+
+ul#nav li {float: left;	display: block}
+
+ul#nav li a {
+    width: 170px;
+    margin: 3px 0 0 0;  /* a little top margin */
+    border: 0;
+    border-left: 10px solid #CCCC33;
+    padding: 10px 5px;
+    font-family: Georgia, Georgia, serif;
+    font-weight: normal;
+    text-decoration: none;
+    display: block;
+    color: #450F1F;
+    background: #D9D93C
+}
+
+ul#nav li a#current {border-color: #fff}   /* current page, move id in the xhtml when creating a new page */
+
+ul#nav li a:hover {background: #9EA219; color: #fff}
+
+#PAGETOC {
+    float: left;
+}
+#PAGETOC * {
+    font-size: 12px;
+}
+#PAGETOC ul {
+    margin: 0;
+    margin-top: 1em;
+    padding: 0;
+}
+#PAGETOC li {
+    font-size: 1em;
+    list-style-type: none;
+    margin: 0em;
+}
+#PAGETOC ul li ul {
+    padding-left: 1.5em;
+    margin: 0em;
+}
+#PAGETOC li, #PAGETOC li ul li {
+    font-weight: bold;
+    display: block;
+}
+#PAGETOC li ul li {
+    font-weight: 500;
+}
+
+#PAGETOC .tochead {
+    font-size: 10px;
+    background-color: #c0ff3e;
+    background-color: #9acd32;
+    background-color: #b3ee3a;
+    padding: 4px;
+}
+

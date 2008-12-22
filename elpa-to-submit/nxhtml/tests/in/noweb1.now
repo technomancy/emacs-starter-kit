@@ -1,0 +1,38 @@
+@
+\section{Hello world}
+
+Today I awakened and decided to write
+some code, so I started to write a Hello World in \textsf C.
+
+<<hello.c>>=
+/*
+  <<license>>
+*/
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+  printf("Hello World!\n");
+  return 0;
+}
+@
+\noindent \ldots then I did the same in PHP.
+
+<<hello.sql>>=
+SELECT * FROM Persons
+WHERE FirstName LIKE '%a'
+@
+<<hello.php>>=
+<?php
+  /*
+  <<license>>
+  */
+  echo "Hello world!\n";
+?>
+@
+\section{License}
+Later, same day some lawyer reminded me about licenses.
+So, here it is:
+
+<<license>>=
+This work is placed in the public domain.
+@

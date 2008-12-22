@@ -1,0 +1,115 @@
+
+1.26 => 1.27 (2004-08-23)
+=========================
+
+ * Proposed and partially provided by Samuel Marshall <sam@leafdigital.com>
+ * enhanced timezone handling, should be perfect now
+ * new option -c, like -i but then asks interactively to let do it
+ * if FTP user/password are set to ?, they are asked for interactively
+
+
+1.25 => 1.26 (2004-03-31)
+=========================
+
+ * fixed "dangerous" algorithm of synchronization direction
+
+
+1.24 => 1.25 (2004-03-20)
+=========================
+
+ * fixed some 1.24 bugs
+ * clock offset computation now more resistant against very slow connections
+ * clock offset computation disabled for GET mode, so mirroring of foreign
+   stuff is now possible again
+ * default localdir of . disabled, therefore
+ * using . as localdir parameter does not cause a parsing error any more
+ * replaced damn indentation tabs in sourcecode by appropriate number of 
+   spaces, so code is readable independent of tab settings
+ * enabled handling of ftpdir /
+ * handling of relative ftpdir corrected
+
+
+1.23 => 1.24 (2003-10-11)
+=========================
+
+ By Michiel Steltman <Msteltman@disway.nl>
+ 
+ * handle files with blanks etc in names
+ * clock offset remote-local to reduce unnecessary transfers
+ * error handling
+ 
+
+1.22 => 1.23 (2003-09-28)
+=========================
+
+ * New parameter timeout
+   
+
+1.21 => 1.22 (2003-03-24)
+=========================
+
+ * Now cuts of / at directory spec's end, to avoid pwd() being different 
+   from target of cwd() (which lead to unneccesarry abortions)
+   
+
+1.20 => 1.21 (2003-03-24)
+=========================
+
+ * version information in sourcefile and output of -h command
+ 
+
+1.11 => 1.20 (2003-03-22)
+=========================
+
+ * generally, most foreseeable problems are beeing checked, in particular:
+
+   - unability to connect to FTP server
+   - unability to login into FTP server
+   - unability to change to local or remote base directory
+   - unability to change to remote subdirectory
+   - unability to create local or remote subdirectory
+   - unability to remove local or remote subdirectory
+   - unability to put or get a file within 3 trials
+   
+   All these errors (except the last one) leads to immediate abortion.
+
+
+1.10 => 1.11 (2002-05-10)
+=========================
+
+ * Some optical corrections concerning output
+ 
+ * Files are now automatically re-transferred until the size on both ends 
+   matches
+
+ * -? now corrrectly recognized 
+
+
+1.00 => 1.10 (2001-10-28)
+=========================
+
+ * config file support
+   This is mportant to avoid putting ftp passwords in the process list!
+
+ * much more informative standard and verbose/debug output, including kind
+   of a advance information
+   
+ * better FTP-URL parsing supporting such without user/password
+ 
+ * much better default values, e.g. ftp://ftp:anonymous@localhost/., ...
+ 
+ * softlinks are now detected (locally and remote) and treated somewhat
+   correctly, i.e. they are ignored correctly ;-))
+
+
+
+=> 1.00 (2001-10-26)
+====================
+
+* 1.0 created 2001-10-20 23:10 by Christoph Lechleitner <lech@ibcl.at>
+
+Quite good for a 5 hour hack, isn't it?
+O.K., I have already written similar programs for local file systems
+in Pascal for DOS, Win3x and OS/2, and in VisualBasic for Win95b.
+
+

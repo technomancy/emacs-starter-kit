@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Indentation bug at &lt;</title>
+</head>
+<body>
+Try to indent the whole file several times.
+The first time both the html and the php code is badly indented.
+<div id="main">
+<?php
+for ($i = 0; $i < 4711; ++$i) {
+}
+?>
+</div>
+</body>
+</html>

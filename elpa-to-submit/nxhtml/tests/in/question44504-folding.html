@@ -1,0 +1,28 @@
+<table>
+
+
+<!--M&#279;nesio pasirinkimas -->
+
+<tr>
+	<td width='50' colspan='1' class='men-met'>
+		<input type='button' value=' < ' onClick='goLastMonth(<?php echo date("t", strtotime("$year1-$month1-$day1")).", ".$month . ", " . $year.", ".date("w", strtotime("$year-$month-$day1")); ?>)' />
+	</td>
+	<td width='250' colspan='5' class='men-met'>
+		<span class='title'><?php echo $men . " " . $year; ?></span><br />
+	</td>
+	<td width='50' colspan='1' align='right' class='men-met'>
+		<input type='button' value=' > ' onClick='goNextMonth(1, <?php echo $month . ", " . $year.", ".date("w", strtotime("$year2-$month2-$day1")); ?>)' />
+	</td>
+</tr> 
+
+<!-- Antrašt&#279; su savait&#279;s dienom -->
+<tr>
+	<td class='head' >Pir</td>
+	<td class='head' >Ant</td>
+	<td class='head' >Tre</td>
+	<td class='head' >Ket</td>
+	<td class='head' >Pen</td>
+	<td class='head' >Šeš</td>
+	<td class='head' style="color: red;" >Sek</td>
+</tr> 
+</table>

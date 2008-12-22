@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+          "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>News and Notes about nXhtml</title>
+    <link href="wd/grapes/nxhtml-grapes.css" rel="StyleSheet" type="text/css" />
+  </head>
+  <body>
+    <div id="container">
+
+      <div id="rgtcol">
+        <p id="nxhtml-home">
+          <a href="nxhtml.html">To nXhtml main page</a>
+        </p>
+
+        <h1>News and Notes about nXhtml</h1>
+
+        <dl>
+
+          <dt id="hadron-bugs" style="margin-top:1em;">Thanks for testing!</dt>
+          <dd>
+            <p>
+              I want to thanks the testers, especially Hadron Quark
+              and Eric Lilja, for helping me by testing and pointing
+              out bugs and weaknesses, most related to editing of PHP.
+            </p>
+            <p>
+              It is quite a big job trying to get rid of smaller annoying bugs and bigger ones.
+              In my mailbox folder for nXhtml I have more than 500 old messages currently.
+            </p>
+          </dd>
+
+          <dt id="state-of-the-art" style="margin-top:1em;
+            background-color: #00fa9a;
+            background-color: #20b2aa;
+            padding: 0.5em;
+                                           ">The State of the Art</dt>
+          <dd style="background-color: #54ff9f; padding: 0.5em">
+            <p>
+              I have more and more come to realize that there are two
+              main parts of nXhtml which are in quite different
+              degrees of maturity.  The reason for the difference is
+              mainly that one of them, <strong>mumamo-mode</strong>, requires
+              very tight integration with Emacs in a way that
+              currently is not completely possible. Some things must
+              be changed in Emacs for this.  There are also things to
+              discover in the interactions with other minor modes for
+              example.
+            </p>
+            <p>
+              That said I still think mumamo-mode is mature enough for
+              serious use (though it sometimes conflicts with some other modules).
+            </p>
+            <p>
+              The other part, <strong>nxhtml-mode</strong>, is more mature,
+              since it stands more by itself and since it builds on
+              the very stable nxml-mode. I would not say nxhtml-mode
+              is finished, but it is stable and useful.
+            </p>
+          </dd>
+
+          <dt id="magic-problems" style="margin-top:1em;">Magic major mode selection</dt>
+          <dd>
+            <p>
+              Sometimes the major mode that Emacs opens a file in is
+              not what you expect. This can happen with files like PHP
+              files.  The reason might be that magic-mode-alist have
+              choosen a mode based on the content of the file. The way
+              this is done does not take files with mixes a mix of for
+              example XHTML and PHP into account.
+            </p>
+            <p>
+              You may try setting magic-mode-alist to nil if this is a
+              problem for you.
+            </p>
+            <p>
+              <em>
+                This is now no longer necessary since the introduction
+                of magic-fallback-mode-alist in CVS Emacs on 2007-05-16.
+                (If you have an Emacs newer than that, of course.)
+              </em>
+            </p>
+          </dd>
+
+          <dt id="underline-bug" style="margin-top:1em;">Long Red Underlines</dt>
+          <dd>
+            <p>
+              Because of a bug in Emacs 22.1 you can sometimes (at the
+              end of a line) get long red lines instead of just a
+              single underlined character.  Many users (me included)
+              find this quite a bit disturbing. I have therefore added
+              a command to quickly hide/show the underlines. This is
+              on <em>C-c C-w</em>.
+            </p>
+            <p>
+              This is particular useful for example in the case where
+              you edit a PHP file and are bound to get a lot of XHTML
+              validation errors.
+            </p>
+          </dd>
+
+          <dt id="php-attribute-values" style="margin-top:1em;">Attribute values computed by PHP</dt>
+          <dd>
+            <p>
+              If you want to have attribute values computed by PHP
+              here is a way how to structure that to avoid breaking
+              completion and validation in the XHTML part unnessecary:
+            </p>
+            <p style="margin-left:2em">
+              &lt;img src=&quot;images/linux.png&quot; title=&quot;&lt;?php foo(&quot;bar&quot;);?&gt;&quot;/>
+            </p>
+            <p>
+              Unfortunately that still breaks XHTML validation since
+              &lt; is not allowed in strings.  In the long run I
+              believe the XML validator has to be broken up so that it
+              avoids parsing the string here (in PHP files).
+            </p>
+            <p>
+              For now I have implemented a workaround.
+              If you are using constructs like those above then turn on <em>nxhtml-strval-mode</em>.
+              This will temporarily replace the above with
+            </p>
+            <p style="margin-left:2em">
+              &lt;img src=&quot;images/linux.png&quot; title=&quot;&#171;?php foo(&quot;bar&quot;);?&#187;&quot;/>
+            </p>
+            <p>
+              However on the screen you will still see the original
+              string and when writing to file the correct characters
+              will be used.
+            </p>
+          </dd>
+
+          <dt id="pi-note" style="margin-top:1em;">A note for PHP and its cousins</dt>
+          <dd>
+            <p>
+              The rules for a process instruction in XML, like &lt;?php
+              ... ?&gt; says that the text can contain any text except
+              <em>?&gt;</em>. So if you want to output that string
+              from PHP then break it up so it does not look as ?&gt; in
+              the source file.
+            </p>
+            <p>
+              It might be good to break up the beginning part of the
+              process instructions too.  And please note that to use
+              XHTML validation or completion you should avoid using
+              &lt; in strings, since it is not allowed there.
+            </p>
+          </dd>
+
+          <dt id="pi-note" style="margin-top:1em;">Perl Mode slow with Mumamo Mode</dt>
+          <dd>
+            <p>
+              Perl mode used with MuMaMo mode sometimes makes the
+              fontification slow for big files.  I do not know the
+              reason, but I am trying to find a solution for this.  If
+              you encounter this problem, just turn off mumamo-mode in
+              that buffer.
+            </p>
+          </dd>
+
+          <dt id="tab-width-problems" style="margin-top:1em;">Tab width</dt>
+          <dd>
+            <p>
+              Do you have <em>tab-width</em> to something different than 8
+              (the default)? Then please change this to 8. I have got
+              reports of problem with indentation when it is not 8.
+            </p>
+          </dd>
+
+          <dt id="mmm-compat" style="margin-top:1em;">Why the chunks are not compatible with mmm</dt>
+          <dd>
+            <p>
+              Some people have asked why the way to specify chunks in
+              mumamo-mode is not compatible with the old mmm-mode. The
+              answer is that I was not sure that the way used in
+              mmm-mode for specifying the chunks was flexible enough.
+            </p>
+            <p>
+              And I am sure that even the way used in mumamo-mode is
+              not good enough for all cases, but I let it be the way
+              it is until I have a better understanding of the
+              problem. Suggestions and comments are welcome!
+            </p>
+          </dd>
+
+      </dl>
+
+        <h1>nXhtml Changes</h1>
+
+        <dl>
+          <dt>0.89</dt>
+          <dd>
+            <ul>
+              <li>
+                Corrected autostart for nXhtml when not used together with EmacsW32.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.90</dt>
+          <dd>
+            <ul>
+              <li>
+                Improved display of XML path.
+              </li>
+              <li>
+                Discontinued xmple-mode.
+              </li>
+              <li>
+                New major modes nxhtml-part-mode/nxml-part-mode replaces
+                minor mode xmlpe-mode.  (While moving the code to
+                nxhtml-part.el I also fixed a bug in Xmple minor mode that
+                made Emacs take 99% of the CPU.)
+              </li>
+            </ul>
+          </dd>
+          <dt>0.91</dt>
+          <dd>
+            <ul>
+              <li>
+                Fixed some calls to perl which prevented uploading of
+                a site of you did not have perl in the same location
+                as me.
+              </li>
+              <li>
+                Glued together things so that editing PHP files works
+                as I intended. (This means that Emacs switches between
+                php-mode and nxhtml-part-mode automatically when
+                moving point. And that you can use completion.)
+              </li>
+              <li>
+                Starting working on the documentation for nXhtml.
+                New layout to the documentation files.
+                Examples with images.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.92</dt>
+          <dd>
+            <ul>
+              <li>
+                Fixes to make the switching between php and xhtml
+                style editing work better.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.93</dt>
+          <dd>
+            <ul>
+              <li>
+                Better error handling when switching to editing
+                embedded JavaScript and CSS.
+              </li>
+              <li>
+                Removed PHP spec from embedded switching since they
+                interfered with the automatic switching between php
+                and xhtml.
+              </li>
+              <li>
+                Gives an error message if web host is not defined in
+                site when trying to use View Uploaded File and
+                cousins.
+              </li>
+              <li>
+                Gives a ready message when finished uploading a single
+                file.
+              </li>
+              <li>
+                When using Mode Switching at &lt;? ... ?&gt; mode
+                switching could occur in wrong buffer. Fixed together
+                with some other buffer problems.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.94</dt>
+          <dd>
+            <ul>
+              <li>
+                Add http://www.w3.org/ to the help sites for CSS.
+              </li>
+              <li>
+                Included a CSS mode.
+              </li>
+              <li>
+                Added a menu entry for bug reporting.
+              </li>
+              <li>
+                Renamed menu bar entry from XHTML to nXhtml for clarity.
+                (But nXml menu bar entry is still called XML.)
+              </li>
+              <li>
+                Added work around for globalized minor modes in the
+                cases of MLinks, XML Path and mode switching at &lt;? ... ?&gt;.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.95</dt>
+          <dd>
+            <ul>
+              <li>
+                Added workaround for the problem with the first
+                keyboard key after automatically switching of mode at
+                &lt;? ... ?&gt;.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.96</dt>
+          <dd>
+            <ul>
+              <li>
+                Added support for multiple major modes with mumamo.el.
+              </li>
+              <li>
+                More conventient handling of links. They can now be
+                opened in the same window, 'other window' or in a new
+                frame.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.97</dt>
+          <dd>
+            <ul>
+              <li>
+                Schema was not setup after starting new page so
+                completion did not work. Fixed.
+              </li>
+              <li>
+                Added http://xhtml.com/ to help sites for XHTML.
+              </li>
+              <li>
+                Added the concept of <em>XML validation headers</em>.
+                These are just text parsed by the nXml validation
+                parser to get a start state before starting parsing a
+                buffer.  This allows the use of the nXml completion in
+                buffers where there are no XML header.  Such a header
+                is often lacking for example in PHP code since the
+                XHTML header is often generated dynamically.
+              </li>
+              <li>
+                Because of the change above <em>nxhtml-part-mode</em>
+                is no longer needed and is therefore declared
+                obsolete.
+              </li>
+              <li>
+                Corrected a bug in mlinks.el that prevented opening an
+                HTML link in a other window or a new frame.
+              </li>
+              <li>
+                Added support for JSP, eRuby and some support for perl
+                in mumamo.el.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.98</dt>
+          <dd id="v0.98">
+            <ul>
+              <li>
+                Mumamo was not found when nXhtml was installed with
+                just the zip file. Corrected.  (nXhtml is also
+                installed when you install EmacsW32.)
+              </li>
+              <li>
+                Enhancement to mumamo error handling when a bad mode
+                specifier for an embedded mode is found.
+              </li>
+              <li>
+                Introduced a bug for empty XHTML documents in
+                0.97. Corrected.
+              </li>
+              <li>
+                Corrected a bug for chunks 1 character long.
+              </li>
+              <li>
+                There is what I consider is a bug in Emacs 22.1 in the
+                handling of global minor mode that are not distributed
+                with Emacs. If they are turned on by customization,
+                but loaded after Emacs have loaded the customizations
+                (usually in .emacs) then they are not turned on
+                correctly. Added work-around for this.
+              </li>
+              <li>
+                <em>Extra XHTML Validation Header</em>:
+                <ul>
+                  <li>
+                    <em>Extra XHTML Validation Header</em> state was not saved when moving between chunks. Fixed.
+                  </li>
+                  <li>
+                    Tried to make the concept of <em>Extra XHTML Validation Header</em>
+                    more clear.  Added this visually to the buffer.
+                  </li>
+                  <li>
+                    <em>Extra XHTML Validation Headers</em> can now be turned on
+                    automatically based on file name.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <em>nXhtml menu:</em>
+                <ul>
+                  <li>
+                    Reorganized the nXhtml menu.
+                  </li>
+                  <li>
+                    Added <em>customization</em> groups for help libraries to nXhtml.
+                  </li>
+                  <li>
+                    Added an entry for customization of nXhtml to the menus.
+                  </li>
+                  <li>
+                    Added <em>Tidy</em> to the menus again.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Corrected bug in <em>XML Path</em> (nxml-where) for single tags.
+                Other small fixes to nxhtml-where.
+              </li>
+              <li>
+                Documentation enhancements.
+                Added <em>The Quick Guide</em>.
+              </li>
+            </ul>
+          </dd>
+          <dt>0.99</dt>
+          <dd id="v0.99">
+            <ul>
+              <li>
+                Fixed a serious bug in the cooperation between nxhtml-mode and mumamo-mode.
+              </li>
+              <li>
+                Turn on mumamo-mode by file name (mumamo-global-mode).
+              </li>
+              <li>
+                Extra XHTML Validation Header:
+                <ul>
+                  <li>
+                    The Extra XHTML Validation Header state were not saved when changing major mode in MuMaMo. Corrected.
+                  </li>
+                  <li>
+                    Added more alternatives to the Extra XHTML Validation Header list.
+                    This should make it easier to use completion with for example PHP.
+                  </li>
+                  <li>
+                    Added default value for the Extra XHTML Validation Header.
+                  </li>
+                  <li>
+                    Tried to make the use of Extra XHTML Validation Header more automatic and therefore useful.
+                    Also tried to make it play better with setting schema file.
+                    (There is no need normally to set schema file by hand.)
+                  </li>
+                  <li>
+                    To turn this on by default customize nxhtml-global-validation-header-mode.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Possible to hide validation warnings without turning
+                on validation (which would make completion in the
+                XHTML part impossible).
+              </li>
+              <li>
+                Some fixes to php-mode:
+                <ul>
+                  <li>Using the character # for comments now works for most cases.</li>
+                  <li>Now uses the fontification faces in a more standard way which calms down the look.</li>
+                  <li>Initialization bug fixes.</li>
+                  <li>Renamed php-mode-user-hook to php-mode-hook to follow standard.</li>
+                </ul>
+              </li>
+              <li>
+                Indentation fixes:
+                <ul>
+                  <li>
+                    Various corrections to indentation in mumamo.
+                  </li>
+                  <li>
+                    Added the possibility to use TAB to indent regions
+                    (indent-region-mode).
+                  </li>
+                  <li>
+                    Warn about bad indentation in mixed PHP/HTML code
+                    when using php-mode only.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Fontification now fontifies all text first in main
+                major mode and thereafter applies submodes. (This
+                avoids some problems with around a submode chunk.)
+              </li>
+              <li>
+                Reorganized the nXhtml menu:
+                <ul>
+                  <li>
+                    There is now a minor mode for the nXhtml
+                    menu. This makes it possible to easier use common
+                    features when in buffers not in nxhtml-mode.
+                  </li>
+                  <li>
+                    The nXhtml menu does not disappear when moving
+                    into a chunk where the major mode is not
+                    nxhtml-mode.  The changes also makes it easy to
+                    access uploading functions functions etc from
+                    other modes than nxhtml-mode since the
+                    <em>nXhtml</em> may also be shown in them.
+                  </li>
+                  <li>
+                    The nXhtml menu can be turned on globally by default.
+                    Customize nxhtml-menu-mode for that.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </dd>
+          <dt>1.00</dt>
+          <dd id="v1.00">
+            <ul>
+              <li>
+                Reached version number 1.00 - which you maybe believe
+                means the bugs should be gone? Sorry, it is just that
+                I ran out of version numbers ;-) However it looks like
+                much fewer bugs at least.
+              </li>
+              <li>
+                Fixed problems mostly related to global turn on of different features in nXhtml.
+              </li>
+              <li>
+                Small fixes to indentation.
+                <ul>
+                  <li>
+                    nxhtml-mode could get confused by php tags.
+                  </li>
+                  <li>
+                    nxhtml-mode did not indent &lt;!DOCTYPE in a sensible way.
+                  </li>
+                  <li>
+                    Electric keys now works in embedded php when using mumamo-mode.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Tidy was very misbehaving since the output buffer was
+                not erased between different files. But I have got no
+                bug reports on this ;-)
+              </li>
+              <li>
+                Fixed a bug in validation that should up when using muamo-mode.
+              </li>
+              <li>
+                Fixed bug in &lt;script ...> and &lt;style ...> chunk dividing.
+              </li>
+              <li>
+                Added support for OpenLaszlo.
+              </li>
+              <li>
+                Corrections to mlinks-mode (visible mostly as links in
+                XHTML buffers):
+                <ul>
+                  <li>
+                    Links disappeared when a new file was
+                    opened. Corrected.
+                  </li>
+                  <li>
+                    Links were not correctly updated at changes in the
+                    buffer when mumamo-mode was used. Fixed.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                The welcome message for nXhtml could be shown too
+                early sometimes when loading, before nXhtml actually
+                knew if it should be shown or not. Tried to fix it.
+              </li>
+            </ul>
+          </dd>
+          <dt>1.01</dt>
+          <dd id="v1.01">
+            <ul>
+              <li>
+                Reported wrong version number for nXhtml in the menus. Fixed.
+              </li>
+              <li>
+                <em>If you use the zip file to install nXhtml please
+                notice that it has now a top level nxml.</em> Sorry for not
+                having zipped it like that before!
+              </li>
+              <li>
+                The url links in <em>Welcome to nXhtml</em> was a bit
+                incorrect and did not work on all OS:es. Fixed.
+              </li>
+              <li>
+                Added customization of popup completion to the 'nxhtml
+                customization group so they are easier to find.
+              </li>
+              <li>
+                MuMaMo
+                <ul>
+                  <li>
+                    Struggled a bit with the load sequences of the elisp
+                    libraries used by nXhtml when using MuMaMo.
+                  </li>
+                  <li>
+                    Tried to get the global turn on of mumam-mode to work
+                    in all cases.
+                  </li>
+                  <li>
+                    The screen was blinking when changing overlays after
+                    changes in the buffer. Tried to fix this.
+                  </li>
+                  <li>
+                    Minor fixes do syntax highlighting, like taking care of single ':s.
+                  </li>
+                  <li>
+                    Fixes to the support for JSP and eRuby.
+                  </li>
+                  <li>
+                    Made the support for perl here documents a bit better.
+                    Large perl documents are however still quite slow when
+                    using mumamo-mode.  I do not know the reason yet.
+                  </li>
+                  <li>
+                    Refontification could miss some parts when buffer
+                    changes caused chunk division changes. Complex,
+                    tried to fix it, but I am a bit unsure that it
+                    always works.
+                  </li>
+                  <li>
+                    Cleaned up mumamo.el a bit.
+                  </li>
+                  <li>
+                    Rewrote mumamo-test.el and functions called from it in
+                    mumamo.el a bit to make tracebacks from errors more
+                    useful. Changed keybindings in mumamo-test.el from
+                    global to a minor mode <em>mumamo-test-mode</em>.
+                    Renamed mumamo-notest.el to mumamo-test.el.  Added it
+                    to the zipped distribution of nXhtml.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Fixed a bug related to links and buffer changes.
+              </li>
+            </ul>
+          </dd>
+          <dt>1.02</dt>
+          <dd id="v1.02">
+            <ul>
+              <li>
+                Fixed a refontification bug that occured after changes.
+              </li>
+            </ul>
+          </dd>
+          <dt>1.03</dt>
+          <dd id="v1.03">
+            <ul>
+              <li>
+                Added the possibility to call GIMP.
+              </li>
+              <li>
+                Reworked the messages for fontification errors to try
+                to catch an error that shows up sometimes.  Tried to
+                avoid disturbing normal use in spite of that error.
+              </li>
+              <li>
+                Reverted to using a short delay before switching major
+                mode when moving between buffers.
+              </li>
+            </ul>
+          </dd>
+          <dt>1.04</dt>
+          <dd id="v1.04">
+            <ul>
+              <li>
+                Completion in empty buffers with a completion header
+                did not work. Fixed.
+              </li>
+              <li>
+                Multiple major modes:
+                <ul>
+                  <li>
+                    Better error tracing for some functions.
+                  </li>
+                  <li>
+                    Position was garbled when a ;-char was inserted in php-mode chunk. Fixed.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Extra XHTML Validation Header:
+                <ul>
+                  <li>
+                    View File did not work correctly when an extra
+                    XHTML validation header was used. Corrected.
+                  </li>
+                  <li>
+                    Extra XHTML validation headers are no longer
+                    turned on by default in any buffers.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Tried to fix a problem when using newline-and-indent.
+                When this was in a mode derived from C the indentation
+                sometimes became 0.
+              </li>
+              <li>
+                Added a workaround for <a
+                href="#php-attribute-values">Attribute values computed
+                by PHP</a>
+              </li>
+              <li>
+                Ruby
+                <ul>
+                  <li>
+                    Multiple major mode turned on by default for .rhtml files when this mode is global.
+                  </li>
+                  <li>
+                    Multiple major mode is no longer turned on when rub-mode is turned on.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Added .nosearch to subdirectories with no elisp files.
+              </li>
+              <li>
+                Added support for Firefox add-on It's All Text.
+              </li>
+              <li>
+                Added the possibility to easily view the output of scripts on the server (if they require no parameters).
+                You can now do that from the nXhtml menu.
+                Previously only html files on the server could be viewed that way.
+                Image files can also be viewed this way.
+              </li>
+              <li>
+                Upgraded htmlize.el to version 1.34
+              </li>
+              <li>
+                Added functions for unfilling.
+              </li>
+              <li>
+                Added keybindings and menu entries for longlines-mode, fill-paragraph and unfill-paragraph.
+              </li>
+              <li>
+                Added image-mode to those that are encompassed by
+                nxhtml-global-minor-mode so that images can be
+                uploaded more easily.
+              </li>
+              <li>
+                Added <em>edit with GIMP</em> and <em>upload</em> to the popup menu for links.
+                This avoids the need to load the linked files in Emacs first.
+              </li>
+              <li>
+                Fixed incorrect checks for mlinks-mode in menu building.
+              </li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <hr class="footer"/>
+    <p class="footer">
+      Copyright &copy; 2007 OurComments.org
+      --
+      Latest update 2007-05-06
+    </p>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+@import url(td_oc.css);
+
+hr {
+    margin-top: 4em;
+}
+body {
+    margin-top: 0.5em;
+    background-color: #ffe4b5;
+    background-color: #ffffdf;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+body, td {
+    font-size: 0.9em;
+    font-family: Arial, sans-serif;
+}
+h1, h2, h3 {
+    color: #556b2f;
+}
+em {
+    color: maroon;
+    font-style: normal;
+}
+
+a {
+    color: maroon;
+}
+a.nonexistent {
+    font-weight: bold;
+    background-color: #F8F8F8;
+    color: #FF2222;
+}
+
+a.nonexistent:visited {
+    background-color: #F8F8F8;
+    color: #FF2222;
+}
+
+a.dl {
+    font-weight: 400;
+    background-color: #e0ff6e
+}
+
+strong { font-weight: bold; }
+
+ul { list-style-type: disc }
+
+dl.contents { margin-top: 0; }
+dt.contents { margin-bottom: 0; }
+
+
+p.verse {
+    white-space: pre;
+    margin-left: 5%;
+}
+
+pre {
+    white-space: pre;
+    /* monospace does not work in Firefox 0.9.2 font-family: monospace; */
+    margin-left: 0em;
+    margin-bottom: 0em;
+}
+
+dl.bolddt dt { font-weight: bold; }
+
+dt {
+    font-weight: bold;
+}
+dd {
+    margin-bottom: 0.7em;
+}
+hr {
+    width: 100%;
+}
+hr.divider {
+    height: 0.7em;
+    background-color: maroon;
+    width: 67%;
+}
+#FEAT li {
+    margin-bottom: 0.7em;
+}
+
+#PAGETOC {
+    float: left;
+    background-color: #df7;
+    background-color: #edef87;
+    margin-right: 2em;
+    margin-bottom: 2em;
+    margin-top: 0em;
+    -moz-border-radius: 1em;
+}
+#PAGETOC td {
+    padding: 0.8em;
+    padding-right: 1.1em;
+    //font-size: 0.8em; /* For IE only */
+}
+#PAGETOC strong {
+    color: #6b8e23;
+    display: block;
+    margin-bottom: 0.5em;
+}
+#PAGETOC ul li a {
+    color: maroon;
+}
+#PAGETOC a:hover { background-color: yellow; }
+#PAGETOC ul {
+    list-style-type: none;
+    margin:0;
+    padding-left: 1.5em;
+}
+#PAGETOC ul li {
+    font-weight: bold;
+}
+#PAGETOC ul li ul { }
+#PAGETOC ul li ul li {  font-weight: normal;}
+#PAGETOC .liul {
+    //display:inline; /* For IE only */
+}
+#emacswikibar {
+    background-color:#ef4;
+    background-color: #edef87;
+    text-align:center;
+    margin-top:0em;
+    padding:0.4em;
+}
+#imgwikiguide {
+    background-color:#cef;
+    padding:2em;
+    -moz-border-radius: 2em;
+}
+
+#download a {
+    border: groove;
+    font-size: 1.5em;
+    padding: 0.6em;
+    background-color: #556b2f;
+    color: #ce6;
+    -moz-border-radius: 1em;
+}
+#download a:hover {
+    color: #BF0;
+    background-color: black;
+    text-decoration: underline;
+}
+#emacsw32dl {
+    width:20em;
+    border-style:solid;
+    border-color:#556b2f;
+    padding:0.7em;
+    -moz-border-radius: 1em;
+}
+
+#my-elisp {
+    background-color: #fff;
+    padding: 2em;
+    border-style: solid;
+    -moz-border-radius: 1em;
+}
+#my-elisp dl {
+    margin-left: 2em;
+}
+
+#keybnotationdiv {
+    border-width:1px;
+    border-style:solid;
+    border-color:#556b2f;
+    padding:0.7em;
+    padding-left:1.5em;
+    -moz-border-radius: 1em;
+}

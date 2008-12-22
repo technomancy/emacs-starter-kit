@@ -1,0 +1,25 @@
+ROLLOVER_SPEC a {
+    /* Image */
+    display: block;
+    background: transparent url("IMG_URL") 0 0 no-repeat;
+    overflow: hidden;
+    width: IMG_WIDTHpx;
+    /* Text placement and size, etc */
+    CENTER_OR_PAD;
+    padding-top: PADDING_TOPpx;
+    font-size: FONT_SIZEpx;
+    padding-bottom: PADDING_BOTTOMpx;
+    text-decoration: none;
+    white-space: nowrap;
+    border: none;
+    margin: 0;
+}
+ROLLOVER_SPEC a:hover {
+    background-position: 0 -IMG_HEIGHT_2px;
+}
+ROLLOVER_SPEC li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    HOR_OR_VER;
+}
