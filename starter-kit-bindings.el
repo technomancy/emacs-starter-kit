@@ -50,7 +50,10 @@
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
 ;; Start a regular shell if you prefer that.
-(global-set-key (kbd "C-x C-m") 'shell)
+(global-set-key (kbd "C-x M-m") 'shell)
+
+;; If you want to be able to M-x without meta
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
 
 ;; Fetch the contents at a URL, display it raw.
 (global-set-key (kbd "C-x h") 'view-url)
