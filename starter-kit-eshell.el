@@ -11,7 +11,9 @@
      (require 'em-prompt)
      (require 'em-term)
      (require 'em-cmpl)
-     (require 'eshell-vc)
+     ;; TODO: for some reason requiring this here breaks it, but
+     ;; requiring it after an eshell session is started works fine.
+     ;; (require 'eshell-vc)
      (setenv "PAGER" "cat")
      (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
      (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
