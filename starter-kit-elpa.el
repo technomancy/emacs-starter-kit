@@ -8,6 +8,7 @@
                                    'js2-mode
                                    'css-mode
                                    'nxml
+                                   'gist
                                ;; To submit:
 ;;;                                "magit"
 ;;;                                "paredit"
@@ -16,7 +17,6 @@
 ;;;                                "haml"
 ;;;                                "sass"
 ;;;                                "cheat"
-;;;                                "gist"
 ;;;                                "html-fontify"
 ;;;                                "color-theme"
 ;;;                                "color-theme-zenburn"
