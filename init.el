@@ -30,6 +30,10 @@
 (require 'ansi-color)
 (require 'recentf)
 
+;; this must be loaded before ELPA since it bundles its own
+;; out-of-date js stuff. TODO: fix it to use ELPA dependencies
+(load "elpa-to-submit/nxhtml/autostart")
+
 ;; Load up ELPA, the package manager:
 
 (require 'package)
@@ -53,7 +57,6 @@
 ;; More complicated packages that haven't made it into ELPA yet:
 
 (autoload 'jabber-connect "jabber" "" t)
-(load "elpa-to-submit/nxhtml/autostart")
 ;; TODO: rinari, slime
 
 ;; You can keep system- or user-specific customizations here:
