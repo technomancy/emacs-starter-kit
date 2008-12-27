@@ -30,18 +30,25 @@
                                    )
   "Libraries that should be installed by default.")
 
+;; Work around a bug in ELPA
+(ignore-errors (load "elpa/inf-ruby-2.0/inf-ruby-autoloads"))
+
 (defun starter-kit-elpa-install ()
   "Install all starter-kit packages that aren't installed."
   (interactive)
   (dolist (package starter-kit-packages)
-    (unless (member package package-activated-list)
+    (unless (or (member package package-activated-list)
+                (functionp package))
       (message "Installing %s" (symbol-name package))
       (package-install package))))
 
+(defun esk-online? ()
+  (some (lambda (iface) (unless (equal "lo" (car iface))
+                     (member 'up (first (last (network-interface-info
+                                               (car iface)))))))
+        (network-interface-list)))
+
 ;; On your first run, this should pull in all the base packages.
-;; But you might not be online, so ignore errors.
-(ignore-errors
-  (message "Checking base list of packages...")
-  (starter-kit-elpa-install))
+(when (esk-online?) (starter-kit-elpa-install))
 
 (provide 'starter-kit-elpa)
