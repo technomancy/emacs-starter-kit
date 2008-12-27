@@ -43,10 +43,16 @@
       (package-install package))))
 
 (defun esk-online? ()
-  (some (lambda (iface) (unless (equal "lo" (car iface))
-                     (member 'up (first (last (network-interface-info
-                                               (car iface)))))))
-        (network-interface-list)))
+  "See if we're online.
+
+Windows does not have the network-interface-list function, so we
+just have to assume it's online."
+  (if (functionp 'network-interface-list)
+      (some (lambda (iface) (unless (equal "lo" (car iface))
+                         (member 'up (first (last (network-interface-info
+                                                   (car iface)))))))
+            (network-interface-list))
+    t))
 
 ;; On your first run, this should pull in all the base packages.
 (when (esk-online?) (starter-kit-elpa-install))
