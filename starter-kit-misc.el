@@ -9,6 +9,10 @@
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
 
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
 (setq visible-bell t
       font-lock-maximum-decoration t
       inhibit-startup-message t
