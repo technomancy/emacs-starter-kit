@@ -1,12 +1,36 @@
-;;; clojure-mode.el -- Major mode for Clojure code
+;;; clojure-mode.el --- Major mode for Clojure code
 
-;; Copyright (C) 2008 Jeffrey Chu
+;; Copyright (C) 2007, 2008 Jeffrey Chu and Lennart Staflin
 ;;
-;; Author: Jeffrey Chu <jochu0@gmail.com>
-;; 
-;;   Originally by: Lennart Staflin <lenst@lysator.liu.se>
-;;                  Copyright (C) 2007, 2008 Lennart Staflin
-;;
+;; Authors: Jeffrey Chu <jochu0@gmail.com>
+;;          Lennart Staflin <lenst@lysator.liu.se>
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/ClojureMode
+;; Version: 1.0
+;; Keywords: languages, lisp
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+
+;; Provides font-lock, indentation, and functions for communication
+;; with subprocesses for Clojure. (http://clojure.org)
+
+;; Set the clojure-enable-paredit flag to non-nil to enable paredit
+;; when editing clojure code. You will need paredit.el on your path. A
+;; copy is bundled, but you can download the latest version at
+;; http://mumble.net/~campbell/emacs/paredit.el
+
+;;; Installation:
+
+;; (0) Add this file to your load-path.
+;; (1) Either:
+;;     Add these lines to your .emacs:
+;;       (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
+;;       (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+;;     Or generate autoloads with the `update-directory-autoloads' function.
+
+;;; License:
+
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
 ;; as published by the Free Software Foundation; either version 3
@@ -21,6 +45,8 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
+
+;;; Code:
 
 (require 'cl)
 
@@ -62,6 +88,10 @@ indentation."
   :type 'integer
   :group 'clojure-mode)
 
+(defcustom clojure-enable-paredit nil
+  "Set to non-nil to enable paredit when using clojure-mode."
+  :type 'boolean
+  :group 'clojure-mode)
 
 (defvar clojure-mode-map
   (let ((map (make-sparse-keymap)))
@@ -255,13 +285,26 @@ elements of a def* forms."
          "(\\(?:clojure/\\)?" 
          (regexp-opt
           '("cond" "for" "loop" "let" "recur" "do" "binding" "with-meta"
-            "when" "when-not" "when-let" "when-first" "if" "if-let"
+            "when" "when-not" "when-let" "when-first" "if" "if-let" "if-not"
             "delay" "lazy-cons" "." ".." "->" "and" "or" "locking"
             "dosync" "load"
             "sync" "doseq" "dotimes" "import" "unimport" "ns" "in-ns" "refer"
             "implement" "proxy" "time" "try" "catch" "finally" "throw"
             "doto" "with-open" "with-local-vars" "struct-map"
-            "gen-class" "gen-and-load-class" "gen-and-save-class") t)
+            "gen-class" "gen-and-load-class" "gen-and-save-class" "apply"
+            "map" "mapcat" "vector?" "list?" "hash-map" "reduce" "filter"
+            "remove" "merge" "interleave" "interpose" "distinct" "for"
+            "cons" "concat" "lazy-cat" "cycle" "rest" "frest" "drop" "drop-while"
+            "nthrest" "take" "take-while" "take-nth" "butlast" "drop-last"
+            "reverse" "sort" "sort-by" "split-at" "partition" "split-with"
+            "first" "ffirst" "rfirst" "when-first" "zipmap" "into" "set" "vec" "into-array"
+            "to-array-2d" "not-empty" "seq?" "not-every?" "every?" "not-any?" "empty?"
+            "doseq" "dorun" "doall"
+            "vals" "keys" "rseq" "subseq" "rsubseq"
+            "fnseq" "lazy-cons" "repeatedly" "iterate"
+            "repeat" "replicate" "range"
+            "line-seq" "resultset-seq" "re-seq" "re-find" "tree-seq" "file-seq" "xml-seq"
+            "iterator-seq" "enumeration-seq") t)
          "\\>")
         .  1)
       ;; (fn name? args ...)
@@ -485,6 +528,13 @@ check for contextual indenting."
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+
+(when clojure-enable-paredit
+  (defun clojure-paredit-hook () (require 'paredit) (paredit-mode +1))
+  (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
+
+  (define-key clojure-mode-map "{" 'paredit-open-brace)
+  (define-key clojure-mode-map "}" 'paredit-close-brace))
 
 (provide 'clojure-mode)
 ;;; clojure-mode.el ends here
