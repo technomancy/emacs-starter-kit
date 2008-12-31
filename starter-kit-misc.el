@@ -9,6 +9,9 @@
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
 
+(if (not window-system)
+    (setq xterm-mouse-mode t)
+
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
