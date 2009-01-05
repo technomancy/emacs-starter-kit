@@ -8,7 +8,6 @@ maybe include:
 * should yasnippet be included in rinari?
 
 to write/finish:
-* ri
 * submit ruby fixes to flymake
 
 which-func-mode in ruby?

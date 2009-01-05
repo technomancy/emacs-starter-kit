@@ -6,13 +6,16 @@ working environment for anyone using Emacs for dynamic languages. The
 main advantage of the Starter Kit is that it provides better default
 settings and bundles many useful libraries.
 
+The latest version is at http://github.com/technomancy/emacs-starter-kit/
+
 ## Learning
 
 This won't teach you Emacs, but it'll make it easier to get
 comfortable. To access the tutorial, press control-h followed by t.
 
 You may also find the [PeepCode Meet Emacs
-screencast](http://peepcode.com/products/meet-emacs) helpful.
+screencast](http://peepcode.com/products/meet-emacs) helpful. The
+[Emacs Wiki](http://emacswiki.org) is also very handy.
 
 ## Installation
 
@@ -33,13 +36,18 @@ single instance using the starter kit, try the following invocation:
 
 ## ELPA
 
-Libraries from ELPA (http://tromey.com/elpa) are preferred when
+Libraries from [ELPA](http://tromey.com/elpa) are preferred when
 available since dependencies are handled automatically, and the burden
 to update them is removed from the user. In the long term, ideally
 everything would be installed via ELPA, and only package.el would need
 to be distributed with the starter kit. (Or better yet, package.el
 would come with Emacs...) See starter-kit-elpa.el for a list of
 libraries that are pending submission to ELPA.
+
+There's no vendor/ directory in the starter kit because if an external
+library is useful enough to be bundled with the starter kit, it should
+be useful enough to submit to ELPA so that everyone can use it, not
+just users of the starter kit.
 
 ## Contributing
 
@@ -50,5 +58,3 @@ it. Take a look at what happens in init.el to get started.
 
 Also: see the file TODO. Helping submit new libraries to ELPA is the
 easiest way to help out.
-
-The latest version is at http://github.com/technomancy/emacs-starter-kit/
