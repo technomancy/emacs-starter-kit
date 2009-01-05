@@ -3,15 +3,12 @@
 ;; Part of the Emacs Starter Kit
 
 (when window-system
-  (mouse-wheel-mode t)
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
 
-(if (not window-system)
-    (setq xterm-mouse-mode t))
-
+(mouse-wheel-mode t)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -30,6 +27,7 @@
       whitespace-line-column 100
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory (concat dotfiles-dir "oddmuse")
+      xterm-mouse-mode t
       save-place-file (concat dotfiles-dir "places"))
 
 ;; Set this to whatever browser you use:
