@@ -13,9 +13,11 @@
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
+
 (add-to-list 'load-path dotfiles-dir)
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/jabber"))
+
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
@@ -32,7 +34,6 @@
 
 ;; this must be loaded before ELPA since it bundles its own
 ;; out-of-date js stuff. TODO: fix it to use ELPA dependencies
-;; TODO: this is causing issues with js2-mode; re-enable when fixed.
 (load "elpa-to-submit/nxhtml/autostart")
 
 ;; Load up ELPA, the package manager:

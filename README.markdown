@@ -34,6 +34,31 @@ single instance using the starter kit, try the following invocation:
 
   $ emacs -q -l ~/src/emacs-starter-kit/init.el
 
+## Structure
+
+The init.el file is where everything begins. It's the first file to
+get loaded. The starter-kit-* files provide what I consider to be
+better defaults, both for different programming languages and for
+built-in Emacs features like bindings or registers.
+
+Files that are pending submission to ELPA are bundled with the starter
+kit under the directory elpa-to-submit/. The understanding is that
+these are bundled just because nobody's gotten around to turning them
+into packages, and the bundling of them is temporary. For these
+libraries, autoloads will be generated and kept in the loaddefs.el
+file. This allows them to be loaded on demand rather than at startup.
+
+There are also a few files that are meant for code that doesn't belong
+in the Starter Kit. First, the user-specific-config file is the file
+named after your user with the extension ".el". In addition, if a
+directory named after your user exists, it will be added to the
+load-path, and any elisp files in it will be loaded. Finally, the
+Starter Kit will look for a file named after the current hostname
+ending in ".el" which will allow host-specific configuration. This is
+where you should put code that you don't think would be useful to
+everyone. That will allow you to merge with newer versions of the
+starter-kit without conflicts.
+
 ## ELPA
 
 Libraries from [ELPA](http://tromey.com/elpa) are preferred when
@@ -42,7 +67,8 @@ to update them is removed from the user. In the long term, ideally
 everything would be installed via ELPA, and only package.el would need
 to be distributed with the starter kit. (Or better yet, package.el
 would come with Emacs...) See starter-kit-elpa.el for a list of
-libraries that are pending submission to ELPA.
+libraries that are pending submission to ELPA. Packages get installed
+in the elpa/ directory.
 
 There's no vendor/ directory in the starter kit because if an external
 library is useful enough to be bundled with the starter kit, it should
@@ -57,4 +83,6 @@ you just can't live without, add it or let me know so I can add
 it. Take a look at what happens in init.el to get started.
 
 Also: see the file TODO. Helping submit new libraries to ELPA is the
-easiest way to help out.
+easiest way to help out. Grep the project for TODO for other things.
+
+The latest version is at http://github.com/technomancy/emacs-starter-kit/
