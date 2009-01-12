@@ -24,6 +24,7 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
    Otherwise, Mac users should get it [from Apple](http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html).
    Windows users can get it [from GNU](http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip).
 2. Move the directory containing this file to ~/.emacs.d
+   (If you already have a directory at ~/.emacs.d move it out of the way and put this there instead.)
 3. Launch Emacs!
 
 If you are missing some autoloads after an update (should manifest
@@ -33,6 +34,10 @@ If you want to keep your regular ~/.emacs.d in place and just launch a
 single instance using the starter kit, try the following invocation:
 
   $ emacs -q -l ~/src/emacs-starter-kit/init.el
+
+Note that having a ~/.emacs file might override the starter kit
+loading, so if you've having trouble loading it, make sure that file
+is not present.
 
 ## ELPA
 
