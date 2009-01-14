@@ -83,6 +83,9 @@ exec-to-string command, but it works and seems fast"
                                   'flymake-display-err-menu-for-current-line)
                    (flymake-mode t))))))
 
+(eval-after-load 'haml-mode
+  (add-hook 'haml-mode-hook 'whitespace-mode))
+
 ;; TODO: set up ri
 ;; TODO: electric
 
