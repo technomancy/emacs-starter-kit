@@ -31,7 +31,7 @@
 
 ;;; Commentary:
 
-;; This library depends on GNU find.
+;; This library depends on the Unix find command.
 
 ;; This file provides a couple methods for quickly finding any file in
 ;; a given project. Projects are defined in two ways. The first uses 
@@ -112,7 +112,7 @@ directory they are found in so that they are unique."
                 (add-to-list 'file-alist file-cons)
                 file-cons))
             (split-string (shell-command-to-string
-                           (format "find %s -type f %s %s"
+                           (format "find %s -type f \\( %s \\) %s"
                                    (or ffip-project-root (ffip-project-root))
                                    (ffip-join-patterns)
                                    ffip-find-options))))))
@@ -170,6 +170,11 @@ project-local-variables.el."
             ((string= parent "/..") nil)
             ((file-exists-p (concat file name)) file)
             (t (plv-find-project-file parent name))))))
+
+;; Safe file-local variables:
+(dolist (var '(ffip-patterns ffip-find-options
+                             ffip-project-root ffip-project-file))
+  (put var 'safe-local-variable 'stringp))
 
 (provide 'find-file-in-project)
 ;;; find-file-in-project.el ends here

@@ -69,6 +69,9 @@
 (defvar ruby-compilation-test-name-flag "-n"
   "What flag to use to specify that you want to run a single test.")
 
+(defvar ruby-compilation-clear-between t
+  "Whether to clear the compilation output between runs.")
+
 (defun ruby-compilation-run (cmd)
   "Run a ruby process dumping output to a ruby compilation buffer."
   (interactive "FRuby Comand: ")
@@ -184,7 +187,9 @@ compilation buffer."
   for navigating ruby compilation buffers."
   nil
   " ruby:comp"
-  ruby-compilation-minor-mode-map)
+  ruby-compilation-minor-mode-map
+  (when ruby-compilation-clear-between
+    (delete-region (point-min) (point-max))))
 
 ;; So we can invoke it easily.
 (eval-after-load 'ruby-mode
