@@ -8,3 +8,6 @@ elpa-to-submit/jabber/jabber.info
 elpa-to-submit/nxhtml/etc/schema/xhtml-loader.rnc
 thumbs/*
 oddmuse/*
+.newsrc-dribble
+.nnmail-cache
+/#.newsrc-dribble#
