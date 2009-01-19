@@ -368,6 +368,8 @@ The first time this command is used, the line will be indented to the
 maximum sensible indentation.  Each immediately subsequent usage will
 back-dent the line by `haml-indent-offset' spaces.  On reaching column
 0, it will cycle back to the maximum sensible indentation."
+  ;; TODO: pressing tab to bring the point to the first non-whitespace
+  ;; char marks the buffer as modified even though it doesn't change anything
   (interactive "*")
   (let ((ci (current-indentation))
         (cc (current-column))

@@ -9,7 +9,7 @@
                                    'css-mode
                                    'nxml
                                    'gist
-                               ;; To submit:
+                               ;; To submit
 ;;;                                "magit"
 ;;;                                "paredit"
 ;;;                                "clojure-mode"
@@ -21,7 +21,7 @@
 ;;;                                "color-theme"
 ;;;                                "color-theme-zenburn"
 ;;;                                "color-theme-vivid-chalk"
-                               ;; Complicated ones:
+                               ;; Complicated ones
 ;;;                                "nxhtml"
 ;;;                                "rinari"
 ;;;                                "jabber"

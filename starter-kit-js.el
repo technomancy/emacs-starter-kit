@@ -30,5 +30,15 @@
      (setq js2-bounce-indent-flag nil
            js2-indent-on-enter-key t)))
 
+(defun esk-pp-json ()
+  "Pretty-print the json object following point."
+  (interactive)
+  (require 'json)
+  (let ((json-object (save-excursion (json-read))))
+    (switch-to-buffer "*json*")
+    (delete-region (point-min) (point-max))
+    (insert (pp json-object))
+    (goto-char (point-min))))
+
 (provide 'starter-kit-js)
 ;;; starter-kit-js.el ends here
