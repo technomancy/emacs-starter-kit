@@ -62,8 +62,12 @@
 (autoload 'jabber-connect "jabber" "" t)
 ;; TODO: rinari, slime
 
-;; You can keep system- or user-specific customizations here
+;; It seems that in OSX, system-name contains the FQDN instead of just
+;; the hostname.  This should fix that.
+(if (eq system-type 'darwin)
+    (setq system-name (car (split-string system-name "\\."))))
 
+;; You can keep system- or user-specific customizations here:
 (setq system-specific-config (concat dotfiles-dir system-name ".el")
       user-specific-config (concat dotfiles-dir user-login-name ".el")
       user-specific-dir (concat dotfiles-dir user-login-name))
