@@ -64,7 +64,7 @@ where you should put code that you don't think would be useful to
 everyone. That will allow you to merge with newer versions of the
 starter-kit without conflicts.
 
-## ELPA
+## Emacs Lisp Package Archive
 
 Libraries from [ELPA](http://tromey.com/elpa) are preferred when
 available since dependencies are handled automatically, and the burden
@@ -89,5 +89,8 @@ it. Take a look at what happens in init.el to get started.
 
 Also: see the file TODO. Helping submit new libraries to ELPA is the
 easiest way to help out. Grep the project for TODO for other things.
+
+Files are licensed under the same license as Emacs unless otherwise
+specified. See the file COPYING for details.
 
 The latest version is at http://github.com/technomancy/emacs-starter-kit/

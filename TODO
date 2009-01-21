@@ -14,4 +14,3 @@ which-func-mode in ruby?
 
 Bug fixes:
 get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
-ruby-compilation.el should auto-kill the buffer on successful test runs; only leave it open on error/fail
