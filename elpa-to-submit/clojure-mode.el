@@ -29,6 +29,10 @@
 ;;       (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 ;;     Or generate autoloads with the `update-directory-autoloads' function.
 
+;;; Todo:
+
+;; * hashbang is also a valid comment character
+
 ;;; License:
 
 ;; This program is free software; you can redistribute it and/or
@@ -136,6 +140,9 @@ All commands in `lisp-mode-shared-map' are inherited by this map.")
 This holds a cons cell of the form `(DIRECTORY . FILE)'
 describing the last `clojure-load-file' or `clojure-compile-file' command.")
 
+(defvar clojure-def-regexp "^\\s *\\((def\\S *\\s +\\(\\S +\\)\\)"
+  "A regular expression to match any top-level definitions.")
+
 ;;;###autoload
 (defun clojure-mode ()
   "Major mode for editing Clojure code - similar to Lisp mode..
@@ -161,6 +168,12 @@ if that value is non-nil."
   (set (make-local-variable 'lisp-indent-function)
        'clojure-indent-function)
   (set (make-local-variable 'font-lock-multiline) t)
+
+  (setq lisp-imenu-generic-expression
+        `((nil ,clojure-def-regexp 2)))
+  (setq imenu-create-index-function
+        (lambda ()
+          (imenu--generic-function lisp-imenu-generic-expression)))
 
   (if (and (not (boundp 'font-lock-extend-region-functions))
            (or clojure-mode-font-lock-multiline-def
@@ -252,7 +265,6 @@ elements of a def* forms."
 
 (defun clojure-font-lock-mark-comment (limit)
   "Marks all (comment ..) forms with font-lock-comment-face."
-  ;; TODO: #! is also treated as a comment
   (let (pos)
     (while (and (< (point) limit)
                 (setq pos (re-search-forward "(comment\\>" limit t)))
@@ -285,10 +297,10 @@ elements of a def* forms."
       (,(concat
          "(\\(?:clojure/\\)?" 
          (regexp-opt
-          '("cond" "for" "loop" "let" "recur" "do" "binding" "with-meta"
+          '("cond" "condp" "for" "loop" "let" "recur" "do" "binding" "with-meta"
             "when" "when-not" "when-let" "when-first" "if" "if-let" "if-not"
-            "delay" "lazy-cons" "." ".." "->" "and" "or" "locking"
-            "dosync" "load"
+            "delay" "lazy-cons" "." ".." "->" "and" "or" "locking" "list*"
+            "dosync" "load" "symbol" "keyword?" "number?" "instance?"
             "sync" "doseq" "dotimes" "import" "unimport" "ns" "in-ns" "refer"
             "implement" "proxy" "time" "try" "catch" "finally" "throw"
             "doto" "with-open" "with-local-vars" "struct-map"
@@ -300,12 +312,16 @@ elements of a def* forms."
             "reverse" "sort" "sort-by" "split-at" "partition" "split-with"
             "first" "ffirst" "rfirst" "when-first" "zipmap" "into" "set" "vec" "into-array"
             "to-array-2d" "not-empty" "seq?" "not-every?" "every?" "not-any?" "empty?"
-            "doseq" "dorun" "doall"
-            "vals" "keys" "rseq" "subseq" "rsubseq"
+            "map?" "set?" "list?" "seq?" "unquote?" "self-eval?" "str" "int" "println"
+            "doseq" "dorun" "doall" "even?" "first" "second" "last" "list" 
+            "vals" "keys" "keyword" "rseq" "subseq" "rsubseq"
             "fnseq" "lazy-cons" "repeatedly" "iterate"
             "repeat" "replicate" "range"
             "line-seq" "resultset-seq" "re-seq" "re-find" "tree-seq" "file-seq" "xml-seq"
-            "iterator-seq" "enumeration-seq") t)
+            "iterator-seq" "enumeration-seq"
+            "symbol?" "string?" "vector" "conj" "str"
+            "pos?" "neg?" "zero?" "nil?" "inc" "format"
+            "alter" "commute" "ref-set" "floor" "assoc" "send" "send-off" ) t)
          "\\>")
         .  1)
       ;; (fn name? args ...)
@@ -320,7 +336,7 @@ elements of a def* forms."
       ("\\<:\\sw+\\>" 0 font-lock-builtin-face)
       ;; Meta type annotation #^Type
       ("#^\\sw+" 0 font-lock-type-face)
-      ))
+      ("\\<io!\\>" 0 font-lock-warning-face)))
   "Default expressions to highlight in Clojure mode.")
 
 
@@ -531,8 +547,11 @@ check for contextual indenting."
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 
 (when clojure-enable-paredit
-  (require 'paredit)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (autoload 'paredit-mode "paredit"
+    "Minor mode for pseudo-structurally editing Lisp code." t)
+
+  (defun clojure-paredit-hook () (paredit-mode +1))
+  (add-hook 'clojure-mode-hook 'clojure-paredit-hook)
 
   (define-key clojure-mode-map "{" 'paredit-open-brace)
   (define-key clojure-mode-map "}" 'paredit-close-brace))
