@@ -252,6 +252,7 @@ elements of a def* forms."
 
 (defun clojure-font-lock-mark-comment (limit)
   "Marks all (comment ..) forms with font-lock-comment-face."
+  ;; TODO: #! is also treated as a comment
   (let (pos)
     (while (and (< (point) limit)
                 (setq pos (re-search-forward "(comment\\>" limit t)))
