@@ -171,7 +171,7 @@ project-local-variables.el."
             ((file-exists-p (concat file name)) file)
             (t (plv-find-project-file parent name))))))
 
-;; Safe file-local variables:
+;; Safe file-local variables
 (dolist (var '(ffip-patterns ffip-find-options
                              ffip-project-root ffip-project-file))
   (put var 'safe-local-variable 'stringp))
