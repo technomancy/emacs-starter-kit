@@ -52,10 +52,14 @@ root as an argument."
   (setq src-path (or src-path "~/src"))
 
   (add-to-list 'load-path (concat src-path "/slime"))
+  (add-to-list 'load-path (concat src-path "/slime/contrib"))
   (add-to-list 'load-path (concat src-path "/swank-clojure"))
 
-  (autoload 'slime "slime" "" t)
+  (require 'slime-autoloads)
   (load "swank-clojure-autoload")
+
+  (eval-after-load "slime"
+    '(slime-setup '(slime-fancy)))
 
   (setq swank-clojure-jar-path (concat src-path "/clojure/clojure.jar")
         swank-clojure-extra-classpaths
