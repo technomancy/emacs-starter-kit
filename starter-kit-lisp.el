@@ -59,23 +59,36 @@ root as an argument."
 
   (setq swank-clojure-jar-path (concat src-path "/clojure/clojure.jar")
         swank-clojure-extra-classpaths
-        (list (concat src/path "/clojure-contrib/clojure-contrib.jar")))
+        (list (concat src-path "/clojure-contrib/clojure-contrib.jar")))
 
   (add-hook 'clojure-mode-hook 'coding-hook))
 
-(defun esk-clojure-install (&optional src-path)
-  "Perform the initial clojure install."
-  (setq src-path (or src-path "~/src"))
+;; TODO: test this!
+(defun esk-clojure-install (src-path)
+  "Perform the initial clojure install along with Emacs support libs."
+  (interactive (list
+                (read-from-minibuffer "Install Clojure in (default: ~/src): "
+                                      nil nil nil nil "~/src")))
+
   (if (file-exists-p (concat src-path "/clojure"))
       (error "Clojure is already installed at %s/clojure" src-path))
+
   (cd src-path)
   (dolist (cmd '("git clone git://github.com/kevinoneill/clojure.git"
                  "git clone git://github.com/kevinoneill/clojure-contrib.git"
                  "git clone git://github.com/jochu/swank-clojure.git"
-                 "git clone git://git.boinkor.net/slime.git"
-                 "cd clojure && ant"
-                 "cd ../clojure-contrib && ant"))
-    (shell-command cmd)))
+                 "git clone git://git.boinkor.net/slime.git"))
+    (unless (= 0 (shell-command cmd))
+      (error "Clojure installation step failed: %s" cmd)))
+  (message "Checked out Clojure and friends. Compiling...")
+
+  (cd (concat src-path "/clojure"))
+  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure."))
+  (cd (concat src-path "/clojure-contrib"))
+  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure contrib."))
+
+  (esk-clojure src-path)
+  (message "Installed Clojure successfully. Press M-x slime to continue."))
 
 ;; You might like this, but it's a bit disorienting at first:
 ;; (setq clojure-enable-paredit t)
