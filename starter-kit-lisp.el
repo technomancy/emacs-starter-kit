@@ -65,17 +65,19 @@ root as an argument."
   (font-lock-add-keywords 'clojure-mode
                           '(("(\\|)" . 'esk-paren-face))))
 
-;; TODO: test this!
 (defun esk-clojure-install (src-path)
   "Perform the initial clojure install along with Emacs support libs."
   (interactive (list
                 (read-from-minibuffer "Install Clojure in (default: ~/src): "
                                       nil nil nil nil "~/src")))
+  (setq clojure-src-path src-path)
+  (mkdir src-path t)
 
   (if (file-exists-p (concat src-path "/clojure"))
       (error "Clojure is already installed at %s/clojure" src-path))
 
   (cd src-path)
+  (message "Checking out source... this will take a while...")
   (dolist (cmd '("git clone git://github.com/kevinoneill/clojure.git"
                  "git clone git://github.com/kevinoneill/clojure-contrib.git"
                  "git clone git://github.com/jochu/swank-clojure.git"
