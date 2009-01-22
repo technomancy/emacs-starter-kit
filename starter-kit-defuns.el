@@ -152,6 +152,11 @@
         (switch-to-buffer buffer)
       (funcall function))))
 
+(defun insert-date()
+  "Insert a time-stamp according to locale's date and time format."
+  (interactive)
+  (insert (format-time-string "%c" (current-time))))
+
 (defun pairing-bot ()
   "If you can't pair program with a human, use this instead."
   (interactive)

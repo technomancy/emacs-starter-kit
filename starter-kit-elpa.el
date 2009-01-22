@@ -32,6 +32,7 @@
 
 ;; Work around a bug in ELPA
 (ignore-errors (load "elpa/inf-ruby-2.0/inf-ruby-autoloads"))
+(ignore-errors (load "elpa/lisppaste-1.5/lisppaste-autoloads"))
 
 (defun starter-kit-elpa-install ()
   "Install all starter-kit packages that aren't installed."
