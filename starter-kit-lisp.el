@@ -15,7 +15,7 @@
      (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
      (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))))
 
-(defface paren-face
+(defface esk-paren-face
    '((((class color) (background dark))
       (:foreground "grey20"))
      (((class color) (background light))
@@ -27,9 +27,9 @@
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'coding-hook)
-(add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 
-(defun emacs-lisp-remove-elc-on-save ()
+(defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
   (make-local-variable 'after-save-hook)
   (add-hook 'after-save-hook
@@ -38,7 +38,7 @@
                   (delete-file (concat buffer-file-name "c"))))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
-			'(("(\\|)" . 'paren-face)))
+			'(("(\\|)" . 'esk-paren-face)))
 
 ;;; Clojure
 
@@ -61,7 +61,9 @@ root as an argument."
         swank-clojure-extra-classpaths
         (list (concat src-path "/clojure-contrib/clojure-contrib.jar")))
 
-  (add-hook 'clojure-mode-hook 'coding-hook))
+  (add-hook 'clojure-mode-hook 'coding-hook)
+  (font-lock-add-keywords 'clojure-mode
+                          '(("(\\|)" . 'esk-paren-face))))
 
 ;; TODO: test this!
 (defun esk-clojure-install (src-path)
@@ -97,13 +99,13 @@ root as an argument."
 
 (add-hook 'scheme-mode-hook 'coding-hook)
 (font-lock-add-keywords 'scheme-mode
-			'(("(\\|)" . 'paren-face)))
+			'(("(\\|)" . 'esk-paren-face)))
 
 ;;; Common Lisp
 
 (add-hook 'lisp-mode-hook 'coding-hook)
 (font-lock-add-keywords 'lisp-mode
-			'(("(\\|)" . 'paren-face)))
+			'(("(\\|)" . 'esk-paren-face)))
 
 (provide 'starter-kit-lisp)
 ;; starter-kit-lisp.el ends here
