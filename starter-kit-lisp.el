@@ -8,7 +8,7 @@
 (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
 (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
 
-(eval-after-load 'paredit-mode
+(eval-after-load 'paredit
   '(progn
      ;; Not sure why paredit behaves this way with comments; it's annoying
      (define-key paredit-mode-map (kbd ";")   'self-insert-command)
@@ -42,61 +42,9 @@
 
 ;;; Clojure
 
-(defun esk-clojure (&optional src-path)
-  "Load clojure support. Takes an optional argument for the checkout root.
-
-Since there's no single conventional place to keep Clojure, this
-is bundled up as a function that you can call with your source
-root as an argument."
-
-  (setq src-path (or src-path "~/src"))
-
-  (add-to-list 'load-path (concat src-path "/slime"))
-  (add-to-list 'load-path (concat src-path "/slime/contrib"))
-  (add-to-list 'load-path (concat src-path "/swank-clojure"))
-
-  (require 'slime-autoloads)
-  (load "swank-clojure-autoload")
-
-  (eval-after-load "slime"
-    '(slime-setup '(slime-fancy)))
-
-  (setq swank-clojure-jar-path (concat src-path "/clojure/clojure.jar")
-        swank-clojure-extra-classpaths
-        (list (concat src-path "/clojure-contrib/clojure-contrib.jar")))
-
-  (add-hook 'clojure-mode-hook 'coding-hook)
-  (font-lock-add-keywords 'clojure-mode
-                          '(("(\\|)" . 'esk-paren-face))))
-
-(defun esk-clojure-install (src-path)
-  "Perform the initial clojure install along with Emacs support libs."
-  (interactive (list
-                (read-from-minibuffer "Install Clojure in (default: ~/src): "
-                                      nil nil nil nil "~/src")))
-  (setq clojure-src-path src-path)
-  (mkdir src-path t)
-
-  (if (file-exists-p (concat src-path "/clojure"))
-      (error "Clojure is already installed at %s/clojure" src-path))
-
-  (cd src-path)
-  (message "Checking out source... this will take a while...")
-  (dolist (cmd '("git clone git://github.com/kevinoneill/clojure.git"
-                 "git clone git://github.com/kevinoneill/clojure-contrib.git"
-                 "git clone git://github.com/jochu/swank-clojure.git"
-                 "git clone git://git.boinkor.net/slime.git"))
-    (unless (= 0 (shell-command cmd))
-      (error "Clojure installation step failed: %s" cmd)))
-  (message "Checked out Clojure and friends. Compiling...")
-
-  (cd (concat src-path "/clojure"))
-  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure."))
-  (cd (concat src-path "/clojure-contrib"))
-  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure contrib."))
-
-  (esk-clojure src-path)
-  (message "Installed Clojure successfully. Press M-x slime to continue."))
+(add-hook 'clojure-mode-hook 'coding-hook)
+(font-lock-add-keywords 'clojure-mode
+                        '(("(\\|)" . 'esk-paren-face)))
 
 ;; You might like this, but it's a bit disorienting at first:
 ;; (setq clojure-enable-paredit t)
