@@ -15,9 +15,9 @@
      (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
      (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))))
 
-(defface esk-paren-face
+(defface esk-paren-face3
    '((((class color) (background dark))
-      (:foreground "grey20"))
+      (:foreground "grey50"))
      (((class color) (background light))
       (:foreground "grey55")))
    "Face used to dim parentheses."
