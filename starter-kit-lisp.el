@@ -15,7 +15,7 @@
      (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
      (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))))
 
-(defface esk-paren-face3
+(defface esk-paren-face
    '((((class color) (background dark))
       (:foreground "grey50"))
      (((class color) (background light))
