@@ -1,6 +1,6 @@
 ;;; clojure-mode.el --- Major mode for Clojure code
 
-;; Copyright (C) 2007, 2008 Jeffrey Chu and Lennart Staflin
+;; Copyright (C) 2007, 2008, 2009 Jeffrey Chu and Lennart Staflin
 ;;
 ;; Authors: Jeffrey Chu <jochu0@gmail.com>
 ;;          Lennart Staflin <lenst@lysator.liu.se>
@@ -17,7 +17,7 @@
 
 ;;; Installation:
 
-;; (0) Add this file to your load-path.
+;; (0) Add this file to your load-path, usually the ~/.emacs.d directory.
 ;; (1) Either:
 ;;     Add these lines to your .emacs:
 ;;       (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
@@ -26,14 +26,22 @@
 
 ;; Paredit users:
 
-;; Download paredit v22 (currently beta)
-;;    http://mumble.net/~campbell/emacs/paredit-beta.el
+;; Download paredit v21 or greater
+;;    http://mumble.net/~campbell/emacs/paredit.el
 
-;; Use paredit as you normally would any other mode.
-;; Example:
+;; Use paredit as you normally would with any other mode; for instance:
+;;
 ;;   ;; require or autoload paredit-mode
 ;;   (defun lisp-enable-paredit-hook () (paredit-mode 1))
 ;;   (add-hook 'clojure-mode-hook 'lisp-enable-paredit-hook)
+
+;; The clojure-install function can check out and configure all the
+;; dependencies get going with Clojure, including SLIME integration.
+
+;;; Todo:
+
+;; * hashbang is also a valid comment character
+;; * do the inferior-lisp functions work without SLIME? needs documentation
 
 ;;; License:
 
@@ -94,6 +102,13 @@ indentation."
   :type 'integer
   :group 'clojure-mode)
 
+(defcustom clojure-src-root (expand-file-name "~/src")
+  "Directory that contains checkouts for clojure, clojure-contrib,
+slime, and swank-clojure. This value is used by `clojure-install'
+and `clojure-slime-config'."
+  :type 'string
+  :group 'clojure-mode)
+
 (defvar clojure-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map lisp-mode-shared-map)
@@ -137,6 +152,9 @@ All commands in `lisp-mode-shared-map' are inherited by this map.")
 This holds a cons cell of the form `(DIRECTORY . FILE)'
 describing the last `clojure-load-file' or `clojure-compile-file' command.")
 
+(defvar clojure-def-regexp "^\\s *\\((def\\S *\\s +\\(\\S +\\)\\)"
+  "A regular expression to match any top-level definitions.")
+
 ;;;###autoload
 (defun clojure-mode ()
   "Major mode for editing Clojure code - similar to Lisp mode..
@@ -163,6 +181,12 @@ if that value is non-nil."
        'clojure-indent-function)
   (set (make-local-variable 'font-lock-multiline) t)
 
+  (setq lisp-imenu-generic-expression
+        `((nil ,clojure-def-regexp 2)))
+  (setq imenu-create-index-function
+        (lambda ()
+          (imenu--generic-function lisp-imenu-generic-expression)))
+
   (if (and (not (boundp 'font-lock-extend-region-functions))
            (or clojure-mode-font-lock-multiline-def
                clojure-mode-font-lock-comment-sexp))
@@ -188,7 +212,7 @@ if that value is non-nil."
   (run-mode-hooks 'clojure-mode-hook)
   
   ;; Enable curly braces when paredit is enabled in clojure-mode-hook
-  (when (and (featurep 'paredit) paredit-mode (>= paredit-version 22))
+  (when (and (featurep 'paredit) paredit-mode (>= paredit-version 21))
     (define-key clojure-mode-map "{" 'paredit-open-curly)
     (define-key clojure-mode-map "}" 'paredit-close-curly)))
 
@@ -534,13 +558,9 @@ check for contextual indenting."
   (with-open 1)
   (with-precision 1))
 
-(defvar clojure-src-root "~/src"
-  "Directory that contains checkouts for Clojure and other libs.
+;;; SLIME integration
 
-clojure-contrib, slime, and swank-clojure should be here too. Use
-the `clojure-install' command to check these out and configure
-them for you.")
-
+;;;###autoload
 (defun clojure-slime-config ()
   "Load Clojure SLIME support out of the `clojure-src-root' directory.
 
@@ -555,50 +575,72 @@ is bundled up as a function so that you can call it after you've set
   (require 'slime-autoloads)
   (require 'swank-clojure-autoload)
 
-  (eval-after-load 'slime '(slime-setup '(slime-fancy)))
+  (slime-setup '(slime-fancy slime-repl))
 
   (setq swank-clojure-jar-path (concat clojure-src-root "/clojure/clojure.jar")
         swank-clojure-extra-classpaths
-        (list (concat clojure-src-root "/clojure-contrib/clojure-contrib.jar"))))
+        (list (concat clojure-src-root "/clojure-contrib/src/"))))
 
+;;;###autoload
 (defun clojure-install (src-root)
   "Perform the initial Clojure install along with Emacs support libs.
 
 This requires git, a JVM, ant, and an active Internet connection."
   (interactive (list
-                (read-from-minibuffer (concat "Install Clojure in (default: "
-                                              clojure-src-root "): ")
-                                      nil nil nil nil clojure-src-root)))
-  (mkdir src-root t)
+                (read-string (concat "Install Clojure in (default: "
+                                     clojure-src-root "): ")
+                             nil nil clojure-src-root)))
+
+  (make-directory src-root t)
 
   (if (file-exists-p (concat src-root "/clojure"))
       (error "Clojure is already installed at %s/clojure" src-root))
 
-  (cd src-root)
   (message "Checking out source... this will take a while...")
   (dolist (cmd '("git clone git://github.com/kevinoneill/clojure.git"
                  "git clone git://github.com/kevinoneill/clojure-contrib.git"
                  "git clone git://github.com/jochu/swank-clojure.git"
-                 "git clone git://git.boinkor.net/slime.git"))
-    (unless (= 0 (shell-command cmd))
+                 "git clone --depth 2 git://github.com/nablaone/slime.git"))
+    (unless (= 0 (shell-command (format "cd %s; %s" src-root cmd)))
       (error "Clojure installation step failed: %s" cmd)))
 
   (message "Compiling...")
-  (cd (concat clojure-src-root "/clojure"))
-  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure."))
-  (cd (concat clojure-src-root "/clojure-contrib"))
-  (unless (= 0 (shell-command "ant")) (error "Couldn't compile Clojure contrib."))
+  (unless (= 0 (shell-command (format "cd %s/clojure; ant" src-root)))
+    (error "Couldn't compile Clojure."))
 
-  (unless (equal src-root clojure-src-root)
-    (with-output-to-temp-buffer "clojure-install-note"
-      (princ (format "You've installed clojure in a non-default location. If you want to use this installation in the future, you will need to add the following line to your personal Emacs config somewhere:
+  (with-output-to-temp-buffer "clojure-install-note"
+    (princ
+     (if (equal src-root clojure-src-root)
+         "Add a call to \"\(eval-after-load 'clojure-mode '\(clojure-slime-config\)\)\"
+to your .emacs so you can use SLIME in future sessions."
+       (setq clojure-src-root src-root)
+       (format "You've installed clojure in a non-default location. If you want
+to use this installation in the future, you will need to add the following
+lines to your personal Emacs config somewhere:
 
-\(setq clojure-src-root \"%s\"\)" src-root)))
-    (setq clojure-src-root src-root))
+\(setq clojure-src-root \"%s\"\)
+\(eval-after-load 'clojure-mode '\(clojure-slime-config\)\)" src-root)))
+    (princ "\n\n Press M-x slime to launch Clojure."))
 
-  (clojure-slime-config)
+  (clojure-slime-config))
 
-  (message "Installed Clojure successfully. Press M-x slime to continue."))
+(defun clojure-update ()
+  "Update clojure-related repositories and recompile clojure.
+
+Works with clojure etc. installed via `clojure-install'. Code
+should be checked out in the `clojure-src-root' directory."
+  (interactive)
+
+  (message "Updating...")
+  (dolist (repo '("clojure" "clojure-contrib" "swank-clojure" "slime"))
+    (unless (= 0 (shell-command (format "cd %s/%s; git pull" clojure-src-root repo)))
+      (error "Clojure update failed: %s" repo)))
+
+  (message "Compiling...")
+  (save-window-excursion
+    (unless (= 0 (shell-command (format "cd %s/clojure; ant" clojure-src-root)))
+      (error "Couldn't compile Clojure.")))
+  (message "Finished updating Clojure."))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
