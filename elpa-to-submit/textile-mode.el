@@ -47,6 +47,8 @@
     map)
   "Keymap for `textile-mode'.")
 
+(defvar textile-mode-hook nil
+  "A list of functions to run when entering textile-mode.")
 
 (defun textile-re-concat (l)
   "Concatenate the elements of a list with a \\| separator and
@@ -237,10 +239,8 @@ non-matching parentheses"
 (define-derived-mode textile-mode text-mode "Textile"
   "A major mode for editing textile files."
   (set (make-local-variable 'font-lock-defaults) '(textile-font-lock-keywords t))
-  (set (make-local-variable 'font-lock-multiline) 'undecided))
-
-
-
+  (set (make-local-variable 'font-lock-multiline) 'undecided)
+  (run-mode-hooks 'textile-mode-hook))
 
 ;; FACES
 
