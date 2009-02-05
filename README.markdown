@@ -88,7 +88,13 @@ you just can't live without, add it or let me know so I can add
 it. Take a look at what happens in init.el to get started.
 
 Also: see the file TODO. Helping submit new libraries to ELPA is the
-easiest way to help out. Grep the project for TODO for other things.
+easiest way to help out. There are two ways you can do this: either
+take new libraries and make them ready for ELPA, dropping them in the
+elpa-to-submit directory or take files that are already in
+elpa-to-submit, ensuring all their dependencies are correctly loaded
+into ELPA, and sending them to the ELPA maintainer. There are details
+at http://tromey.com/elpa/upload.html for how ELPA submission
+works. Grep the project for TODO for other things.
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
