@@ -9,12 +9,9 @@
 
 (global-set-key (kbd "C-h P") 'perldoc)
 
-(add-to-list 'auto-mode-alist '("\\.(?:cgi|p[lm])$" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.p[lm]$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.pod$" . pod-mode))
 (add-to-list 'auto-mode-alist '("\\.tt$" . tt-mode))
-
-;; We never want to edit Rubinius bytecode
-(add-to-list 'completion-ignored-extensions ".rbc")
 
 ;; TODO: flymake
 ;; TODO: electric bugaloo 
