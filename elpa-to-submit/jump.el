@@ -7,6 +7,8 @@
 ;; Version: 2.0
 ;; Created: 2008-08-21
 ;; Keywords: project, convenience, navigation
+;; Package-Requires: ((findr "0.7")
+;;                    (inflections "1.0"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -78,9 +80,9 @@
 
 (defun jump-find-file-in-dir (dir)
   "if `ido-mode' is turned on use ido speedups finding the file"
-  (if ido-mode
+  (if (or (equal ido-mode 'file) (equal ido-mode 'both))
       (ido-find-file-in-dir dir)
-    (let ((default-dir dir)) (find-file))))
+    (let ((default-directory dir)) (call-interactively 'find-file))))
 
 (defun jump-method ()
   "Return the method defined at the current position in current
@@ -118,7 +120,7 @@ from all matches."
   (interactive "Mfile: ")
   (let ((file-cons (cons (file-name-nondirectory file) file))
 	file-alist)
-    (if (string-match "/$" file) ;; TODO: ensure that the directory exists
+    (if (and (equal (file-name-directory file) file) (file-exists-p file))
 	(jump-find-file-in-dir (expand-file-name file root)) ;; open directory
       (if (file-exists-p file)
 	  (find-file file) ;; open file
@@ -146,8 +148,8 @@ line inside of method."
 		      (or (string-equal (jump-method) method)
 			  (and (> (forward-line 1) 0)
 			       (goto-char (point-min)))))))
-    (unless (equal results 1) t)))
-
+    (when (and (commandp 'recenter-top-bottom) (not (equal results 1))) (recenter-top-bottom))))
+  
 (defun jump-to-path (path)
   "Jump to the location specified by PATH (regexp allowed in
 path).  If path ends in / then just look in that directory"
@@ -156,11 +158,11 @@ path).  If path ends in / then just look in that directory"
     (when (string-match "^\\(.*\\)#\\(.*\\)$" path)
       (setf method (match-string 2 path))
       (setf file (match-string 1 path)))
-    (if (jump-to-file file) ;; returns t as long as a file was found
-	(when method (jump-to-method method) t))))
+    (when (jump-to-file file) ;; returns t as long as a file was found
+      (when method (jump-to-method method))
+      t)))
 
 (defun jump-insert-matches (spec matches)
-  (message (format "%S" (cons spec matches)))
   (if matches
       (let ((count 1) (new-spec spec) (spec nil))
 	(while (not (equal spec new-spec))
@@ -204,21 +206,22 @@ path).  If path ends in / then just look in that directory"
 (defun jump-to (spec &optional matches make)
   "Jump to a spot defined by SPEC.  If optional argument MATCHES
 replace all '\\n' portions of SPEC with the nth (1 indexed)
-element of MATCHES.  If optiona argument MAKE, then create the
+element of MATCHES.  If optional argument MAKE, then create the
 target file if it doesn't exist, if MAKE is a function then use
 MAKE to create the target file."
   (if (functionp spec) (eval (list spec matches)) ;; custom function in spec
     (let ((path (jump-insert-matches spec matches)))
-      (unless (or (jump-to-path path)
-		  (and matches (jump-to-all-inflections spec matches)))
-	(when make (message (format "making %s" path))
+      (if (not (or (jump-to-path path)
+		   (and matches (jump-to-all-inflections spec matches))))
+	  (when make (message (format "making %s" path))
 	      (let ((path (if (or (string-match "^\\(.*?\\)\\.\\*" path)
 				  (string-match "^\\(.*/\\)$" path))
 			      (read-from-minibuffer "create " (match-string 1 path))
 			    path)))
 		(when (functionp make) (eval (list make path)))
 		(find-file (concat root (if (string-match "^\\(.*\\)#" path)
-					    (match-string 1 path) path)))))))))
+					    (match-string 1 path) path)))))
+	t))))
 
 (defun jump-from (spec)
   "Match SPEC to the current location returning a list of any matches"
@@ -281,12 +284,16 @@ find the current method which defaults to `which-function'."
 					   (car spec)) (cdr spec))
 				  spec))
 			      specs))
-	 until (setf matches (jump-from (car spec)))
-	 finally (cond
-		  ((equal t matches)
-		   (jump-to (cdr spec) nil (if create (quote ,make))))
-		  ((consp matches)
-		   (jump-to (cdr spec) matches (if create (quote ,make))))))))))
+	 ;; don't stop until both the front and the back match
+	 ;;
+	 ;; the back should match if the user is presented with a list
+	 ;; of files, or a single file is jumped to
+	 until (and (setf matches (jump-from (car spec)))
+		    (cond
+		     ((equal t matches)
+		      (jump-to (cdr spec) nil (if create (quote ,make))))
+		     ((consp matches)
+		      (jump-to (cdr spec) matches (if create (quote ,make)))))))))))
 
 (provide 'jump)
 ;;; jump.el ends here

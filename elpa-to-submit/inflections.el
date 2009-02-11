@@ -1,13 +1,14 @@
-;;; inflections.el ---
+;;; inflections.el --- convert english words between singular and plural
 
 ;; Copyright (C) 2006 Dmitry Galinsky <dima dot exe at gmail dot com>
 
-;; Authors: Dmitry Galinsky <dima dot exe at gmail dot com>,
-;;          Howard Yeh <hayeah at gmail dot com>
-
+;; Authors: Dmitry Galinsky, Howard Yeh
+;; URL: http://emacs-rails.rubyforge.org/svn/trunk/inflections.el
+;; Version: 1.0
+;; Created: 2007-11-02
 ;; Keywords: ruby rails languages oop
-;; $URL: http://emacs-rails.rubyforge.org/svn/trunk/inflections.el $
-;; $Id: inflections.el 216 2007-11-02 20:48:22Z dimaexe $
+
+;; This file is NOT part of GNU Emacs.
 
 ;;; License
 
@@ -145,3 +146,4 @@
         str)))
 
 (provide 'inflections)
+;;; inflections.el ends here

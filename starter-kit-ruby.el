@@ -84,6 +84,12 @@ exec-to-string command, but it works and seems fast"
                                   'flymake-display-err-menu-for-current-line)
                    (flymake-mode t))))))
 
+;; Rinari (Minor Mode for Ruby On Rails)
+(setq rinari-major-modes
+      (list 'mumamo-after-change-major-mode-hook 'dired-mode-hook 'ruby-mode-hook
+	    'css-mode-hook 'yaml-mode-hook 'javascript-mode-hook))
+(require 'rinari)
+
 ;; TODO: set up ri
 ;; TODO: electric
 
