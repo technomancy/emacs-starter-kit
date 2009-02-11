@@ -414,9 +414,8 @@ Recursively activates all dependencies of the named package."
 	   (keep-going (or (not (memq package package-activated-list))
 			   (package-version-compare this-version version '>))))
       (while (and req-list keep-going)
-	(or (package-activate (car (car req-list))
-			      (car (cdr (car req-list))))
-	    (setq keep-going nil))
+        (package-activate (car (car req-list))
+                          (car (cdr (car req-list))))
 	(setq req-list (cdr req-list)))
       (if keep-going
 	  (package-do-activate package (cdr pkg-desc))))))
