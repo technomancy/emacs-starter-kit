@@ -23,7 +23,7 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
    Use your package manager if you have one.
    Otherwise, Mac users should get it [from Apple](http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html).
    Windows users can get it [from GNU](http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip).
-2. Move the directory containing this file to ~/.emacs.d
+2. Move the directory containing this file to ~/.emacs.d [1]
    (If you already have a directory at ~/.emacs.d move it out of the way and put this there instead.)
 3. Launch Emacs!
 
@@ -100,3 +100,6 @@ Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
 
 The latest version is at http://github.com/technomancy/emacs-starter-kit/
+
+On Unix, /home/$USER/.emacs.d, on windows Documents and Settings/%your
+user name%/Application Data
