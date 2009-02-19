@@ -162,5 +162,10 @@
   (interactive)
   (message (if (y-or-n-p "Do you have a test for that? ") "Good." "Bad!")))
 
+;; A monkeypatch to cause annotate to ignore whitespace
+(defun vc-git-annotate-command (file buf &optional rev)
+  (let ((name (file-relative-name file)))
+    (vc-git-command buf 0 name "blame" "-w" rev)))
+
 (provide 'starter-kit-defuns)
 ;;; starter-kit-defuns.el ends here
