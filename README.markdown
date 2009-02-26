@@ -80,6 +80,12 @@ library is useful enough to be bundled with the starter kit, it should
 be useful enough to submit to ELPA so that everyone can use it, not
 just users of the starter kit.
 
+Sometimes packages are removed from the Starter Kit as they get added
+to ELPA itself. This has occasionally caused problems with certain
+packages. If you run into problems with such a package, try removing
+everything from inside the elpa/ directory and invoking M-x
+starter-kit-elpa-install in a fresh instance.
+
 ## Contributing
 
 If you know your way around Emacs, please try out the starter kit as a
