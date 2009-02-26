@@ -68,12 +68,8 @@
 (set-default 'indicate-empty-lines t)
 (set-default 'imenu-auto-rescan t)
 
-(add-hook 'text-mode-hook 'auto-fill-mode)
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'textile-mode-hook 'auto-fill-mode)
-(add-hook 'textile-mode-hook 'flyspell-mode)
-(add-hook 'markdown-mode-hook 'auto-fill-mode)
-(add-hook 'markdown-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook (lambda () (auto-fill-mode 1)))
+(add-hook 'text-mode-hook (lambda () (flyspell-mode 1)))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
