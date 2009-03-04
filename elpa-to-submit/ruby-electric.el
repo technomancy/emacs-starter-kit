@@ -129,7 +129,8 @@ strings. Note that you must have Font Lock enabled."
       (save-excursion
         (ruby-indent-line t)
         (newline)
-        (ruby-insert-end))))
+        (insert "end")
+        (ruby-indent-line t))))
 
 (defun ruby-electric-code-at-point-p()
   (and ruby-electric-mode

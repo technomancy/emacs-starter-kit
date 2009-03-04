@@ -37,9 +37,13 @@
 
 ;; The clojure-install function can check out and configure all the
 ;; dependencies get going with Clojure, including SLIME integration.
+;; To use this function, you may have to manually load clojure-mode.el
+;; using M-x load-file or M-x eval-buffer.
 
 ;;; Todo:
 
+;; * installer doesn't work when git port is blocked
+;; * updater/installer should know "last known good" sha1s?
 ;; * hashbang is also a valid comment character
 ;; * do the inferior-lisp functions work without SLIME? needs documentation
 
@@ -83,7 +87,7 @@ restart (ie. M-x clojure-mode) of existing clojure mode buffers."
   :type 'boolean
   :group 'clojure-mode)
 
-(defcustom clojure-mode-load-command  "(clojure/load-file \"%s\")\n"
+(defcustom clojure-mode-load-command  "(clojure.core/load-file \"%s\")\n"
   "*Format-string for building a Clojure expression to load a file.
 This format string should use `%s' to substitute a file name
 and should result in a Clojure expression that will command the inferior Clojure
@@ -216,6 +220,9 @@ if that value is non-nil."
     (define-key clojure-mode-map "{" 'paredit-open-curly)
     (define-key clojure-mode-map "}" 'paredit-close-curly)))
 
+;; (define-key clojure-mode-map "{" 'self-insert-command)
+;; (define-key clojure-mode-map "}" 'self-insert-command)
+
 (defun clojure-font-lock-def-at-point (point)
   "Find the position range between the top-most def* and the
 fourth element afterwards. Note that this means there's no
@@ -298,7 +305,7 @@ elements of a def* forms."
     `( ;; Definitions.
       (,(concat "(\\(?:clojure/\\)?\\(def"
 		;; Function declarations.
-		"\\(n-?\\|multi\\|macro\\|method\\|"
+		"\\(n-?\\|multi\\|macro\\|method\\|test\\|"
 		;; Variable declarations.
                 "struct\\|once\\|"
 		"\\)\\)\\>"
@@ -575,7 +582,7 @@ is bundled up as a function so that you can call it after you've set
   (require 'slime-autoloads)
   (require 'swank-clojure-autoload)
 
-  (slime-setup '(slime-fancy slime-repl))
+  (slime-setup '(slime-fancy))
 
   (setq swank-clojure-jar-path (concat clojure-src-root "/clojure/clojure.jar")
         swank-clojure-extra-classpaths
@@ -633,7 +640,7 @@ should be checked out in the `clojure-src-root' directory."
 
   (message "Updating...")
   (dolist (repo '("clojure" "clojure-contrib" "swank-clojure" "slime"))
-    (unless (= 0 (shell-command (format "cd %s/%s; git pull" clojure-src-root repo)))
+    (unless (= 0 (shell-command (format "cd %s/%s; git pull origin master" clojure-src-root repo)))
       (error "Clojure update failed: %s" repo)))
 
   (message "Compiling...")
@@ -641,6 +648,16 @@ should be checked out in the `clojure-src-root' directory."
     (unless (= 0 (shell-command (format "cd %s/clojure; ant" clojure-src-root)))
       (error "Couldn't compile Clojure.")))
   (message "Finished updating Clojure."))
+
+(defun clojure-enable-slime-on-existing-buffers ()
+  (interactive)
+  (add-hook 'clojure-mode-hook 'swank-clojure-slime-mode-hook)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (if (equal major-mode 'clojure-mode)
+          (swank-clojure-slime-mode-hook)))))
+
+(add-hook 'slime-connected-hook 'clojure-enable-slime-on-existing-buffers)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
