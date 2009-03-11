@@ -20,7 +20,7 @@
      (defun js-lambda () (interactive) (insert "function () {\n}")
        (backward-char 5))
 
-     (add-hook 'js2-mode-hook 'coding-hook)
+     (add-hook 'js2-mode-hook 'run-coding-hook)
 
      (define-key js2-mode-map (kbd "C-c l") 'js-lambda)
      (define-key js2-mode-map "\C-\M-h" 'backward-kill-word)

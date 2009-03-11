@@ -62,18 +62,30 @@ Symbols matching the text at point are put first in the completion list."
            (position (cdr (assoc selected-symbol name-and-pos))))
       (goto-char position))))
 
-(defun coding-hook ()
-  "Enable things that are convenient across all coding buffers."
-  (set (make-local-variable 'comment-auto-fill-only-comments) t)
+;;; These belong in coding-hook:
+
+(defun local-column-number-mode ()
   (make-local-variable 'column-number-mode)
-  (column-number-mode t)
-  (setq save-place t)
-  (auto-fill-mode) ;; in comments only
-  (if window-system (hl-line-mode t))
-  (pretty-lambdas)
-  ;; TODO: this breaks in js2-mode!
-  ;;(if (functionp 'idle-highlight) (idle-highlight))
-  )
+  (column-number-mode t))
+
+(defun local-comment-auto-fill ()
+  (set (make-local-variable 'comment-auto-fill-only-comments) t)
+  (auto-fill-mode t))
+
+(defun turn-on-hl-line-mode ()
+  (if window-system (hl-line-mode t)))
+
+(defun turn-on-save-place-mode ()
+  (setq save-place t))
+
+(add-hook 'coding-hook 'local-column-number-mode)
+(add-hook 'coding-hook 'local-comment-auto-fill)
+(add-hook 'coding-hook 'turn-on-hl-line-mode)
+(add-hook 'coding-hook 'pretty-lambdas)
+  
+(defun run-coding-hook ()
+  "Enable things that are convenient across all coding buffers."
+  (run-hooks coding-hook))
 
 (defun untabify-buffer ()
   (interactive)
