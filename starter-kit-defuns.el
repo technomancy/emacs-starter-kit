@@ -85,7 +85,7 @@ Symbols matching the text at point are put first in the completion list."
   
 (defun run-coding-hook ()
   "Enable things that are convenient across all coding buffers."
-  (run-hooks coding-hook))
+  (run-hooks 'coding-hook))
 
 (defun untabify-buffer ()
   (interactive)
