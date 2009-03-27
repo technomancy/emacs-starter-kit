@@ -57,4 +57,9 @@ just have to assume it's online."
 (when (esk-online?) (ignore-errors (with-timeout (15)
                                      (starter-kit-elpa-install))))
 
+(unless (functionp 'idle-highlight)
+  ;; TODO: Quick workaround for a problem folks are reporting until I
+  ;; get a chance to investigate further.
+  (defun idle-highlight () (interactive)))
+
 (provide 'starter-kit-elpa)
