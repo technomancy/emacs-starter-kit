@@ -100,6 +100,31 @@ Only works with files in your project root's src/, not in dependencies."
 ;; You might like this, but it's a bit disorienting at first:
 ;; (setq clojure-enable-paredit t)
 
+(defun clojure-project (path)
+  "Setup classpaths for a clojure project and starts a new SLIME session.
+
+Kills existing SLIME session, if any."
+  (interactive (list
+                (ido-read-directory-name
+                 "Project root: "
+                 (locate-dominating-file default-directory "pom.xml"))))
+  (when (get-buffer "*inferior-lisp*")
+    (kill-buffer "*inferior-lisp*"))
+  (setq swank-clojure-binary nil
+        swank-clojure-jar-path (expand-file-name "target/dependency/" path)
+        swank-clojure-extra-classpaths
+        (mapcar (lambda (d) (expand-file-name d path))
+                '("src/" "target/classes/" "test/"))
+        swank-clojure-extra-vm-args
+        (list (format "-Dclojure.compile.path=%s"
+                      (expand-file-name "target/classes/" path)))
+        slime-lisp-implementations
+        (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
+              (remove-if #'(lambda (x) (eq (car x) 'clojure))
+                         slime-lisp-implementations)))
+  (save-window-excursion
+    (slime)))
+
 ;;; Scheme
 
 (add-hook 'scheme-mode-hook 'run-coding-hook)
