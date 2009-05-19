@@ -57,11 +57,6 @@
 (regen-autoloads)
 (load custom-file 'noerror)
 
-;; More complicated packages that haven't made it into ELPA yet
-
-(autoload 'jabber-connect "jabber" "" t)
-;; TODO: rinari, slime
-
 ;; Work around a bug on OS X where system-name is FQDN
 (if (eq system-type 'darwin)
     (setq system-name (car (split-string system-name "\\."))))

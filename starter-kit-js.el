@@ -20,7 +20,9 @@
      (defun js-lambda () (interactive) (insert "function () {\n}")
        (backward-char 5))
 
-     (add-hook 'js2-mode-hook 'run-coding-hook)
+     (add-hook 'js2-mode-hook 'local-column-number-mode)
+     (add-hook 'js2-mode-hook 'local-comment-auto-fill)
+     (add-hook 'js2-mode-hook 'turn-on-hl-line-mode)
 
      (define-key js2-mode-map (kbd "C-c l") 'js-lambda)
      (define-key js2-mode-map "\C-\M-h" 'backward-kill-word)
