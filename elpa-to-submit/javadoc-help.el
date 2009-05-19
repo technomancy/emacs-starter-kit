@@ -31,6 +31,9 @@
 ;;  through multiple online and local javadocs quickly, and view the found
 ;;  class documentation in the system web browser.
 ;;
+;;  Modified by Phil Hagelberg to follow Emacs conventions a little
+;;  more closely. Removed saving/restoring settings from file; jmenu
+;;  functions. Use elisp code to set variables instead.
 
 ;;; Overview:
 ;;
@@ -53,17 +56,14 @@
 ;;
 ;;  or add the autoloads for the public command functions.
 ;;    (autoload 'javadoc-lookup       "javadoc-help" "Look up Java class in Javadoc."   t)
-;;    (autoload 'javadoc-help         "javadoc-help" "Open up the Javadoc-help menu."   t)
-;;    (autoload 'javadoc-set-predefined-urls  "javadoc-help" "Set pre-defined urls."    t)
-;;
 
 ;;; Configuration:
 ;;
 ;;  Assign the commands to some keys in your .emacs file.
 ;;
-;;  Examples below assign a set of keys to the javadoc-help functions.
-;;    (global-set-key [(f1)]          'javadoc-lookup)  ; F1 to lookup
-;;    (global-set-key [(shift f1)]    'javadoc-help)    ; Shift-F1 to bring up menu
+;;  Example:
+;;
+;;    (global-set-key (kbd "C-h j") 'javadoc-lookup)
 ;;
 ;;  Javadoc-help uses browse-url to launch the system web browser.  Make sure
 ;;  it's working for your platform.  Try it out with, M-x browse-url.  Usually
@@ -161,9 +161,12 @@
   :type 'string
   :group 'javadoc-help)
 
+(defcustom javadoc-hook nil
+  "Hook to run when javadoc buffers are opened.")
 
 ;;; User callable functions
 
+;;;###autoload
 (defun javadoc-lookup ()
   "Look up Java class in Javadoc."
   (interactive)
@@ -183,16 +186,6 @@
           (browse-url single-result-url)))
         )
     )
-  )
-
-(defun javadoc-help ()
-  "Bring up the Javadoc Help Menu to edit the Javadoc URLs."
-  (interactive)
-  (switch-to-buffer (get-buffer-create jdh--jmenu-buffer))
-  (jdh-jmenu-redraw)
-  (goto-char (point-min))
-  (forward-line jdh--jmenu-table-offset)
-  (jdh-jmenu-mode)
   )
 
 (defun javadoc-set-predefined-urls (url-list)
@@ -509,50 +502,6 @@
              (cons (point) (match-end 0))
            nil))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; *Javadoc-Help* menu functions
-
-(defconst jdh--jmenu-table-offset 7)
-
-(defun jdh-jmenu-redraw ()
-  "Redraw the javadoc-help javadocs in the buffer named `*Javadoc-Help*'."
-  (save-excursion
-    (save-window-excursion
-      (setq inhibit-read-only t)
-      (erase-buffer)
-      (insert (concat jdh--jmenu-buffer "\n\n"))
-      (insert "Javadoc URL Management.\n")
-      (insert "Command: u, f, o, r, e, q, ctrl-d, shift-d, shift-x.  Press '?' for help.\n\n")
-      (insert "% Javadoc URL\n")
-      (insert "- -------------------------------------------------------------------------\n")
-      (mapc
-       (lambda (javadoc)
-         (insert (format "  %s\n" (jdh-javadoc-to-str javadoc)))
-         )
-       *jdh-javadocs*)
-      ))
-  )
-
-(defun jdh-jmenu-redraw-at (&optional index)
-  "Redraw the jmenu screen and preserve the cursor's position."
-  (let* ((current-index (jdh-jmenu-get-javadoc-index))
-         (index-to-advance (if (null index) current-index index)))
-    (jdh-jmenu-redraw)
-    (goto-char (point-min))
-    (forward-line (+ jdh--jmenu-table-offset index-to-advance)))
-  )
-
-(defun jdh-jmenu-get-javadoc-index ()
-  "Return a javadoc index under the cursor.  Index might be out of range."
-  (1- (- (line-number-at-pos) jdh--jmenu-table-offset))
-  )
-
-(defun jdh-jmenu-valid-javadoc ()
-  "Check whether the cursor is on a valid javadoc"
-  (jdh-javadocs-get (jdh-jmenu-get-javadoc-index))
-  )
-
 (defun jdh-refresh-url (url-file-base)
   "Refresh and download the allclasses-file from the online javadoc url."
   (if (not (file-accessible-directory-p javadoc-help-cache-dir))
@@ -581,219 +530,6 @@
           )
       (kill-buffer buffer))
     status)
-  )
-
-(defun jdh-jmenu-add-url ()
-  "Add Javadoc URL."
-  (interactive)
-  (let* ((default-url (car *jdh-url-input-history*))
-         (prompt-str (format "Javadoc URL (http://sample/javadoc/): "))
-         (input-str (read-from-minibuffer 
-                 prompt-str
-		 nil
-		 nil
-		 nil
-		 '*jdh-url-input-history*
-		 default-url)))
-    (setq input-str (jdh-jmenu-parse-input input-str))
-    (if (not (and input-str
-                  (jdh-refresh-url input-str)))
-        (message (format "Failed to refresh %s" input-str))
-      (jdh-javadocs-add (jdh-javadoc-new input-str t t nil))
-      (jdh-javadocs-save)
-      (jdh-jmenu-redraw-at)
-      (message (format "Javadoc url %s added" input-str)))
-    )
-  )
-
-(defun jdh-jmenu-add-directory ()
-  "Add Javadoc directory."
-  (interactive)
-  (let* ((directory-name (jdh-jmenu-input-directory))
-         allclasses-file)
-    (when directory-name
-      ;; and-check api file, add file record
-      (setq allclasses-file (jdh-get-allclasses-local-file directory-name))
-      (if (not (file-readable-p allclasses-file))
-          (message (format "%s is not readable.  Make sure the directory is correct." allclasses-file))
-        (jdh-javadocs-add (jdh-javadoc-new directory-name t t nil))
-        (jdh-javadocs-save)
-        (jdh-jmenu-redraw-at)
-        (message (format "%s added." directory-name))
-        )
-      ))
-  )
-
-(defun jdh-jmenu-input-directory ()
-  "Input Javadoc directory."
-  (interactive)
-  (let* ((default-dir *jdh-dir-input-history*)
-         (prompt-str "Javadoc file: ")
-         (input-str (if (null default-dir)
-                        (read-file-name prompt-str)
-                      (read-file-name prompt-str default-dir default-dir nil))))
-    (setq input-str (jdh-jmenu-parse-input input-str))
-    (if (null input-str)
-        nil
-      (setq *jdh-dir-input-history* input-str)
-      (if (file-directory-p input-str)
-          input-str
-        (message (format "%s is not a directory." input-str))
-        nil)))
-  )
-
-(defun jdh-jmenu-parse-input (input-url)
-  "Do any parsing on the input url/directory."
-  (setq input-url (string-trim input-url))
-  (if (equal input-url "")
-      nil
-    (let ((suffix-pos (string-match "index.html$" input-url)))
-      (if suffix-pos
-          (setq input-url (substring input-url 0 suffix-pos))))
-    input-url)
-  )
-
-(defun jdh-jmenu-advance-cursor ()
-  (forward-line 1)
-  (when (null (jdh-jmenu-valid-javadoc))
-    (goto-char (point-min))
-    (forward-line jdh--jmenu-table-offset))
-  )
-
-(defun jdh-jmenu-refresh-javadoc ()
-  "Refresh the javadoc url from the source."
-  (interactive)
-  (let ((javadoc (jdh-jmenu-valid-javadoc)))
-    (if (null javadoc)
-        (message "No valid javadoc selected.")
-      (let ((base-url (jdh-javadoc-url javadoc)))
-        (message (format "Refreshing %s" base-url))
-        (if (jdh-http-p base-url)
-          (if (not (jdh-refresh-url base-url))
-              (message (format "Failed to refresh %s" base-url))
-            (message (format "Refreshed %s" base-url)))
-          (message (format "Refreshed local directory %s" base-url)))
-        (jdh-javadoc-set-refreshed javadoc t)
-        (jdh-javadocs-save)
-        (jdh-jmenu-redraw-at)
-        (message (format "Refreshed %s" base-url)))
-      ))
-  )
-
-(defun jdh-jmenu-enable-javadoc ()
-  "Enable/disable the javadoc url."
-  (interactive)
-  (let ((javadoc (jdh-jmenu-valid-javadoc)))
-    (if (null javadoc)
-        (message "No valid javadoc selected.")
-      (jdh-javadoc-set-enabled javadoc (not (jdh-javadoc-enabled javadoc)))
-      (jdh-jmenu-redraw-at)
-      (jdh-javadocs-save)
-      (message (format "%s" (if (jdh-javadoc-enabled javadoc) "Enabled" "Disabled")))
-      ))
-  )
-
-(defun jdh-jmenu-open-url ()
-  "Open the main page of the javadoc under cursor in the system web browser."
-  (interactive)
-  (let ((javadoc (jdh-jmenu-valid-javadoc)))
-    (if (null javadoc)
-        (message "No valid javadoc selected.")
-      (let* ((base-url (jdh-javadoc-url javadoc))
-             (main-url (jdh-normalize-url(concat-path base-url "index.html"))))
-;       (jdh-close-buffer)
-        (message (format "Launching web browser on %s" main-url))
-        (browse-url main-url))))
-  )
-
-(defun jdh-jmenu-mark-char (mark-char)
-  "Set a mark char on the javadoc line at cursor."
-  (when (jdh-jmenu-valid-javadoc)
-    (setq inhibit-read-only t)
-    (beginning-of-line)
-    (delete-char 1)
-    (insert mark-char)
-    (jdh-jmenu-advance-cursor))
-  )
-
-(defun jdh-jmenu-mark-delete ()
-  "Mark the javadoc at cursor for delete."
-  (interactive)
-  (let ((javadoc (jdh-jmenu-valid-javadoc)))
-    (if (and javadoc (jdh-javadoc-predefined javadoc))
-        (message "Cannot delete predefined javadoc.  Use javadoc-set-predefined-urls() to change predefined urls.")
-      (jdh-jmenu-mark-char "D")))
-  )
-
-(defun jdh-jmenu-unmark-delete ()
-  "Unmark the javadoc at cursor from deletion."
-  (interactive)
-  (jdh-jmenu-mark-char " ")
-  )
-
-(defun jdh-jmenu-commit-deletions ()
-  "Commit deletion on the marked javadocs."
-  (interactive)
-  (goto-char (point-min))
-  (forward-line jdh--jmenu-table-offset)
-  (let ((items-to-delete (list)))
-    (dotimes (i (length *jdh-javadocs*))
-      (beginning-of-line)
-      (if (looking-at "D")
-          (push i items-to-delete))
-      (forward-line 1))
-    (dolist (index items-to-delete)
-      (let ((javadoc (jdh-javadocs-get index)))
-        (setq *jdh-javadocs* (remove javadoc *jdh-javadocs*))))
-    )
-  (jdh-jmenu-redraw)
-  (forward-line jdh--jmenu-table-offset)
-  (jdh-javadocs-save)
-  (message "Committed deletion")
-  )
-
-(defvar *jdh-jmenu-mode-map* nil)
-(progn
-  (setq *jdh-jmenu-mode-map* (make-keymap))
-  (suppress-keymap *jdh-jmenu-mode-map* t)
-  (define-key *jdh-jmenu-mode-map* "u"        'jdh-jmenu-add-url)
-  (define-key *jdh-jmenu-mode-map* "f"        'jdh-jmenu-add-directory)
-  (define-key *jdh-jmenu-mode-map* "o"        'jdh-jmenu-open-url)
-  (define-key *jdh-jmenu-mode-map* "r"        'jdh-jmenu-refresh-javadoc)
-  (define-key *jdh-jmenu-mode-map* "e"        'jdh-jmenu-enable-javadoc)
-  (define-key *jdh-jmenu-mode-map* "\C-d"     'jdh-jmenu-mark-delete)
-  (define-key *jdh-jmenu-mode-map* "\S-d"     'jdh-jmenu-unmark-delete)
-  (define-key *jdh-jmenu-mode-map* "\S-x"     'jdh-jmenu-commit-deletions)
-  (define-key *jdh-jmenu-mode-map* "n"        'next-line)
-  (define-key *jdh-jmenu-mode-map* " "        'next-line)
-  (define-key *jdh-jmenu-mode-map* "p"        'previous-line)
-  (define-key *jdh-jmenu-mode-map* "q"        'jdh-close-buffer)
-  (define-key *jdh-jmenu-mode-map* "\C-g"     'jdh-close-buffer)
-  (define-key *jdh-jmenu-mode-map* "?"        'describe-mode)
-  )
-
-(defun jdh-jmenu-mode ()
-  "Major mode for listing and editing the list of javadoc-help javadocs.
-The following commands are available.
-\\<*jdh-jmenu-mode-map*>
-\\[jdh-jmenu-add-url] -- add a new online javadoc url. e.g. http://commons.apache.org/lang/api/
-\\[jdh-jmenu-add-directory] -- add a new local javadoc directory. e.g. c:/jdk/docs/api, or /opt/jdk/docs/api
-\\[jdh-jmenu-open-url] -- launch the javadoc URL in the system web browser.
-\\[jdh-jmenu-refresh-javadoc] -- refresh the javadoc url from the source.
-\\[jdh-jmenu-enable-javadoc] -- enable/disable the javadoc url for searching.
-\\[jdh-jmenu-mark-delete] -- mark this javadoc to be deleted.
-\\[jdh-jmenu-unmark-delete] -- unmark the javadoc from deletion.
-\\[jdh-jmenu-commit-deletions] -- delete javadocs marked with `\\[jdh-jmenu-mark-delete]'.
-\\[next-line] -- move to the next line
-\\[previous-line] -- move to the previous line
-\\[jdh-close-buffer] -- close the *Javadoc-Help* window
-"
-  (kill-all-local-variables)
-  (use-local-map *jdh-jmenu-mode-map*)
-  (setq truncate-lines t)
-  (setq buffer-read-only t)
-  (setq major-mode 'jdh-jmenu-mode)
-  (setq mode-name jdh--jmenu-mode-name)
   )
 
 
@@ -859,12 +595,9 @@ The following commands are available.
     (if (null matched-item)
         (message "No valid javadoc selected.")
       (let ((url (jdh-get-match-url matched-item)))
+        (save-window-excursion (browse-url url))
         (when close-buffer
-          (jdh-close-buffer))
-        (message (format "Launching web browser on %s" url))
-        (browse-url url)
-        )))
-  )
+          (jdh-close-buffer))))))
 
 (defun jdh-smenu-open-url ()
   "Open the javadoc under cursor in the system web browser."
@@ -886,10 +619,7 @@ The following commands are available.
         (message "No valid javadoc selected.")
       (let* ((base-url (jdh-get-match-base-url matched-item))
              (main-url (jdh-normalize-url(concat-path base-url "index.html"))))
-        (message (format "Launching web browser on %s" main-url))
-        (browse-url main-url)
-        )))
-  )
+        (browse-url main-url)))))
 
 (defun jdh-smenu-open-parent ()
   "Open the parent package of the javadoc under cursor in the browser."
@@ -950,104 +680,8 @@ The following commands are available.
   (setq buffer-read-only t)
   (setq major-mode 'jdh-smenu-mode)
   (setq mode-name jdh--smenu-mode-name)
+  (run-hooks 'javadoc-hook)
   )
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Javadoc saving and restoring
-
-(defun jdh-javadocs-save ()
-  "Save the javadocs to file."
-  (let ((data-alist 
-         (list 
-          (cons 'magic-number jdh--file-magic)
-          (cons 'version jdh--file-version)
-          (cons 'timestamp (current-time))
-          (cons '*jdh-javadocs* *jdh-javadocs*)
-          (cons '*jdh-url-input-history* *jdh-url-input-history*)
-          (cons '*jdh-dir-input-history* *jdh-dir-input-history*)
-          (cons '*jdh-search-input-history* *jdh-search-input-history*))
-         ))
-    (jdh-javadocs-save-file data-alist javadoc-help-setting-file))
-  )
-
-(defun jdh-javadocs-restore ()
-  "Load the javadocs from file."
-  (let ((data-alist (jdh-javadocs-load-file javadoc-help-setting-file)))
-    (when (equal jdh--file-magic (cdr (assoc 'magic-number data-alist)))
-      (setq *jdh-javadocs* (cdr (assoc '*jdh-javadocs* data-alist)))
-      (setq *jdh-url-input-history* (cdr (assoc '*jdh-url-input-history* data-alist)))
-      (setq *jdh-dir-input-history* (cdr (assoc '*jdh-dir-input-history* data-alist)))
-      (setq *jdh-search-input-history* (cdr (assoc '*jdh-search-input-history* data-alist)))
-      ))
-  )
-
-(defun jdh-javadocs-load-file (file)
-  "Load the javadoc-list from file."
-  (when (and file
-             (file-readable-p file))
-    (let ((loading-buffer (find-file-noselect file))
-          (javadoc-list))
-      (setq javadoc-list (with-current-buffer loading-buffer
-                        (goto-char (point-min))
-                        (read (current-buffer))))
-      (kill-buffer loading-buffer)
-      javadoc-list))
-  )
-
-(defun jdh-javadocs-save-file (data-alist file)
-  "Save the data-alist to file."
-  (when (and file
-             (file-writable-p file))
-    (let ((writing-buffer (find-file-noselect file)))
-      (with-current-buffer writing-buffer
-        (erase-buffer)
-        (insert ";; javadoc-help.el saved javadocs.  Do not edit this file.\n")
-        (prin1 data-alist (current-buffer))
-        (insert "\n")
-        (save-buffer))
-      (kill-buffer writing-buffer)))
-  )
-
-(defun jdh-process-predefined-urls (url-list)
-  "Process the list of the pre-defined urls."
-  ; Trim the urls
-  (setq url-list (mapcar 
-                  (lambda (url)
-                    (string-trim url))
-                  url-list))
-  ; Add the predefined url as javadoc
-  (mapc
-   (lambda (url)
-     (let* ((index (jdh-javadocs-find-by-url url))
-            (javadoc (jdh-javadocs-get index)))
-       (if javadoc
-           (jdh-javadoc-set-predefined javadoc t)           ; Just mark the existing javadoc as predefined.
-         (jdh-javadocs-add (jdh-javadoc-new url nil t t))   ; Add the predefined javadoc
-         )))
-   url-list)
-  ; Remove any existing predefined javadoc that are not in the new predefined url-list.
-  (mapc
-   (lambda (javadoc)
-     (let ((url (jdh-javadoc-url javadoc)))
-       (if (and (jdh-javadoc-predefined javadoc)
-                (not (member url url-list)))
-           (jdh-javadocs-remove javadoc)))
-     )
-   *jdh-javadocs*)
-  (jdh-javadocs-save)
-  )
-
-;; Load from setting file on start up.
-(add-hook' after-init-hook
-           (lambda ()
-             (jdh-javadocs-restore)
-             (jdh-process-predefined-urls *jdh-predefined-urls*)
-             ))
-
-;; Save to setting file on exit.
-(add-hook 'kill-emacs-hook 'jdh-javadocs-save)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Util functions
@@ -1103,7 +737,6 @@ The following commands are available.
 (defun jdh-http-p (url)
   (eq (string-match "^[Hh][Tt][Tt][Pp][Ss]?://" url) 0)
   )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing and debugging
