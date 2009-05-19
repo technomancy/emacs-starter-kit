@@ -73,10 +73,26 @@
 
 (add-hook 'sldb-mode-hook 'sldb-font-lock)
 
+(defun slime-jump-to-trace (&optional on)
+  "Jump to the file/line that the current stack trace line references.
+Only works with files in your project root's src/, not in dependencies."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (search-forward-regexp "[0-9]: \\([^$(]+\\).*?\\([0-9]*\\))")
+    (let ((line (string-to-number (match-string 2)))
+          (ns-path (split-string (match-string 1) "\\."))
+          (project-root (locate-dominating-file default-directory "src/")))
+      (find-file (format "%s/src/%s.clj" project-root
+                         (mapconcat 'identity ns-path "/")))
+      (goto-line line))))
+
 (eval-after-load 'slime
-  '(defun sldb-prune-initial-frames (frames)
-     "Show all stack trace lines by default."
-     frames))
+  '(progn
+     (defalias 'sldb-toggle-details 'slime-jump-to-trace)
+     (defun sldb-prune-initial-frames (frames)
+       "Show all stack trace lines by default."
+       frames)))
 
 (eval-after-load 'find-file-in-project
   '(add-to-list 'ffip-patterns "*.clj"))
