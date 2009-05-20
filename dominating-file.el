@@ -42,3 +42,5 @@ and return the directory.  Return nil if not found."
 
   (defvar locate-dominating-stop-dir-regexp
     "\\`\\(?:[\\/][\\/][^\\/]+\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"))
+
+(provide 'dominating-file)
