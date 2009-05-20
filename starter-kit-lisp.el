@@ -8,12 +8,12 @@
 (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
 (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
 
+(defun turn-on-paredit ()
+  (paredit-mode +1))
+
 (eval-after-load 'paredit
-  '(progn
      ;; Not sure why paredit behaves this way with comments; it's annoying
-     (define-key paredit-mode-map (kbd ";")   'self-insert-command)
-     (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-     (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))))
+  '(define-key paredit-mode-map (kbd ";")   'self-insert-command))
 
 (defface esk-paren-face
    '((((class color) (background dark))
@@ -29,6 +29,7 @@
 (add-hook 'emacs-lisp-mode-hook 'run-coding-hook)
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'idle-highlight)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-paredit)
 
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -65,7 +66,7 @@
                           '(("[0-9]+: \\(clojure\.\\(core\\|lang\\).*\\)"
                              1 esk-clojure-trace-face)
                             ("[0-9]+: \\(java.*\\)"
-                             1 font-lock-comment-face)
+                             1 esk-clojure-trace-face)
                             ("[0-9]+: \\(swank.*\\)"
                              1 esk-clojure-trace-face)
                             ("\\[\\([A-Z]+\\)\\]"
@@ -98,7 +99,7 @@ Only works with files in your project root's src/, not in dependencies."
   '(add-to-list 'ffip-patterns "*.clj"))
 
 ;; You might like this, but it's a bit disorienting at first:
-;; (setq clojure-enable-paredit t)
+(add-hook 'clojure-mode-hook 'turn-on-paredit)
 
 (defun clojure-project (path)
   "Setup classpaths for a clojure project and starts a new SLIME session.
@@ -136,6 +137,7 @@ Kills existing SLIME session, if any."
 
 (add-hook 'lisp-mode-hook 'run-coding-hook)
 (add-hook 'lisp-mode-hook 'idle-highlight)
+(add-hook 'lisp-mode-hook 'turn-on-paredit)
 (font-lock-add-keywords 'lisp-mode
 			'(("(\\|)" . 'esk-paren-face)))
 
