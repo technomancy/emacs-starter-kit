@@ -76,16 +76,12 @@
 
 (ignore-errors
   (add-to-list 'load-path "/home/phil/src/elisp/relax.el")
-  (require 'relax))
+  (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t))
 
 (ignore-errors
   ;; Instant MESSAGING!
   (add-to-list 'load-path "/home/phil/src/elisp/elim/elisp")
-  (require 'garak))
-
-;; until the fixed version makes it to elpa
-(ignore-errors
-  (load "../../../elisp/clojure-mode/clojure-test-mode"))
+  (autoload 'garak "garak" "Start Garak IM session." t))
 
 ;;; Random stuff
 
@@ -100,9 +96,11 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/js/conkeror/contrib/run-conkeror")
 
-(require 'clojure-mode)
 (setq clojure-src-root "/home/phil/src/clj")
 (clojure-slime-config)
+
+(eval-after-load 'clojure-mode
+  '(load "../../../elisp/clojure-mode/clojure-test-mode"))
 
 (add-hook 'clojure-mode-hook 'turn-on-whitespace)
 
