@@ -14,6 +14,7 @@
 (prefer-coding-system 'utf-8)
 
 (setq visible-bell t
+      echo-keystrokes 0.1
       font-lock-maximum-decoration t
       inhibit-startup-message t
       transient-mark-mode t
