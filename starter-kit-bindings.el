@@ -5,7 +5,7 @@
 ;; TODO: switch to kbd invocations everywhere
 
 ;; You know, like Readline.
-(global-set-key "\C-\M-h" 'backward-kill-word)
+(global-set-key (kbd "C-M-h") 'backward-kill-word)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
@@ -24,13 +24,13 @@
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
 ;; Use regex searches by default.
-(global-set-key "\C-s" 'isearch-forward-regexp)
-(global-set-key "\C-r" 'isearch-backward-regexp)
-(global-set-key "\C-\M-s" 'isearch-forward)
-(global-set-key "\C-\M-r" 'isearch-backward)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "\C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
 
 ;; Jump to a definition in the current file. (This is awesome.)
-(global-set-key "\C-x\C-i" 'ido-imenu)
+(global-set-key (kbd "C-x C-i") 'ido-imenu)
 
 ;; File finding
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
@@ -44,8 +44,8 @@
 
 ;; Window switching. (C-x o goes to the next window)
 (windmove-default-keybindings) ;; Shift+direction
-(global-set-key "\C-xO" (lambda () (interactive) (other-window -1))) ;; back one
-(global-set-key "\C-x\C-o" (lambda () (interactive) (other-window 2))) ;; forward two
+(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
+(global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
 
 ;; Indentation help
 (global-set-key (kbd "C-x ^") 'join-line)
