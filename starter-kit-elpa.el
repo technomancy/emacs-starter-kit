@@ -36,8 +36,8 @@ just have to assume it's online."
     t))
 
 ;; On your first run, this should pull in all the base packages.
-(when (esk-online?) (ignore-errors (with-timeout (15)
-                                     (unless package-archive-contents (package-refresh-contents))
-                                     (starter-kit-elpa-install))))
+(when (esk-online?)
+  (unless package-archive-contents (package-refresh-contents))
+  (starter-kit-elpa-install))
 
 (provide 'starter-kit-elpa)
