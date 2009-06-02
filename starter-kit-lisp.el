@@ -11,9 +11,9 @@
 (defun turn-on-paredit ()
   (paredit-mode +1))
 
-(eval-after-load 'paredit
-     ;; Not sure why paredit behaves this way with comments; it's annoying
-  '(define-key paredit-mode-map (kbd ";")   'self-insert-command))
+;; (eval-after-load 'paredit
+;;      ;; Not sure why paredit behaves this way with comments; it's annoying
+;;   '(define-key paredit-mode-map (kbd ";")   'self-insert-command))
 
 (defface esk-paren-face
    '((((class color) (background dark))

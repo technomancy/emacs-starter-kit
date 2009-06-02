@@ -155,7 +155,8 @@ Symbols matching the text at point are put first in the completion list."
               (some (lambda (f) (file-newer-than-file-p f autoload-file))
                     (directory-files autoload-dir t "\\.el$")))
       (message "Updating autoloads...")
-      (update-directory-autoloads autoload-dir)))
+      (let (emacs-lisp-mode-hook)
+        (update-directory-autoloads autoload-dir))))
   (load autoload-file))
 
 ;; TODO: fix this
