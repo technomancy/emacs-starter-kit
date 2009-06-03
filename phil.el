@@ -60,7 +60,7 @@
   ;; 3 is magic-dbus-speak for "CONNECTED"
   (when (member 3 state)
     (message "Connected!")
-    (rcirc)))
+    (rcirc nil)))
 
 (defun irc ()
   (interactive)
