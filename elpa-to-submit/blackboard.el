@@ -34,7 +34,7 @@
      (bold-italic ((t (:bold t))))
      (border-glyph ((t (nil))))
      (buffers-tab ((t (:background "#0C1021" :foreground "#F8F8F8"))))
-     (font-lock-builtin-face ((t (:foreground "#F8F8F8"))))
+     (font-lock-builtin-face ((t (:foreground "#94bff3"))))
      (font-lock-comment-face ((t (:italic t :foreground "#AEAEAE"))))
      (font-lock-constant-face ((t (:foreground "#D8FA3C"))))
      (font-lock-doc-string-face ((t (:foreground "DarkOrange"))))
