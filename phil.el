@@ -92,8 +92,7 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/js/conkeror/contrib/run-conkeror")
 
-(setq clojure-src-root "/home/phil/src/clj")
-(clojure-slime-config)
+(clojure-slime-config "/home/phil/src/clj")
 
 ;; (eval-after-load 'swank-clojure
 ;;   '(add-to-list 'swank-clojure-extra-vm-args
