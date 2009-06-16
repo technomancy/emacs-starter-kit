@@ -70,18 +70,13 @@
 
 ;;; elisp libraries I run from source checkouts:
 
-(ignore-errors
-  (add-to-list 'load-path "/home/phil/src/elisp/emacs-w3m")
-  (require 'w3m))
+(add-to-list 'load-path "/home/phil/src/elisp/emacs-w3m")
+(add-to-list 'load-path "/home/phil/src/elisp/relax.el")
+(add-to-list 'load-path "/home/phil/src/elisp/elim/elisp")
 
-(ignore-errors
-  (add-to-list 'load-path "/home/phil/src/elisp/relax.el")
-  (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t))
-
-(ignore-errors
-  ;; Instant MESSAGING!
-  (add-to-list 'load-path "/home/phil/src/elisp/elim/elisp")
-  (autoload 'garak "garak" "Start Garak IM session." t))
+(autoload 'w3m "w3m" "w3m browser" t)
+(autoload 'relax "relax" "Connect to the CouchDB database at db-url." t)
+(autoload 'garak "garak" "Start Garak IM session." t)
 
 ;;; Random stuff
 
