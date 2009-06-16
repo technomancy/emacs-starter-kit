@@ -86,13 +86,20 @@
       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-1")))
 
 (eval-after-load 'ruby-mode
-  '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
+  '(progn (add-hook 'ruby-mode-hook 'ruby-electric-mode)
+          (add-hook 'ruby-mode-hook 'paredit-mode)))
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/js/conkeror/contrib/run-conkeror")
 
 (setq clojure-src-root "/home/phil/src/clj")
 (clojure-slime-config)
+
+;; (eval-after-load 'swank-clojure
+;;   '(add-to-list 'swank-clojure-extra-vm-args
+;;                 "-agentlib:jdwp=transport=dt_socket,address=8021,server=y,suspend=n"))
+
+(add-hook 'slime-repl-mode-hook 'turn-on-paredit)
 
 (eval-after-load 'clojure-mode
   '(load "../../../elisp/clojure-mode/clojure-test-mode"))
@@ -118,3 +125,6 @@
 (defun eshell/rm (&rest args)
   "Eshell's built-in rm is ridiculously slow."
   (shell-command (format "rm %s" (mapconcat 'identity args " "))))
+
+(defalias 'zb 'color-theme-zenburn)
+(defalias 'bb 'color-theme-blackboard)
