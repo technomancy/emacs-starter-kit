@@ -117,8 +117,11 @@ Kills existing SLIME session, if any."
   (setq swank-clojure-binary nil
         swank-clojure-jar-path (expand-file-name "target/dependency/" path)
         swank-clojure-extra-classpaths
-        (mapcar (lambda (d) (expand-file-name d path))
-                '("src/" "target/classes/" "test/"))
+        (append (mapcar (lambda (d) (expand-file-name d path))
+                        '("src/" "target/classes/" "test/"))
+                (let ((lib (expand-file-name "lib" path)))
+                  (if (file-exists-p lib)
+                      (directory-files lib t ".jar$"))))
         slime-lisp-implementations
         (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
               (remove-if #'(lambda (x) (eq (car x) 'clojure))
