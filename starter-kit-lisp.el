@@ -111,14 +111,17 @@ Kills existing SLIME session, if any."
                  (locate-dominating-file default-directory "pom.xml"))))
   (when (get-buffer "*inferior-lisp*")
     (kill-buffer "*inferior-lisp*"))
+  (add-to-list 'swank-clojure-extra-vm-args
+               (format "-Dclojure.compile.path=%s"
+                       (expand-file-name "target/classes/" path)))
   (setq swank-clojure-binary nil
         swank-clojure-jar-path (expand-file-name "target/dependency/" path)
         swank-clojure-extra-classpaths
-        (mapcar (lambda (d) (expand-file-name d path))
-                '("src/" "target/classes/" "test/"))
-        swank-clojure-extra-vm-args
-        (list (format "-Dclojure.compile.path=%s"
-                      (expand-file-name "target/classes/" path)))
+        (append (mapcar (lambda (d) (expand-file-name d path))
+                        '("src/" "target/classes/" "test/"))
+                (let ((lib (expand-file-name "lib" path)))
+                  (if (file-exists-p lib)
+                      (directory-files lib t ".jar$"))))
         slime-lisp-implementations
         (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
               (remove-if #'(lambda (x) (eq (car x) 'clojure))
