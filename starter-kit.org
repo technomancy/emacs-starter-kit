@@ -1,0 +1,114 @@
+#+TITLE: Emacs Starter Kit
+#+OPTIONS: toc:nil num:nil ^:nil
+
+#+begin_quote 
+Emacs outshines all other editing software in approximately the
+same way that the noonday sun does the stars. It is not just bigger
+and brighter; it simply makes everything else vanish.
+#+end_quote
+-Neal Stephenson, "In the Beginning was the Command Line"
+
+* Starter Kit Emacs Lisp
+
+** Load path etc.
+
+#+srcname: starter-kit-load-paths
+#+begin_src emacs-lisp 
+  (setq dotfiles-dir (file-name-directory
+                      (or (buffer-file-name) load-file-name)))
+  
+  (add-to-list 'load-path dotfiles-dir)
+  (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
+  (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/jabber"))
+  
+  (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
+  (setq package-user-dir (concat dotfiles-dir "elpa"))
+  (setq custom-file (concat dotfiles-dir "custom.el"))
+#+end_src
+
+** Ubiquitous Packages
+
+These should be loaded on startup rather than autoloaded on demand
+since they are likely to be used in every session
+
+#+srcname: starter-kit-load-on-startup
+#+begin_src emacs-lisp 
+  (require 'cl)
+  (require 'saveplace)
+  (require 'ffap)
+  (require 'uniquify)
+  (require 'ansi-color)
+  (require 'recentf)
+#+end_src
+
+** Emacs 22 Backport
+
+backport some functionality to Emacs 22 if needed
+#+srcname: starter-kit-emacs-22-helper
+#+begin_src emacs-lisp 
+  (require 'dominating-file)
+#+end_src
+
+this must be loaded before ELPA since it bundles its own
+out-of-date js stuff. TODO: fix it to use ELPA dependencies
+#+srcname: start-kit-nxhtml
+#+begin_src emacs-lisp 
+  (load "elpa-to-submit/nxhtml/autostart")
+#+end_src
+
+** ELPA (Emacs Lisp Package Manager)
+
+Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
+
+#+srcname: start-kit-elpa
+#+begin_src emacs-lisp 
+  (require 'package)
+  (package-initialize)
+  (require 'starter-kit-elpa)
+#+end_src
+
+** Starter Kit Customizations
+
+Load up starter kit customizations
+
+#+srcname: start-kit-customizations
+#+begin_src emacs-lisp 
+  (require 'starter-kit-defuns)
+  (require 'starter-kit-bindings)
+  (require 'starter-kit-misc)
+  (require 'starter-kit-registers)
+  (require 'starter-kit-eshell)
+  (require 'starter-kit-lisp)
+  (require 'starter-kit-perl)
+  (require 'starter-kit-ruby)
+  (require 'starter-kit-js)
+  
+  (regen-autoloads)
+  (load custom-file 'noerror)
+#+end_src
+
+** Work around OS X bug
+
+Work around a bug on OS X where system-name is FQDN
+#+srcname: start-kit-osX-workaround
+#+begin_src emacs-lisp 
+  (if (eq system-type 'darwin)
+      (setq system-name (car (split-string system-name "\\."))))
+#+end_src
+
+** System/User specific customizations
+
+You can keep system- or user-specific customizations here
+
+#+srcname: start-kit-user/system-setup
+#+begin_src emacs-lisp 
+  (setq system-specific-config (concat dotfiles-dir system-name ".el")
+        user-specific-config (concat dotfiles-dir user-login-name ".el")
+        user-specific-dir (concat dotfiles-dir user-login-name))
+  (add-to-list 'load-path user-specific-dir)
+  
+  (if (file-exists-p system-specific-config) (load system-specific-config))
+  (if (file-exists-p user-specific-config) (load user-specific-config))
+  (if (file-exists-p user-specific-dir)
+    (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+#+end_src

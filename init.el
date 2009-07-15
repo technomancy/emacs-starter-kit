@@ -4,75 +4,24 @@
 ;;
 ;; This is the first thing to get loaded.
 ;;
-;; "Emacs outshines all other editing software in approximately the
-;; same way that the noonday sun does the stars. It is not just bigger
-;; and brighter; it simply makes everything else vanish."
-;; -Neal Stephenson, "In the Beginning was the Command Line"
 
-;; Load path etc.
+;; Load up Org Mode and Org Babel for elisp embedded in Org Mode files
+(setq dotfiles-dir (file-name-directory (or (buffer-file-name) load-file-name)))
 
-(setq dotfiles-dir (file-name-directory
-                    (or (buffer-file-name) load-file-name)))
+(add-to-list 'load-path (expand-file-name
+                         "lisp" (expand-file-name
+                                 "org" (expand-file-name
+                                        "src" dotfiles-dir))))
 
-(add-to-list 'load-path dotfiles-dir)
-(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
-(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/jabber"))
+(add-to-list 'load-path (expand-file-name
+                         "lisp" (expand-file-name
+                                 "org-babel" (expand-file-name
+                                              "src" dotfiles-dir))))
 
-(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-(setq package-user-dir (concat dotfiles-dir "elpa"))
-(setq custom-file (concat dotfiles-dir "custom.el"))
+(require 'org-babel-init)
 
-;; These should be loaded on startup rather than autoloaded on demand
-;; since they are likely to be used in every session
-
-(require 'cl)
-(require 'saveplace)
-(require 'ffap)
-(require 'uniquify)
-(require 'ansi-color)
-(require 'recentf)
-
-;; backport some functionality to Emacs 22 if needed
-(require 'dominating-file)
-
-;; this must be loaded before ELPA since it bundles its own
-;; out-of-date js stuff. TODO: fix it to use ELPA dependencies
-(load "elpa-to-submit/nxhtml/autostart")
-
-;; Load up ELPA, the package manager
-
-(require 'package)
-(package-initialize)
-(require 'starter-kit-elpa)
-
-;; Load up starter kit customizations
-
-(require 'starter-kit-defuns)
-(require 'starter-kit-bindings)
-(require 'starter-kit-misc)
-(require 'starter-kit-registers)
-(require 'starter-kit-eshell)
-(require 'starter-kit-lisp)
-(require 'starter-kit-perl)
-(require 'starter-kit-ruby)
-(require 'starter-kit-js)
-
-(regen-autoloads)
-(load custom-file 'noerror)
-
-;; Work around a bug on OS X where system-name is FQDN
-(if (eq system-type 'darwin)
-    (setq system-name (car (split-string system-name "\\."))))
-
-;; You can keep system- or user-specific customizations here
-(setq system-specific-config (concat dotfiles-dir system-name ".el")
-      user-specific-config (concat dotfiles-dir user-login-name ".el")
-      user-specific-dir (concat dotfiles-dir user-login-name))
-(add-to-list 'load-path user-specific-dir)
-
-(if (file-exists-p system-specific-config) (load system-specific-config))
-(if (file-exists-p user-specific-config) (load user-specific-config))
-(if (file-exists-p user-specific-dir)
-  (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+;; load up the main file
+;; (org-babel-load-file (expand-file-name "starter-kit.org" dotfiles-dir))
+(org-babel-load-file "starter-kit.org")
 
 ;;; init.el ends here
