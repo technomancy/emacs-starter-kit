@@ -18,7 +18,7 @@
 (add-hook 'espresso-mode-hook 'moz-minor-mode)
 (add-hook 'espresso-mode-hook 'turn-on-paredit)
 (add-hook 'espresso-mode-hook 'run-coding-hook)
-(add-hook 'espresso-mode-hook 'idle-highlight)
+;; (add-hook 'espresso-mode-hook 'idle-highlight)
 (setq espresso-indent-level 2)
 
 (defun esk-pp-json ()
