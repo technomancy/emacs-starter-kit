@@ -111,6 +111,8 @@ Kills existing SLIME session, if any."
                  (locate-dominating-file default-directory "pom.xml"))))
   (when (get-buffer "*inferior-lisp*")
     (kill-buffer "*inferior-lisp*"))
+  (defvar swank-clojure-extra-vm-args nil)
+  (defvar slime-lisp-implementations nil)
   (add-to-list 'swank-clojure-extra-vm-args
                (format "-Dclojure.compile.path=%s"
                        (expand-file-name "target/classes/" path)))
