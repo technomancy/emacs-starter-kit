@@ -73,6 +73,7 @@
 (add-to-list 'load-path "/home/phil/src/elisp/emacs-w3m")
 (add-to-list 'load-path "/home/phil/src/elisp/relax.el")
 (add-to-list 'load-path "/home/phil/src/elisp/elim/elisp")
+(add-to-list 'load-path "/home/phil/src/elisp/clojure-mode")
 
 (autoload 'w3m "w3m" "w3m browser" t)
 (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t)
@@ -86,8 +87,7 @@
       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-1")))
 
 (eval-after-load 'ruby-mode
-  '(progn (add-hook 'ruby-mode-hook 'ruby-electric-mode)
-          (add-hook 'ruby-mode-hook 'paredit-mode)))
+  '(add-hook 'ruby-mode-hook 'esk-paredit-nonlisp))
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/js/conkeror/contrib/run-conkeror")
@@ -100,15 +100,17 @@
 
 (add-hook 'slime-repl-mode-hook 'turn-on-paredit)
 
-(eval-after-load 'clojure-mode
-  '(load "../../../elisp/clojure-mode/clojure-test-mode"))
-
 (add-hook 'clojure-mode-hook 'turn-on-whitespace)
 
 ;; unfortunately some codebases use tabs. =(
 (set-default 'tab-width 4)
+(set-default 'c-basic-offset 2)
 
 ;; javadoc
+(eval-after-load 'cc-mode
+  '(progn
+     (define-key java-mode-map (kbd "C-M-h") 'backward-kill-word)))
+
 (global-set-key (kbd "C-h j") 'javadoc-lookup)
 
 (setq *jdh-javadocs*
@@ -127,3 +129,8 @@
 
 (defalias 'zb 'color-theme-zenburn)
 (defalias 'bb 'color-theme-blackboard)
+
+;;; Paredit hacks
+(load "../../../elisp/paredit/paredit-beta")
+(load "../../../elisp/paredit/paredit-delimiter-space")
+(load "../../../elisp/paredit/paredit-semicolon")
