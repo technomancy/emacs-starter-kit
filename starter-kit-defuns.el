@@ -195,6 +195,13 @@ Symbols matching the text at point are put first in the completion list."
   (interactive)
   (message (if (y-or-n-p "Do you have a test for that? ") "Good." "Bad!")))
 
+(defun esk-paredit-nonlisp ()
+  "Turn on paredit mode for non-lisps."
+  (set (make-local-variable 'paredit-space-for-delimiter-predicate)
+       (lambda (endp delimiter)
+         (equal (char-syntax (char-before)) ?\")))
+  (paredit-mode 1))
+
 ;; A monkeypatch to cause annotate to ignore whitespace
 (defun vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))

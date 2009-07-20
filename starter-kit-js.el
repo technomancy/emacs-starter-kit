@@ -16,20 +16,15 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
 (add-hook 'espresso-mode-hook 'moz-minor-mode)
-(add-hook 'espresso-mode-hook 'turn-on-paredit)
+(add-hook 'espresso-mode-hook 'esk-paredit-nonlisp)
 (add-hook 'espresso-mode-hook 'run-coding-hook)
 (add-hook 'espresso-mode-hook 'idle-highlight)
 (setq espresso-indent-level 2)
 
-(defun esk-pp-json ()
-  "Pretty-print the json object following point."
-  (interactive)
-  (require 'json)
-  (let ((json-object (save-excursion (json-read))))
-    (switch-to-buffer "*json*")
-    (delete-region (point-min) (point-max))
-    (insert (pp json-object))
-    (goto-char (point-min))))
+;; espresso's insert-and-indent doesn't play nicely with pretty-lambda
+(eval-after-load 'espresso
+  '(progn (define-key espresso-mode-map "{" 'paredit-open-brace)
+          (define-key espresso-mode-map "}" 'paredit-close-brace-and-newline)))
 
 (provide 'starter-kit-js)
 ;;; starter-kit-js.el ends here
