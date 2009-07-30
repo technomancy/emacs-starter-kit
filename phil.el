@@ -134,3 +134,6 @@
 (load "../../../elisp/paredit/paredit-beta")
 (load "../../../elisp/paredit/paredit-delimiter-space")
 (load "../../../elisp/paredit/paredit-semicolon")
+
+;;; broken ido
+(defun ido-directory-too-big-p (arg) nil)

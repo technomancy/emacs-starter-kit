@@ -37,7 +37,7 @@
 
 ;; this must be loaded before ELPA since it bundles its own
 ;; out-of-date js stuff. TODO: fix it to use ELPA dependencies
-(load "elpa-to-submit/nxhtml/autostart")
+;; (load "elpa-to-submit/nxhtml/autostart")
 
 ;; Load up ELPA, the package manager
 
