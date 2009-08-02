@@ -58,8 +58,7 @@
 
 (defun clojure-project (path)
   "Setup classpaths for a clojure project and starts a new SLIME session.
-
-Kills existing SLIME session, if any."
+  Kills existing SLIME session, if any."
   (interactive (list
                 (ido-read-directory-name
                  "Project root: "
