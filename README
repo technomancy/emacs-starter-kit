@@ -1,0 +1,9 @@
+This should provide a saner set of defaults than you get normally with
+Emacs. It's intended for beginners, but it should provide a reasonable
+working environment for anyone using Emacs for dynamic languages. The
+main advantage of the Starter Kit is that it provides better default
+settings and bundles many useful libraries.
+
+The latest version is at http://github.com/technomancy/emacs-starter-kit/
+
+For more information see starter-kit.org
