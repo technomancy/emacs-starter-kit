@@ -127,7 +127,7 @@ On Unix, =/home/$USER/.emacs.d=, on windows =Documents and
 Settings/%your user name%/Application Data=
 
 
-* Tasks [1/8]
+* Tasks [1/10]
 
 ** TODO setup electric for ruby
 ** TODO set up ri for ruby
@@ -143,6 +143,9 @@ Settings/%your user name%/Application Data=
 ** DEFERRED should yasnippet be included in rinari?
 No, rinari has no dependency on yasnippet, and yasnippet has many
 applications outside of rinari.
+
+** TODO flymake for perl
+** TODO electric bugaloo for perl
 
 
 * Bugs [0/1]
@@ -1245,6 +1248,21 @@ Java-script Helpers
     (delete-region (point-min) (point-max))
     (insert (pp json-object))
     (goto-char (point-min))))
+#+end_src
+
+** Starter Kit Perl
+
+#+begin_src emacs-lisp
+(eval-after-load 'cperl-mode
+  '(progn
+     (define-key cperl-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+     (define-key cperl-mode-map (kbd "C-M-h") 'backward-kill-word)))
+
+(global-set-key (kbd "C-h P") 'perldoc)
+
+(add-to-list 'auto-mode-alist '("\\.p[lm]$" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.pod$" . pod-mode))
+(add-to-list 'auto-mode-alist '("\\.tt$" . tt-mode))
 #+end_src
 
 
