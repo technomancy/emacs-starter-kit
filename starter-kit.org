@@ -141,9 +141,12 @@ Settings/%your user name%/Application Data=
 ** TODO get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
 
 
-* Starter Kit Basics
+* Implementation
+This section contains all code implementing the Emacs Starter Kit.
 
-** Load path etc.
+** Starter Kit Basics
+
+*** Load path etc.
 
 #+srcname: starter-kit-load-paths
 #+begin_src emacs-lisp 
@@ -159,7 +162,7 @@ Settings/%your user name%/Application Data=
   (setq custom-file (concat dotfiles-dir "custom.el"))
 #+end_src
 
-** Ubiquitous Packages
+*** Ubiquitous Packages
 
 These should be loaded on startup rather than autoloaded on demand
 since they are likely to be used in every session
@@ -174,7 +177,7 @@ since they are likely to be used in every session
   (require 'recentf)
 #+end_src
 
-** Emacs 22 Backport
+*** Emacs 22 Backport
 
 backport some functionality to Emacs 22 if needed
 #+srcname: starter-kit-emacs-22-helper
@@ -189,7 +192,7 @@ out-of-date js stuff. TODO: fix it to use ELPA dependencies
   (load "elpa-to-submit/nxhtml/autostart")
 #+end_src
 
-** ELPA (Emacs Lisp Package Manager)
+*** ELPA (Emacs Lisp Package Manager)
 
 Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
 
@@ -200,7 +203,7 @@ Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
   (require 'starter-kit-elpa)
 #+end_src
 
-** Starter Kit Customizations
+*** Starter Kit Customizations
 
 Load up starter kit customizations
 
@@ -220,7 +223,7 @@ Load up starter kit customizations
   (load custom-file 'noerror)
 #+end_src
 
-** Work around OS X bug
+*** Work around OS X bug
 
 Work around a bug on OS X where system-name is FQDN
 #+srcname: start-kit-osX-workaround
@@ -229,7 +232,7 @@ Work around a bug on OS X where system-name is FQDN
       (setq system-name (car (split-string system-name "\\."))))
 #+end_src
 
-** System/User specific customizations
+*** System/User specific customizations
 
 You can keep system- or user-specific customizations here
 
@@ -244,6 +247,274 @@ You can keep system- or user-specific customizations here
   (if (file-exists-p user-specific-config) (load user-specific-config))
   (if (file-exists-p user-specific-dir)
     (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+#+end_src
+
+
+** Starter Kit Defuns
+
+#+begin_src emacs-lisp
+(require 'thingatpt)
+(require 'imenu)
+#+end_src
+
+*** Network
+
+#+srcname: start-kit-view-url
+#+begin_src emacs-lisp 
+  (defun view-url ()
+    "Open a new buffer containing the contents of URL."
+    (interactive)
+    (let* ((default (thing-at-point-url-at-point))
+           (url (read-from-minibuffer "URL: " default)))
+      (switch-to-buffer (url-retrieve-synchronously url))
+      (rename-buffer url t)
+      ;; TODO: switch to nxml/nxhtml mode
+      (cond ((search-forward "<?xml" nil t) (xml-mode))
+            ((search-forward "<html" nil t) (html-mode)))))
+#+end_src
+
+*** Buffer-related
+
+#+srcname: starter-kit-ido-imenu
+#+begin_src emacs-lisp 
+  (defun ido-imenu ()
+    "Update the imenu index and then use ido to select a symbol to navigate to.
+  Symbols matching the text at point are put first in the completion list."
+    (interactive)
+    (imenu--make-index-alist)
+    (let ((name-and-pos '())
+          (symbol-names '()))
+      (flet ((addsymbols (symbol-list)
+                         (when (listp symbol-list)
+                           (dolist (symbol symbol-list)
+                             (let ((name nil) (position nil))
+                               (cond
+                                ((and (listp symbol) (imenu--subalist-p symbol))
+                                 (addsymbols symbol))
+                                
+                                ((listp symbol)
+                                 (setq name (car symbol))
+                                 (setq position (cdr symbol)))
+                                
+                                ((stringp symbol)
+                                 (setq name symbol)
+                                 (setq position (get-text-property 1 'org-imenu-marker symbol))))
+                               
+                               (unless (or (null position) (null name))
+                                 (add-to-list 'symbol-names name)
+                                 (add-to-list 'name-and-pos (cons name position))))))))
+        (addsymbols imenu--index-alist))
+      ;; If there are matching symbols at point, put them at the beginning of `symbol-names'.
+      (let ((symbol-at-point (thing-at-point 'symbol)))
+        (when symbol-at-point
+          (let* ((regexp (concat (regexp-quote symbol-at-point) "$"))
+                 (matching-symbols (delq nil (mapcar (lambda (symbol)
+                                                       (if (string-match regexp symbol) symbol))
+                                                     symbol-names))))
+            (when matching-symbols
+              (sort matching-symbols (lambda (a b) (> (length a) (length b))))
+              (mapc (lambda (symbol) (setq symbol-names (cons symbol (delete symbol symbol-names))))
+                    matching-symbols)))))
+      (let* ((selected-symbol (ido-completing-read "Symbol? " symbol-names))
+             (position (cdr (assoc selected-symbol name-and-pos))))
+        (goto-char position))))
+#+end_src
+
+*** These belong in coding-hook:
+
+We have a number of turn-on-* functions since it's advised that lambda
+functions not go in hooks. Repeatedly evaling an add-to-list with a
+hook value will repeatedly add it since there's no way to ensure that
+a lambda doesn't already exist in the list.
+
+#+srcname: starter-kit-hook-functions
+#+begin_src emacs-lisp 
+(defun local-column-number-mode ()
+  (make-local-variable 'column-number-mode)
+  (column-number-mode t))
+
+(defun local-comment-auto-fill ()
+  (set (make-local-variable 'comment-auto-fill-only-comments) t)
+  (auto-fill-mode t))
+
+(defun turn-on-hl-line-mode ()
+  (if window-system (hl-line-mode t)))
+
+(defun turn-on-save-place-mode ()
+  (setq save-place t))
+
+(defun turn-on-whitespace ()
+  (whitespace-mode t))
+#+end_src
+
+#+srcname: starter-kit-add-local-column-number-mode
+#+begin_src emacs-lisp 
+(add-hook 'coding-hook 'local-column-number-mode)
+#+end_src
+
+#+srcname: start-kit-add-local-comment-auto-fill
+#+begin_src emacs-lisp 
+(add-hook 'coding-hook 'local-comment-auto-fill)
+#+end_src
+
+#+srcname: starter-kit-add-hl-line-mode
+#+begin_src emacs-lisp 
+(add-hook 'coding-hook 'turn-on-hl-line-mode)
+#+end_src
+
+#+srcname: starter-kit-add-pretty-lambdas
+#+begin_src emacs-lisp 
+(add-hook 'coding-hook 'pretty-lambdas)
+#+end_src
+  
+#+srcname: starter-kit-run-coding-hook
+#+begin_src emacs-lisp 
+(defun run-coding-hook ()
+  "Enable things that are convenient across all coding buffers."
+  (run-hooks 'coding-hook))
+#+end_src
+
+#+srcname: starter-kit-untabify-buffer
+#+begin_src emacs-lisp 
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+#+end_src
+
+#+srcname: starter-kit-indent-buffer
+#+begin_src emacs-lisp 
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
+#+end_src
+
+#+srcname: starter-kit-cleanup-buffer
+#+begin_src emacs-lisp 
+(defun cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer."
+  (interactive)
+  (indent-buffer)
+  (untabify-buffer)
+  (delete-trailing-whitespace))
+#+end_src
+
+#+srcname: starter-kit-recentf-ido-find-file
+#+begin_src emacs-lisp 
+(defun recentf-ido-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+#+end_src
+
+*** Cosmetic
+
+#+srcname: starter-kit-pretty-lambdas
+#+begin_src emacs-lisp 
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("(?\\(lambda\\>\\)"
+          (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+#+end_src
+
+*** Other
+
+#+srcname: starter-kit-other-functions
+#+begin_src emacs-lisp 
+  (defun eval-and-replace ()
+    "Replace the preceding sexp with its value."
+    (interactive)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0)))))
+  
+  (defun recompile-init ()
+    "Byte-compile all your dotfiles again."
+    (interactive)
+    (byte-recompile-directory dotfiles-dir 0)
+    ;; TODO: remove elpa-to-submit once everything's submitted.
+    (byte-recompile-directory (concat dotfiles-dir "elpa-to-submit/" 0)))
+  
+  (defun regen-autoloads (&optional force-regen)
+    "Regenerate the autoload definitions file if necessary and load it."
+    (interactive "P")
+    (let ((autoload-dir (concat dotfiles-dir "/elpa-to-submit"))
+          (generated-autoload-file autoload-file))
+      (when (or force-regen
+                (not (file-exists-p autoload-file))
+                (some (lambda (f) (file-newer-than-file-p f autoload-file))
+                      (directory-files autoload-dir t "\\.el$")))
+        (message "Updating autoloads...")
+        (let (emacs-lisp-mode-hook)
+          (update-directory-autoloads autoload-dir))))
+    (load autoload-file))
+#+end_src
+
+TODO: fix this
+#+srcname: starter-kit-sudo-edit
+#+begin_src emacs-lisp 
+(defun sudo-edit (&optional arg)
+  (interactive "p")
+  (if arg
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+#+end_src
+
+Useful when a large block of text is required (e.g. for testing)
+#+srcname: starter-kit-lorem
+#+begin_src emacs-lisp 
+(defun lorem ()
+  "Insert a lorem ipsum."
+  (interactive)
+  (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
+          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
+          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+          "culpa qui officia deserunt mollit anim id est laborum."))
+#+end_src
+
+#+srcname: starter-kit-switch-or-start
+#+begin_src emacs-lisp 
+(defun switch-or-start (function buffer)
+  "If the buffer is current, bury it, otherwise invoke the function."
+  (if (equal (buffer-name (current-buffer)) buffer)
+      (bury-buffer)
+    (if (get-buffer buffer)
+        (switch-to-buffer buffer)
+      (funcall function))))
+#+end_src
+
+#+srcname: starter-kit-insert-date
+#+begin_src emacs-lisp 
+(defun insert-date ()
+  "Insert a time-stamp according to locale's date and time format."
+  (interactive)
+  (insert (format-time-string "%c" (current-time))))
+#+end_src
+
+#+srcname: starter-kit-pairing-bot
+#+begin_src emacs-lisp 
+(defun pairing-bot ()
+  "If you can't pair program with a human, use this instead."
+  (interactive)
+  (message (if (y-or-n-p "Do you have a test for that? ") "Good." "Bad!")))
+#+end_src
+
+A monkeypatch to cause annotate to ignore whitespace
+
+#+srcname: starter-kit-vc-git-annotate-command
+#+begin_src emacs-lisp 
+(defun vc-git-annotate-command (file buf &optional rev)
+  (let ((name (file-relative-name file)))
+    (vc-git-command buf 0 name "blame" "-w" rev)))
 #+end_src
 
 
