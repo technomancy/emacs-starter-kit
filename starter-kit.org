@@ -667,6 +667,22 @@ A monkeypatch to cause annotate to ignore whitespace
 #+end_emacs-lisp
 
 
+** Starter Kit Registers
+Registers allow you to jump to a file or other location quickly. Use
+=C-x r j= followed by the letter of the register (i for =init.el=, s
+for this file) to jump to it.
+
+You should add registers here for the files you edit most often.
+
+#+srcname: starter-kit-registers
+#+begin_src emacs-lisp 
+  (dolist (r `((?i (file . ,(concat dotfiles-dir "init.el")))
+               (?s (file . ,(concat dotfiles-dir "starter-kit.org")))))
+    (set-register (car r) (cadr r)))
+#+end_src
+
+
+
 * COMMENT Footnotes
 
 [1] If you already have a directory at ~/.emacs.d move it out of the
