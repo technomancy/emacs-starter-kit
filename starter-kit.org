@@ -271,27 +271,44 @@ These sections pertain to specific languages or modes.  Feel free to
 turn off these sections if you don't plan on using the related mode or
 language.
 
+*** Starter kit Org-mode
+Located in [[file:starter-kit-org.org][starter-kit-org]]
+
+#+begin_src emacs-lisp
+(org-babel-load-file "starter-kit-org.org")
+#+end_src
+
 *** Starter kit eshell
+Located in [[file:starter-kit-eshell.org][starter-kit-eshell]]
+
 #+begin_src emacs-lisp
 (org-babel-load-file "starter-kit-eshell.org")
 #+end_src
 
 *** Starter kit lisp
+Located in [[file:starter-kit-lisp.org][starter-kit-lisp]]
+
 #+begin_src emacs-lisp
 (org-babel-load-file "starter-kit-lisp.org")
 #+end_src
 
 *** Starter kit ruby
+Located in [[file:starter-kit-ruby.org][starter-kit-ruby]]
+
 #+begin_src emacs-lisp
 (org-babel-load-file "starter-kit-ruby.org")
 #+end_src
 
 *** Starter kit JS
+Located in [[file:starter-kit-js.org][starter-kit-js]]
+
 #+begin_src emacs-lisp
 (org-babel-load-file "starter-kit-js.org")
 #+end_src
 
 *** Starter Kit Perl
+Located in [[file:starter-kit-perl.org][starter-kit-perl]]
+
 #+begin_src emacs-lisp
 (org-babel-load-file "starter-kit-perl.org")
 #+end_src

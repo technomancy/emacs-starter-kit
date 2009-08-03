@@ -1,0 +1,75 @@
+#+TITLE: Starter Kit Org
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Starter Kit Org
+Configuration for the eminently useful [[http://orgmode.org/][Org Mode]].
+
+Org-mode is for keeping notes, maintaining ToDo lists, doing project
+planning, and authoring with a fast and effective plain-text system.
+Org Mode can be used as a very simple folding outliner or as a complex
+GTD system or tool for reproducible research and literate programming.
+
+For more information on org-mode check out [[http://orgmode.org/worg/][worg]], a large Org-mode wiki
+which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
+
+** Helpful Packages
+#+begin_src emacs-lisp
+(require 'org-install)
+(require 'org-mouse)
+#+end_src
+
+** Org-Mode Hook
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key "\M-\C-n" 'outline-next-visible-heading)
+              (local-set-key "\M-\C-p" 'outline-previous-visible-heading)
+              (local-set-key "\M-\C-u" 'outline-up-heading)
+              ;; table
+              (local-set-key "\M-\C-w" 'org-table-copy-region)
+              (local-set-key "\M-\C-y" 'org-table-paste-rectangle)
+              (local-set-key "\M-\C-l" 'org-table-sort-lines)
+              ;; display images
+              (local-set-key "\M-I" 'org-toggle-iimage-in-org)
+              ;; ;; Uncomment this section if you use yasnippet
+              ;; ;; yasnippet (using the new org-cycle hooks)
+              ;; (make-variable-buffer-local 'yas/trigger-key)
+              ;; (setq yas/trigger-key [tab])
+              ;; (define-key yas/keymap [tab] 'yas/next-field-group)
+              ))
+#+end_src
+
+** Support for viewing images
+This allows for the viewing of images in-line in Org-mode documents.
+
+#+begin_src emacs-lisp
+(require 'iimage)
+(setq iimage-mode-image-search-path (expand-file-name "~/"))
+;;Match org file: links
+(add-to-list 'iimage-mode-image-regex-alist
+	     (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
+			   "\\)\\]")  1))
+(defun org-toggle-iimage-in-org ()
+  (interactive)
+  (if (face-underline-p 'org-link)
+      (set-face-underline-p 'org-link nil)
+      (set-face-underline-p 'org-link t))
+  (iimage-mode))
+#+end_src
+
+** Starter Kit Documentation
+This code defines the =starter-kit-project= which is used to publish
+the documentation for the Starter Kit to html.
+
+#+begin_src emacs-lisp :results silent
+  (setq org-publish-project-alist
+        `(("starter-kit-documentation"
+           :base-directory ,dotfiles-dir
+           :base-extension "org"
+           :publishing-directory ,(expand-file-name "doc" dotfiles-dir)
+           :index-filename "starter-kit.org"
+           :auto-postamble nil)))
+#+end_src
+
