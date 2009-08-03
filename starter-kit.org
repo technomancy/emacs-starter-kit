@@ -1,6 +1,6 @@
 #+TITLE: Emacs Starter Kit
 #+SEQ_TODO: PROPOSED TODO STARTED | DONE DEFERRED REJECTED
-#+OPTIONS: H:3 num:nil toc:t
+#+OPTIONS: H:2 num:nil toc:t
 #+STARTUP: oddeven
 
 #+begin_quote 
@@ -10,7 +10,7 @@ and brighter; it simply makes everything else vanish.
 #+end_quote
 -Neal Stephenson, "In the Beginning was the Command Line"
 
-* Emacs Starter Kit
+* Introduction
 
 This should provide a saner set of defaults than you get normally with
 Emacs. It's intended for beginners, but it should provide a reasonable
@@ -127,31 +127,6 @@ On Unix, =/home/$USER/.emacs.d=, on windows =Documents and
 Settings/%your user name%/Application Data=
 
 
-* Tasks [1/10]
-
-** TODO setup electric for ruby
-** TODO set up ri for ruby
-** TODO Submit the packages in starter-kit-elpa.el to ELPA.
-
-** STARTED Greg Newman is working on Python helpers.
-
-** STARTED submit ruby fixes to flymake
-
-** PROPOSED which-func-mode in ruby?
-** TODO all bindings to kbd invocations
-
-** DEFERRED should yasnippet be included in rinari?
-No, rinari has no dependency on yasnippet, and yasnippet has many
-applications outside of rinari.
-
-** TODO flymake for perl
-** TODO electric bugaloo for perl
-
-
-* Bugs [0/1]
-** TODO get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
-
-
 * Implementation
 This section contains all code implementing the Emacs Starter Kit.
 
@@ -220,17 +195,6 @@ Load up starter kit customizations
 
 #+srcname: start-kit-customizations
 #+begin_src emacs-lisp 
-  (require 'starter-kit-defuns)
-  (require 'starter-kit-bindings)
-  (require 'starter-kit-misc)
-  (require 'starter-kit-registers)
-  (require 'starter-kit-eshell)
-  (require 'starter-kit-lisp)
-  (require 'starter-kit-perl)
-  (require 'starter-kit-ruby)
-  (require 'starter-kit-js)
-  
-  (regen-autoloads)
   (load custom-file 'noerror)
 #+end_src
 
@@ -245,19 +209,28 @@ Work around a bug on OS X where system-name is FQDN
 
 *** System/User specific customizations
 
-You can keep system- or user-specific customizations here
+You can keep system- or user-specific customizations here in either
+raw emacs-lisp files or as embedded elisp in org-mode files (as done
+in this document).
 
 #+srcname: start-kit-user/system-setup
 #+begin_src emacs-lisp 
   (setq system-specific-config (concat dotfiles-dir system-name ".el")
+        system-specific-literate-config (concat dotfiles-dir system-name ".org")
         user-specific-config (concat dotfiles-dir user-login-name ".el")
+        user-specific-literate-config (concat dotfiles-dir user-login-name ".org")
         user-specific-dir (concat dotfiles-dir user-login-name))
   (add-to-list 'load-path user-specific-dir)
   
   (if (file-exists-p system-specific-config) (load system-specific-config))
+  (if (file-exists-p system-specific-literate-config)
+      (org-babel-load system-specific-literate-config))
   (if (file-exists-p user-specific-config) (load user-specific-config))
-  (if (file-exists-p user-specific-dir)
-    (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+  (if (file-exists-p user-specific-literate-config)
+      (org-babel-load user-specific-literate-config))
+  (when (file-exists-p user-specific-dir)
+    (mapc #'load (directory-files user-specific-dir nil ".*el$"))
+    (mapc #'org-babel-load (directory-files user-specific-dir nil ".*org$")))
 #+end_src
 
 ** Starter Kit Defuns
@@ -530,51 +503,51 @@ A monkeypatch to cause annotate to ignore whitespace
 ** Starter Kit Bindings
 
 *** You know, like Readline.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
-#+end_emacs-lisp
+#+end_src
 
 *** Align your code in a pretty way.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x \\") 'align-regexp)
-#+end_emacs-lisp
+#+end_src
 
 *** Completion that uses many different methods to find options.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "M-/") 'hippie-expand)
-#+end_emacs-lisp
+#+end_src
 
 *** Perform general cleanup.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-c n") 'cleanup-buffer)
-#+end_emacs-lisp
+#+end_src
 
 *** Turn on the menu bar for exploring new modes
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key [f1] 'menu-bar-mode)
-#+end_emacs-lisp
+#+end_src
 
 *** Font size
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
-#+end_emacs-lisp
+#+end_src
 
 *** Use regex searches by default.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-#+end_emacs-lisp
+#+end_src
 
 *** Jump to a definition in the current file. (This is awesome.)
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
-#+end_emacs-lisp
+#+end_src
 
 *** File finding
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
@@ -583,57 +556,57 @@ A monkeypatch to cause annotate to ignore whitespace
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-#+end_emacs-lisp
+#+end_src
 
 *** Window switching. (C-x o goes to the next window)
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (windmove-default-keybindings) ;; Shift+direction
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
 (global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
-#+end_emacs-lisp
+#+end_src
 
 *** Indentation help
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x ^") 'join-line)
-#+end_emacs-lisp
+#+end_src
 
 *** Start eshell or switch to it if it's active.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x m") 'eshell)
-#+end_emacs-lisp
+#+end_src
 
 *** Start a new eshell even if one is active.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
-#+end_emacs-lisp
+#+end_src
 
 *** Start a regular shell if you prefer that.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x M-m") 'shell)
-#+end_emacs-lisp
+#+end_src
 
 *** If you want to be able to M-x without meta
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
-#+end_emacs-lisp
+#+end_src
 
 *** Fetch the contents at a URL, display it raw.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-x h") 'view-url)
-#+end_emacs-lisp
+#+end_src
 
 *** Help should search more than just commands
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-h a") 'apropos)
-#+end_emacs-lisp
+#+end_src
 
 *** Should be able to eval-and-replace anywhere.
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (global-set-key (kbd "C-c e") 'eval-and-replace)
-#+end_emacs-lisp
+#+end_src
 
 *** Applications
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
@@ -643,31 +616,31 @@ A monkeypatch to cause annotate to ignore whitespace
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
 (global-set-key (kbd "C-c M-j") 'jabber-disconnect)
 (global-set-key (kbd "C-x g") 'magit-status)
-#+end_emacs-lisp
+#+end_src
 
 *** This is a little hacky since VC doesn't support git add internally
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (eval-after-load 'vc
   (define-key vc-prefix-map "i" '(lambda () (interactive)
                                    (if (not (eq 'Git (vc-backend buffer-file-name)))
                                        (vc-register)
                                      (shell-command (format "git add %s" buffer-file-name))
                                      (message "Staged changes.")))))
-#+end_emacs-lisp
+#+end_src
 
 *** Activate occur easily inside isearch
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (define-key isearch-mode-map (kbd "C-o")
   (lambda () (interactive)
     (let ((case-fold-search isearch-case-fold-search))
       (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
-#+end_emacs-lisp
+#+end_src
 
 *** Closing
-#+begin_emacs-lisp 
+#+begin_src emacs-lisp 
 (provide 'starter-kit-bindings)
 ;;; starter-kit-bindings.el ends here
-#+end_emacs-lisp
+#+end_src
 
 ** Starter Kit Registers
 Registers allow you to jump to a file or other location quickly. Use
@@ -1209,7 +1182,6 @@ See [[http://rinari.rubyforge.org/][rinari.rubyforge]] for more information on r
 	    'css-mode-hook 'yaml-mode-hook 'javascript-mode-hook))
 #+end_src
 
-
 ** Starter Kit JS
 Java-script Helpers
 
@@ -1266,10 +1238,38 @@ Java-script Helpers
 #+end_src
 
 
-* COMMENT Footnotes
+* Development
 
-[1] If you already have a directory at ~/.emacs.d move it out of the
-way and put this there instead.
+** Tasks [1/10]
+
+*** TODO setup electric for ruby
+*** TODO set up ri for ruby
+*** TODO Submit the packages in starter-kit-elpa.el to ELPA.
+
+*** STARTED Greg Newman is working on Python helpers.
+
+*** STARTED submit ruby fixes to flymake
+
+*** PROPOSED which-func-mode in ruby?
+*** TODO all bindings to kbd invocations
+
+*** DEFERRED should yasnippet be included in rinari?
+No, rinari has no dependency on yasnippet, and yasnippet has many
+applications outside of rinari.
+
+*** TODO flymake for perl
+*** TODO electric bugaloo for perl
+
+
+** Bugs [0/1]
+*** TODO get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
+
+
+* Footnotes
+
+[1] If you already have a directory at ~/.emacs.d move it out of
+the way and put this there instead.
 
 [2] The emacs starter kit uses [[http://github.com/eschulte/org-babel/tree/master][org-babel]] to load embedded elisp code
 directly from [[http://orgmode.org/][Org Mode]] documents.
+
