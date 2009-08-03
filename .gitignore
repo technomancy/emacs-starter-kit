@@ -19,5 +19,5 @@ elim/
 elpa-to-submit/nxhtml/etc/schema/xhtml-loader.rnc~
 tramp
 # exported files
-starter-kit.el
-starter-kit.html
+starter-kit*el
+starter-kit*html
