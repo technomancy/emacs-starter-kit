@@ -16,6 +16,20 @@ Bug fixes:
 get jabber.el to automatically disconnect when suspending/hibernating
 (via dbus)
 
+overhaul starter-kit-* core and restructure as init/*.el
+
+BAD OVERRIDES:
+C-xh : view-url, not mark-whole-buffer
+C-M-h : backward-kill-word (use C-w)
+remove isearch-{forward,backward}
+C-xf recentf-ido-find-file (try as default?)
+C-cy bury-buffer (use C-TAB)
+C-cr revert-buffer (use F6)
+[new] file-cache-minibuffer-complete
+C-xC-b ibuffer (over default)
+C-xm eshell (use 'magit-status)
+C-xg 'magit-status (use C-xm)
+
 PACKAGES (and equivalents, if possible):
 ack : full-ack
 applescript-mode
