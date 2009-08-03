@@ -1,0 +1,20 @@
+#+TITLE: Starter Kit Perl
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Starter Kit Perl
+Helpers for the [[http://www.perl.org/][Perl]] programming language.
+
+#+begin_src emacs-lisp
+(eval-after-load 'cperl-mode
+  '(progn
+     (define-key cperl-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+     (define-key cperl-mode-map (kbd "C-M-h") 'backward-kill-word)))
+
+(global-set-key (kbd "C-h P") 'perldoc)
+
+(add-to-list 'auto-mode-alist '("\\.p[lm]$" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.pod$" . pod-mode))
+(add-to-list 'auto-mode-alist '("\\.tt$" . tt-mode))
+#+end_src
