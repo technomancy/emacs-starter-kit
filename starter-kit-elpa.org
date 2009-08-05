@@ -1,4 +1,10 @@
+#+TITLE: Starter Kit ELPA
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
 * Starter Kit ELPA
+[[http://tromey.com/elpa/][Emacs List Package Archive]] (ELPA)
 
 The following packages should all ways be installed
 
