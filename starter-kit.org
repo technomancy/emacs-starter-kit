@@ -178,15 +178,25 @@ out-of-date js stuff. TODO: fix it to use ELPA dependencies
   (load "elpa-to-submit/nxhtml/autostart")
 #+end_src
 
+*** Function for loading starter-kit-*
+#+srcname: starter-kit-load
+#+begin_src emacs-lisp 
+  (defun starter-kit-load (file)
+    "This function is to be used to load starter-kit-*.org files."
+    (org-babel-load-file (expand-file-name file
+                                           dotfiles-dir)))
+#+end_src
+
+
 *** ELPA (Emacs Lisp Package Manager)
 
 Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
 
-#+srcname: start-kit-elpa
+#+srcname: starter-kit-elpa
 #+begin_src emacs-lisp 
   (require 'package)
   (package-initialize)
-  (org-babel-load-file "starter-kit-elpa.org")
+  (starter-kit-load "starter-kit-elpa.org")
 #+end_src
 
 *** Starter Kit Customizations
@@ -242,28 +252,28 @@ everyone using the starter kit.
 Starter kit function definitions in [[file:starter-kit-defuns.org][starter-kit-defuns]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-defuns.org")
+(starter-kit-load "starter-kit-defuns.org")
 #+end_src
 
 *** Starter kit bindings
 Key Bindings in [[file:starter-kit-bindings.org][starter-kit-bindings]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-bindings.org")
+(starter-kit-load "starter-kit-bindings.org")
 #+end_src
 
 *** Starter kit misc
 Miscellaneous settings in [[file:starter-kit-misc.org][starter-kit-misc]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-misc.org")
+(starter-kit-load "starter-kit-misc.org")
 #+end_src
 
 *** Starter kit registers
 Registers for jumping to commonly used files in [[file:starter-kit-registers.org][starter-kit-registers]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-registers.org")
+(starter-kit-load "starter-kit-registers.org")
 #+end_src
 
 ** Language/Mode Specific Files
@@ -275,42 +285,42 @@ language.
 Located in [[file:starter-kit-org.org][starter-kit-org]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-org.org")
+(starter-kit-load "starter-kit-org.org")
 #+end_src
 
 *** Starter kit eshell
 Located in [[file:starter-kit-eshell.org][starter-kit-eshell]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-eshell.org")
+(starter-kit-load "starter-kit-eshell.org")
 #+end_src
 
 *** Starter kit lisp
 Located in [[file:starter-kit-lisp.org][starter-kit-lisp]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-lisp.org")
+(starter-kit-load "starter-kit-lisp.org")
 #+end_src
 
 *** Starter kit ruby
 Located in [[file:starter-kit-ruby.org][starter-kit-ruby]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-ruby.org")
+(starter-kit-load "starter-kit-ruby.org")
 #+end_src
 
 *** Starter kit JS
 Located in [[file:starter-kit-js.org][starter-kit-js]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-js.org")
+(starter-kit-load "starter-kit-js.org")
 #+end_src
 
 *** Starter Kit Perl
 Located in [[file:starter-kit-perl.org][starter-kit-perl]]
 
 #+begin_src emacs-lisp
-(org-babel-load-file "starter-kit-perl.org")
+(starter-kit-load "starter-kit-perl.org")
 #+end_src
 
 
