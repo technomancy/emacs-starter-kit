@@ -9,10 +9,14 @@
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
-;; Load path etc.
+;; FIXME osx specifics
+(setq mac-option-modifier 'alt)
+(setq mac-command-modifier 'meta)
+(setq visible-bell nil)
 
-(setq dotfiles-dir (file-name-directory
-                    (or (buffer-file-name) load-file-name)))
+;; Load path etc.
+;; TODO: version detection to set user-emacs-directory
+(setq dotfiles-dir user-emacs-directory)
 
 (add-to-list 'load-path dotfiles-dir)
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
