@@ -9,11 +9,6 @@
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
-;; FIXME osx specifics
-(setq mac-option-modifier 'alt)
-(setq mac-command-modifier 'meta)
-(setq visible-bell nil)
-
 ;; Load path etc.
 ;; TODO: version detection to set user-emacs-directory
 (setq dotfiles-dir user-emacs-directory)
