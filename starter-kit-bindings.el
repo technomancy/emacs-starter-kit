@@ -4,20 +4,21 @@
 
 ;; TODO: switch to kbd invocations everywhere
 
+;; Mark and Region usage overrides
+(global-set-key (kbd "<C-return>") 'set-mark-command)
+(global-set-key (kbd "C-x C-k") 'kill-region)
+
 ;; You know, like Readline.
-(global-set-key (kbd "C-M-h") 'backward-kill-word)
+(global-set-key (kbd "C-w") 'backward-kill-word)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
 
 ;; Completion that uses many different methods to find options.
-(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "<C-SPC>") 'hippie-expand)
 
 ;; Perform general cleanup.
 (global-set-key (kbd "C-c n") 'cleanup-buffer)
-
-;; Turn on the menu bar for exploring new modes
-(global-set-key [f1] 'menu-bar-mode)
 
 ;; Font size
 (define-key global-map (kbd "C-+") 'text-scale-increase)
@@ -25,9 +26,7 @@
 
 ;; Use regex searches by default.
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "\C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; Jump to a definition in the current file. (This is awesome.)
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
@@ -36,8 +35,7 @@
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
-(global-set-key (kbd "C-x C-p") 'find-file-at-point)
-(global-set-key (kbd "C-c y") 'bury-buffer)
+(global-set-key (kbd "<C-tab>") 'bury-buffer)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -49,6 +47,7 @@
 
 ;; Indentation help
 (global-set-key (kbd "C-x ^") 'join-line)
+(global-set-key (kbd "C-c <tab>") 'indent-relative)
 
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
