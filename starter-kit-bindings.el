@@ -43,10 +43,14 @@
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+;; Time tracking
+(global-set-key (kbd "C-c C-k i") 'timeclock-in)
+(global-set-key (kbd "C-c C-k o") 'timeclock-out)
+(global-set-key (kbd "C-c C-k c") 'timeclock-change)
+(global-set-key (kbd "C-c C-k v") 'timeclock-visit-timelog)
+
 ;; Window switching. (C-x o goes to the next window)
 (windmove-default-keybindings) ;; Shift+direction
-(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
-(global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
 
 ;; Indentation help
 (global-set-key (kbd "C-x ^") 'join-line)
