@@ -1,4 +1,4 @@
-#+TITLE: Emacs Starter Kit
+hc#+TITLE: Emacs Starter Kit
 #+SEQ_TODO: PROPOSED TODO STARTED | DONE DEFERRED REJECTED
 #+OPTIONS: H:2 num:nil toc:t
 #+STARTUP: oddeven
@@ -241,23 +241,6 @@ project is not in elpa.
 #+begin_src emacs-lisp
 (setq elisp-source-dir (concat dotfiles-dir "src"))
 (add-to-list 'load-path elisp-source-dir)
-
-(if (file-exists-p elisp-source-dir)
-    (let ((default-directory elisp-source-dir))
-      (normal-top-level-add-subdirs-to-load-path)))
-#+end_src
-
-#+srcname: starter-kit-load-files
-#+begin_src emacs-lisp  
-  (if (file-exists-p system-specific-config) (load system-specific-config))
-  (if (file-exists-p system-specific-literate-config)
-      (org-babel-load system-specific-literate-config))
-  (if (file-exists-p user-specific-config) (load user-specific-config))
-  (if (file-exists-p user-specific-literate-config)
-      (org-babel-load user-specific-literate-config))
-  (when (file-exists-p user-specific-dir)
-    (mapc #'load (directory-files user-specific-dir nil ".*el$"))
-    (mapc #'org-babel-load (directory-files user-specific-dir nil ".*org$")))
 #+end_src
 
 ** Load the rest of the starter kit core
@@ -338,6 +321,25 @@ Located in [[file:starter-kit-perl.org][starter-kit-perl]]
 
 #+begin_src emacs-lisp
 (starter-kit-load "starter-kit-perl.org")
+#+end_src
+
+** Load User/System Specific Files
+
+After we've loaded all the Starter Kit defaults, lets load the User's stuff.
+#+srcname: starter-kit-load-files
+#+begin_src emacs-lisp
+  (if (file-exists-p elisp-source-dir)
+      (let ((default-directory elisp-source-dir))
+        (normal-top-level-add-subdirs-to-load-path)))
+  (if (file-exists-p system-specific-config) (load system-specific-config))
+  (if (file-exists-p system-specific-literate-config)
+      (org-babel-load system-specific-literate-config))
+  (if (file-exists-p user-specific-config) (load user-specific-config))
+  (if (file-exists-p user-specific-literate-config)
+      (org-babel-load user-specific-literate-config))
+  (when (file-exists-p user-specific-dir)
+    (mapc #'load (directory-files user-specific-dir nil ".*el$"))
+    (mapc #'org-babel-load (directory-files user-specific-dir nil ".*org$")))
 #+end_src
 
 
