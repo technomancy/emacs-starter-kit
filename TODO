@@ -60,3 +60,13 @@ uptime
 wget
 yasnippet
 yank-pop-summary
+
+NOTES:
+transient-mark-mode on my default
+M-$ : spellchecking for region if mark is active, word otherwise
+TAB now indents region
+(setq truncate-lines t) to disable wrapping
+
+FIX
+exec-path not setting to my PATH
+magit's git-executable-path
