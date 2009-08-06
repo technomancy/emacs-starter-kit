@@ -35,7 +35,6 @@ ack : full-ack
 applescript-mode
 autotest
 browse-kill-ring : +kill-ring-search!
-cheat
 elscreen
 magit (latest version? elpa v0.7)
 git-blame
