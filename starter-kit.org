@@ -173,7 +173,7 @@ backport some functionality to Emacs 22 if needed
 
 this must be loaded before ELPA since it bundles its own
 out-of-date js stuff. TODO: fix it to use ELPA dependencies
-#+srcname: start-kit-nxhtml
+#+srcname: starter-kit-nxhtml
 #+begin_src emacs-lisp 
   (load "elpa-to-submit/nxhtml/autostart")
 #+end_src
@@ -186,7 +186,6 @@ out-of-date js stuff. TODO: fix it to use ELPA dependencies
     (org-babel-load-file (expand-file-name file
                                            dotfiles-dir)))
 #+end_src
-
 
 *** ELPA (Emacs Lisp Package Manager)
 
@@ -203,7 +202,7 @@ Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
 
 Load up starter kit customizations
 
-#+srcname: start-kit-customizations
+#+srcname: starter-kit-customizations
 #+begin_src emacs-lisp 
   (load custom-file 'noerror)
 #+end_src
@@ -211,7 +210,7 @@ Load up starter kit customizations
 *** Work around OS X bug
 
 Work around a bug on OS X where system-name is FQDN
-#+srcname: start-kit-osX-workaround
+#+srcname: starter-kit-osX-workaround
 #+begin_src emacs-lisp 
   (if (eq system-type 'darwin)
       (setq system-name (car (split-string system-name "\\."))))
@@ -223,7 +222,7 @@ You can keep system- or user-specific customizations here in either
 raw emacs-lisp files or as embedded elisp in org-mode files (as done
 in this document).
 
-#+srcname: start-kit-user/system-setup
+#+srcname: starter-kit-user/system-setup
 #+begin_src emacs-lisp 
   (setq system-specific-config (concat dotfiles-dir system-name ".el")
         system-specific-literate-config (concat dotfiles-dir system-name ".org")
@@ -231,7 +230,25 @@ in this document).
         user-specific-literate-config (concat dotfiles-dir user-login-name ".org")
         user-specific-dir (concat dotfiles-dir user-login-name))
   (add-to-list 'load-path user-specific-dir)
-  
+#+end_src
+
+You can keep elisp source in the =src= directory.  Packages loaded
+from here will override those installed by ELPA.  This is useful if
+you want to track the development versions of a project, or if a
+project is not in elpa.
+
+#+srcname: starter-kit-load-elisp-dir
+#+begin_src emacs-lisp
+(setq elisp-source-dir (concat dotfiles-dir "src"))
+(add-to-list 'load-path elisp-source-dir)
+
+(if (file-exists-p elisp-source-dir)
+    (let ((default-directory elisp-source-dir))
+      (normal-top-level-add-subdirs-to-load-path)))
+#+end_src
+
+#+srcname: starter-kit-load-files
+#+begin_src emacs-lisp  
   (if (file-exists-p system-specific-config) (load system-specific-config))
   (if (file-exists-p system-specific-literate-config)
       (org-babel-load system-specific-literate-config))
