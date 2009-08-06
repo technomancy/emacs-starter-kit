@@ -2,31 +2,14 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
-(when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (tooltip-mode -1)
-  (blink-cursor-mode -1))
-
-(add-hook 'before-make-frame-hook 'turn-off-tool-bar)
-
 (mouse-wheel-mode t)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-(setq visible-bell t
-      echo-keystrokes 0.1
-      font-lock-maximum-decoration t
-      inhibit-startup-message t
-      transient-mark-mode t
-      color-theme-is-global t
-      delete-by-moving-to-trash t
+(setq echo-keystrokes 0.1
       shift-select-mode nil
-      truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
-      whitespace-style '(trailing lines space-before-tab
-                                  indentation space-after-tab)
-      whitespace-line-column 100
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory (concat dotfiles-dir "oddmuse")
       xterm-mouse-mode t
@@ -45,17 +28,8 @@
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
-;; Enable syntax highlighting for older Emacsen that have it off
-(global-font-lock-mode t)
-
-;; You really don't need this; trust me.
-(menu-bar-mode -1)
-
 ;; Save a list of recent files visited.
 (recentf-mode 1)
-
-;; Highlight matching parentheses when the point is on them.
-(show-paren-mode 1)
 
 ;; ido-mode is like magic pixie dust!
 (when (> emacs-major-version 21)
@@ -66,8 +40,6 @@
         ido-use-filename-at-point t
         ido-max-prospects 10))
 
-(set-default 'indent-tabs-mode nil)
-(set-default 'indicate-empty-lines t)
 (set-default 'imenu-auto-rescan t)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
