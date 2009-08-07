@@ -22,6 +22,14 @@
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
 
+;; Insert skeleton pairs by default
+;; TODO: refine per-mode
+(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "'") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+
 ;; Completion that uses many different methods to find options.
 (global-set-key (kbd "<C-SPC>") 'hippie-expand)
 
