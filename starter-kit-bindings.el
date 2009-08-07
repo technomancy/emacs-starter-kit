@@ -54,6 +54,14 @@
 ;; Jump to a definition in the current file. (This is awesome.)
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
 
+;; Gisting
+(global-set-key (kbd "C-c C-g g") (lambda (arg)
+                                    (interactive "P")
+                                    (if (null arg)
+                                        (gist-region-or-buffer)
+                                      (gist-region-or-buffer-private))))
+(global-set-key (kbd "C-c C-g f") 'gist-fetch)
+
 ;; File finding
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
