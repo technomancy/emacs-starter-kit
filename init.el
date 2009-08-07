@@ -24,13 +24,15 @@
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session
 
-(require 'cl)
-(require 'saveplace)
-(require 'ffap)
-(require 'uniquify)
 (require 'ansi-color)
+(require 'cl)
+(require 'ffap)
+(require 'imenu)
 (require 'recentf)
+(require 'saveplace)
+(require 'thingatpt)
 (require 'timeclock)
+(require 'uniquify)
 
 ;; backport some functionality to Emacs 22 if needed
 (require 'dominating-file)

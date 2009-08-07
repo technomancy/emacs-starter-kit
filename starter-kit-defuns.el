@@ -2,9 +2,6 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
-(require 'thingatpt)
-(require 'imenu)
-
 ;; Network
 
 (defun view-url ()
