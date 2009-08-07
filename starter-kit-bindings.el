@@ -12,6 +12,13 @@
 (global-set-key (kbd "C-x RET") 'smex)
 (global-set-key (kbd "C-c RET") 'smex-major-mode-commands)
 
+;; Why can't open-line just indent according to mode?
+(global-set-key (kbd "C-o") 'vi-open-next-line)
+
+;; More precise character zapping
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-M-z") 'zap-to-char)
+
 ;; Mark and Region usage overrides
 (global-set-key (kbd "<C-return>") 'set-mark-command)
 (global-set-key (kbd "C-x C-k") 'kill-region)
@@ -93,8 +100,10 @@
 (global-set-key (kbd "C-c C-k c") 'timeclock-change)
 (global-set-key (kbd "C-c C-k v") 'timeclock-visit-timelog)
 
-;; Window switching. (C-x o goes to the next window)
+;; Window manipulation
 (windmove-default-keybindings) ;; Shift+direction
+(global-set-key [S-f12] 'swap-windows)
+(global-set-key [C-f12] 'swap-split)    ; FIXME
 
 ;; Indentation help
 (global-set-key (kbd "C-x ^") 'join-line)

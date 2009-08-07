@@ -64,6 +64,57 @@ Symbols matching the text at point are put first in the completion list."
   (interactive)
   (revert-buffer t t))
 
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file name new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
+
+;; Window-related
+
+(defun swap-windows ()
+ "If you have 2 windows, it swaps them."
+ (interactive)
+ (cond ((not (= (count-windows) 2))
+        (message "You need exactly 2 windows to do this."))
+       (t
+        (let* ((w1 (first (window-list)))
+               (w2 (second (window-list)))
+               (b1 (window-buffer w1))
+               (b2 (window-buffer w2))
+               (s1 (window-start w1))
+               (s2 (window-start w2)))
+          (set-window-buffer w1 b2)
+          (set-window-buffer w2 b1)
+          (set-window-start w1 s2)
+          (set-window-start w2 s1)))))
+
+(defun swap-split () ; TODO: broken; rewrite
+  "Swaps the orientation of two split windows."
+  (interactive)
+  (save-excursion
+    (let ((b2 (window-buffer (second (window-list))))
+          (side-by-side (not (window-split-horizontally-p))))
+      (if (one-window-p)
+          (message "You need exactly 2 windows to do this.")
+        (delete-other-windows)
+        (if side-by-side
+            (progn
+              (split-window-vertically)         ; spatial
+              (message "Swapped horizontally")) ; visual!
+          (split-window-horizontally (/ (third (window-edges)) 2))
+          (message "Swapped vertically")))
+      (display-buffer b2 t nil))))
+
 ;;; These belong in coding-hook:
 
 ;; We have a number of turn-on-* functions since it's advised that lambda
@@ -132,6 +183,28 @@ Symbols matching the text at point are put first in the completion list."
                     nil))))))
 
 ;; Other
+
+(defun vi-open-next-line (arg)
+  "Move to the next line (like vi) and then opens a line."
+  (interactive "p")
+  (if (looking-at "^")
+      (open-line arg)
+    (end-of-line)
+    (open-line arg)
+    (next-line 1)
+    (indent-according-to-mode)))
+
+(defun zap-up-to-char (arg char)
+  "Kill up to and excluding ARG'th occurrence of CHAR.
+Goes backward if ARG is negative; error if CHAR not found."
+  (interactive "*p\ncZap up to char: ")
+  (kill-region (point)
+               (progn
+                 (search-forward
+                  (char-to-string char) nil nil arg)
+                 (progn (goto-char
+                         (if (> arg 0) (1- (point)) (1+ (point))))
+                        (point)))))
 
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
