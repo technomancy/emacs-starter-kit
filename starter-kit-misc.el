@@ -64,7 +64,12 @@
 
 ;; Don't clutter up directories with files~
 (setq backup-directory-alist `(("." . ,(expand-file-name
-                                        (concat dotfiles-dir "backups")))))
+                                        (concat dotfiles-dir "backups"))))
+      version-control t
+      kept-new-versions 16
+      kept-old-versions 2
+      delete-old-versions t
+      backup-by-copying-when-linked t)
 
 ;; nxhtml stuff
 (setq mumamo-chunk-coloring 'submode-colored
