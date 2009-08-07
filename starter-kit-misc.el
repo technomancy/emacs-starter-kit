@@ -38,11 +38,17 @@
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 
+;; Incremental minibuffer completion
+(icomplete-mode 1)
+
 ;; ido-mode is like magic pixie dust!
 (when (> emacs-major-version 21)
   (ido-mode t)
+  (ido-everywhere t)
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
+        ido-confirm-unique-completion t
+        ido-default-buffer-method 'other-window
         ido-create-new-buffer 'always
         ido-use-filename-at-point t
         ido-max-prospects 10))
