@@ -7,6 +7,12 @@
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
+;; Enable select, disabled features
+(put 'narrow-to-region 'disabled nil)   ; narrow enabled
+(put 'narrow-to-page 'disabled nil)
+(put 'upcase-region 'disabled nil)      ; change case enabled
+(put 'eval-expression 'disabled nil)    ; allow eval commands
+
 (setq echo-keystrokes 0.1
       shift-select-mode nil
       skeleton-pair t
