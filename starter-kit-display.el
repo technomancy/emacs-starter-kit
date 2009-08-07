@@ -24,6 +24,11 @@
 ;; Show buffer boundaries on the left-hande side of the fringe
 (setq-default indicate-buffer-boundaries 'left)
 
+;; Modeline preferences
+(timeclock-modeline-display)
+(display-time-mode 1)
+(column-number-mode 1)
+
 (setq inhibit-startup-message t
       visible-bell nil
       color-theme-is-global t
@@ -31,11 +36,15 @@
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 80
-      truncate-lines t
       )
 
+(set-default 'truncate-lines t)
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
+
+;; Highlight the current line
+;; FIXME:
+(global-hl-line-mode t)
 
 ;; Enable syntax highlighting for older Emacsen that have it off
 (global-font-lock-mode t)
