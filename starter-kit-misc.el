@@ -82,6 +82,21 @@
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 
+;; Keep and trash selected buffers
+(midnight-delay-set 'midnight-delay 4400)
+(add-to-list 'clean-buffer-list-kill-never-buffer-names "*msg*")
+(add-to-list 'clean-buffer-list-kill-never-regexps "^\\*shell-")
+(append clean-buffer-list-kill-buffer-names '("*Shell Command Output*"
+                                              "*Completions*"
+                                              "*Occur*"
+                                              "*Bookmark List*"
+                                              "*Ediff Registry*"
+                                              "*ack*"
+                                              "ri `"
+                                              "*markdown-output*"))
+(add-to-list 'clean-buffer-list-kill-regexps "\\.rb$")
+(add-to-list 'clean-buffer-list-kill-regexps "\\.el$")
+
 ;; Default to unified diffs
 (setq diff-switches "-u")
 
