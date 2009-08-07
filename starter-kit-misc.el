@@ -20,7 +20,10 @@
       require-final-newline t
       auto-save-default nil
       minibuffer-max-depth nil
-      uniquify-buffer-name-style 'forward
+      uniquify-buffer-name-style 'reverse
+      uniquify-separator "|"
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*"
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory (concat dotfiles-dir "oddmuse")
       xterm-mouse-mode t
