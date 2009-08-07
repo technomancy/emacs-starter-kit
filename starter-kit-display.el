@@ -6,13 +6,12 @@
   (tooltip-mode -1)
   (scroll-bar-mode -1)
   (if (eq window-system 'ns)
-      ;; Use the Inconsolata font if running Mac OS X
+      ;; Use the Inconsolata font if running OS X
       (progn (setq ns-antialias-text t
                    ns-input-font "Inconsolata"
                    ns-input-fontsize 14
                    ns-pop-up-frames nil)
-             (ns-respond-to-change-font)))
-  )
+             (ns-respond-to-change-font))))
 
 (blink-cursor-mode 1)
 (menu-bar-mode -1)

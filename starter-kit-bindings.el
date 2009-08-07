@@ -2,7 +2,7 @@
 ;;
 ;; Part of the Emacs Starter Kit.
 
-;; Override Mac OS X's behavior when in Emacs
+;; Override OS X's behavior when in Emacs
 (if (eq system-type 'darwin)
     (setq mac-command-modifier 'meta
           mac-option-modifier 'alt))
