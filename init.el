@@ -78,4 +78,6 @@
 (if (file-exists-p user-specific-dir)
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 
+(eval-after-load "init.el" (smex-initialize))
+
 ;;; init.el ends here

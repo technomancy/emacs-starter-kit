@@ -7,6 +7,11 @@
     (setq mac-command-modifier 'meta
           mac-option-modifier 'alt))
 
+;; Smex, bringing ido to execute-extended-command
+;; FIXME: half broken
+(global-set-key (kbd "C-x RET") 'smex)
+(global-set-key (kbd "C-c RET") 'smex-major-mode-commands)
+
 ;; Mark and Region usage overrides
 (global-set-key (kbd "<C-return>") 'set-mark-command)
 (global-set-key (kbd "C-x C-k") 'kill-region)
