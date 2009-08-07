@@ -27,6 +27,23 @@
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
+;; Frame opacity
+(global-set-key (kbd "C-8") '(lambda () ; decrease
+                               (interactive)
+                               (opacity-modify t)))
+(global-set-key (kbd "C-9") '(lambda () ; increase
+                               (interactive)
+                               (opacity-modify)))
+(global-set-key (kbd "C-0") '(lambda ()
+                               (interactive)
+                               (modify-frame-parameters nil `((alpha . 100)))))
+
+;; Gracefully redo undone changes
+(global-set-key (kbd "M-/") 'redo)
+
+;; Revert the current buffer
+(global-set-key (kbd "<f6>") 'refresh-buffer)
+
 ;; Prefer ack over grep
 (global-set-key (kbd "C-c C-k C-a") 'ack)
 

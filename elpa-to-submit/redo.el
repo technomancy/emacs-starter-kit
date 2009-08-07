@@ -75,6 +75,7 @@
 ;; Emacs 20 variable
 (defvar undo-in-progress)
 
+;;;###autoload
 (defun redo (&optional count)
   "Redo the the most recent undo.
 Prefix arg COUNT means redo the COUNT most recent undos.
@@ -156,6 +157,7 @@ then you cannot redo any undos before then."
 	(message "Redo!"))
     (setq last-buffer-undo-list buffer-undo-list)))
 
+;;;###autoload
 (defun undo (&optional arg)
   "Undo some previous changes.
 Repeat this command to undo more changes.
