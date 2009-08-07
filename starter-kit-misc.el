@@ -15,7 +15,11 @@
 
 (setq echo-keystrokes 0.1
       shift-select-mode nil
+      ffap-require-prefix t
       skeleton-pair t
+      require-final-newline t
+      auto-save-default nil
+      minibuffer-max-depth nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory (concat dotfiles-dir "oddmuse")
