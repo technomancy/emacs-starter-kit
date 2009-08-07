@@ -62,6 +62,11 @@ Symbols matching the text at point are put first in the completion list."
            (position (cdr (assoc selected-symbol name-and-pos))))
       (goto-char position))))
 
+(defun refresh-buffer ()
+  "Refresh the current buffer from disk"
+  (interactive)
+  (revert-buffer t t))
+
 ;;; These belong in coding-hook:
 
 ;; We have a number of turn-on-* functions since it's advised that lambda
