@@ -88,6 +88,9 @@
 
 ;; Associate modes with file extensions
 
+(add-to-list 'auto-mode-alist '("\\.applescript$" . applescript-mode))
+(add-to-list 'auto-mode-alist '("\\.scpt$"        . applescript-mode))
+(add-to-list 'auto-mode-alist '("\\.css$"         . css-mode))
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
