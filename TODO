@@ -20,52 +20,20 @@ overhaul starter-kit-* core and restructure as init/*.el
 
 BAD OVERRIDES:
 M-$: new ispell-{word,region} - must rebind for osx
-C-xh : view-url, not mark-whole-buffer
-C-M-h : backward-kill-word (use C-w)
-remove isearch-{forward,backward}
-C-xf recentf-ido-find-file (try as default?)
-C-cy bury-buffer (use C-TAB)
-C-cr revert-buffer (use F6)
 [new] file-cache-minibuffer-complete
-C-xC-b ibuffer (over default)
-C-xm eshell (use 'magit-status)
-C-xg 'magit-status (use C-xm)
 
 PACKAGES (and equivalents, if possible):
-ack : full-ack
-applescript-mode
-autotest
 browse-kill-ring : +kill-ring-search!
-elscreen
-magit (latest version? elpa v0.7)
-git-blame
-haml-mode
-highlight-beyond-fill-column (highlight-80+)
 install-elisp
-linum
-rcodetools
-rdebug
-re-builder (perl support)
-redo
-ri-emacs,ri-ruby
-ruby-electric
 ruby-hacks ?
 ruby-style ?
-rubydb3x
-sass-mode
 shell-command (+shell-current-directory?)
-smallurl
-tidy
-uptime
-wget
 yasnippet
 yank-pop-summary
 
 NOTES:
-transient-mark-mode on my default
 M-$ : spellchecking for region if mark is active, word otherwise
 TAB now indents region
-(setq truncate-lines t) to disable wrapping
 
 FIX
 exec-path not setting to my PATH
