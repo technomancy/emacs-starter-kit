@@ -290,6 +290,7 @@ create it."
 		   (error (setq yank-pop/window-configuration nil))))
 	       (call-interactively this-command))))))
 
+;;;###autoload
 (defun yank-pop-forward (arg)
   "Replace just-yanked stretch of killed text with a different stretch.
 This command is quite similar to `yank-pop' but displays summary
@@ -304,6 +305,7 @@ buffer to view strings registered in `kill-ring'."
 	(recenter yank-pop-summary-window-offset)))
     (add-hook 'pre-command-hook 'yank-pop/pre-command)))
 
+;;;###autoload
 (defun yank-pop-backward (arg)
   "Replace just-yanked stretch of killed text with a different stretch.
 This command is quite similar to `yank-pop-forward' but its argument
