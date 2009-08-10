@@ -1,0 +1,8 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#name : flexmock mock object, ActiveRecord w/multiple line block
+# --
+${1:var} = flexmock(:model, ${2:YourModel}) do |mock|
+             mock.should_receive(${3:meth})
+             $0
+           end

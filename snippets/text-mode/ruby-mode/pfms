@@ -1,0 +1,6 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#name : flexmock partial mock, String or Symbol
+# --
+${1:var} = flexmock(:base, ${2:real_string_object})
+$0

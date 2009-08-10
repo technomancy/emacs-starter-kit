@@ -1,0 +1,7 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#method with params
+# --
+def ${1:name}(${2:params})
+  $0
+end

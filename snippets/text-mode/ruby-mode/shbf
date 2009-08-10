@@ -1,0 +1,6 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#should be_false
+# --
+${1:target}.should be_false
+$0

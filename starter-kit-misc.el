@@ -67,9 +67,12 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
 
-;; Hippie expand: at times perhaps too hip
-(delete 'try-expand-line hippie-expand-try-functions-list)
-(delete 'try-expand-list hippie-expand-try-functions-list)
+;; YASnippet
+(yas/initialize)
+(yas/load-directory (concat dotfiles-dir "snippets"))
+
+;; Yeah, Hippie expand
+(add-to-list 'hippie-expand-try-functions-list 'yas/hippie-try-expand)
 
 ;; Don't clutter up directories with files~
 (setq backup-directory-alist `(("." . ,(expand-file-name
