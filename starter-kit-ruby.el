@@ -94,5 +94,10 @@ exec-to-string command, but it works and seems fast"
 ;; TODO: set up ri
 ;; TODO: electric
 
+(load-library (concat dotfiles-dir
+                      "snippets/contrib/yasnippets-rspec/setup.el"))
+(load-library (concat dotfiles-dir
+                      "snippets/contrib/yasnippets-rails/setup.el"))
+
 (provide 'starter-kit-ruby)
 ;; starter-kit-ruby.el ends here
