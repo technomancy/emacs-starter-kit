@@ -52,13 +52,13 @@
 (global-font-lock-mode t)
 
 ;; Make unkept whitespace painfully annoying
-;; TODO: learn more about whitespace-mode's options
-(global-whitespace-mode)
+(global-whitespace-mode t)
 
+;; Highlight other instances of the symbol at point
 (global-hi-lock-mode t)
 
 ;; Highlight matching parentheses when the point is on them.
-(show-paren-mode 1)
+(show-paren-mode t)
 
 ;; Courtesy of http://emacs-fu.blogspot.com/2009/02/transparent-emacs.html
 (defun opacity-modify (&optional dec)
