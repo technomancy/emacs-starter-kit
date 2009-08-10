@@ -16,6 +16,7 @@
 (blink-cursor-mode 1)
 (menu-bar-mode -1)
 
+(set-frame-width (selected-frame) 161)
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
 
 ;; Vertical fringes of 1 pixel for each window
