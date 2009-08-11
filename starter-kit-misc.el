@@ -15,6 +15,7 @@
 
 (setq echo-keystrokes 0.1
       shift-select-mode nil
+      yank-pop-change-selection t
       ffap-require-prefix t
       skeleton-pair t
       require-final-newline t
