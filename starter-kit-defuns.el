@@ -237,10 +237,9 @@ Goes backward if ARG is negative; error if CHAR not found."
         (update-directory-autoloads autoload-dir))))
   (load autoload-file))
 
-;; TODO: fix this
 (defun sudo-edit (&optional arg)
   (interactive "p")
-  (if arg
+  (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
