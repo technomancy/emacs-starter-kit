@@ -5,7 +5,7 @@
   (set-default-font
    (concat "-unknown-Inconsolata-normal-normal-normal-*-"
            (if (stringp size) size
-             (if (= 1 size) "18"
+             (if (= 1 size) "16"
                (read-from-minibuffer "Size: ")))
            "-*-*-*-m-0-*-*")))
 
@@ -70,10 +70,10 @@
 
 ;;; elisp libraries I run from source checkouts:
 
-(add-to-list 'load-path "/home/phil/src/elisp/emacs-w3m")
-(add-to-list 'load-path "/home/phil/src/elisp/relax.el")
-(add-to-list 'load-path "/home/phil/src/elisp/elim/elisp")
-(add-to-list 'load-path "/home/phil/src/elisp/clojure-mode")
+(add-to-list 'load-path "/home/phil/src/emacs-w3m")
+(add-to-list 'load-path "/home/phil/src/relax.el")
+(add-to-list 'load-path "/home/phil/src/elim/elisp")
+(add-to-list 'load-path "/home/phil/src/clojure-mode")
 
 (autoload 'w3m "w3m" "w3m browser" t)
 (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t)
@@ -90,9 +90,9 @@
   '(add-hook 'ruby-mode-hook 'esk-paredit-nonlisp))
 
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/home/phil/src/js/conkeror/contrib/run-conkeror")
+      browse-url-generic-program "/home/phil/src/conkeror/contrib/run-conkeror")
 
-(clojure-slime-config "/home/phil/src/clj")
+(clojure-slime-config "/home/phil/src/")
 
 ;; (eval-after-load 'swank-clojure
 ;;   '(add-to-list 'swank-clojure-extra-vm-args
@@ -111,12 +111,6 @@
   '(progn
      (define-key java-mode-map (kbd "C-M-h") 'backward-kill-word)))
 
-(global-set-key (kbd "C-h j") 'javadoc-lookup)
-
-(setq *jdh-javadocs*
-      '(("/home/phil/documents/javadoc/jdk/api/" t t nil nil nil nil nil nil nil)
-        ("/home/phil/documents/javadoc/javamail/javadocs/" t t nil nil nil nil nil nil nil)))
-
 ;; Get around the emacswiki spam protection
 (add-hook 'oddmuse-mode-hook
           (lambda ()
@@ -131,9 +125,13 @@
 (defalias 'bb 'color-theme-blackboard)
 
 ;;; Paredit hacks
-(load "../../../elisp/paredit/paredit-beta")
-(load "../../../elisp/paredit/paredit-delimiter-space")
-(load "../../../elisp/paredit/paredit-semicolon")
+(load "../../paredit/paredit-beta")
+(load "../../paredit/paredit-delimiter-space")
+(load "../../paredit/paredit-semicolon")
 
 ;;; broken ido
 (defun ido-directory-too-big-p (arg) nil)
+
+;;; registers
+(set-register ?n '(file . "~/documents/notes.org"))
+(set-register ?p '(file . "~/.emacs.d/phil.el"))
