@@ -3,6 +3,7 @@
 ;; Spartan appearance
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (turn-off-tool-bar)
   (tooltip-mode -1)
   (scroll-bar-mode -1)
   (if (eq window-system 'ns)
