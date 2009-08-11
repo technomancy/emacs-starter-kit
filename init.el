@@ -52,6 +52,7 @@
 (require 'starter-kit-defuns)
 (require 'starter-kit-bindings)
 (require 'starter-kit-display)
+(require 'starter-kit-faces)
 (require 'starter-kit-misc)
 (require 'starter-kit-registers)
 (require 'starter-kit-eshell)

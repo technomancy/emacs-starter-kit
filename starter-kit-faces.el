@@ -22,3 +22,6 @@
 (eval-after-load 'nxhtml
   '(eval-after-load 'zenburn
      '(set-face-background 'mumamo-background-chunk-submode "gray22")))
+
+(provide 'starter-kit-faces)
+;;; starter-kit-faces.el ends here
