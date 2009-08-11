@@ -7,11 +7,6 @@
     (setq mac-command-modifier 'meta
           mac-option-modifier 'alt))
 
-;; Smex, bringing ido to execute-extended-command
-;; FIXME: half broken
-(global-set-key (kbd "C-x RET") 'smex)
-(global-set-key (kbd "C-c RET") 'smex-major-mode-commands)
-
 (global-set-key (kbd "M-x") 'ispell-word)
 
 ;; Why can't open-line just indent according to mode?
@@ -125,8 +120,9 @@
 ;; Start a regular shell if you prefer that.
 (global-set-key (kbd "C-x M-m") 'shell)
 
-;; If you want to be able to M-x without meta
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
+;; Smex, bringing ido to execute-extended-command
+(global-set-key (kbd "C-x C-m") 'smex)
+(global-set-key (kbd "C-c C-m") 'smex-major-mode-commands)
 
 ;; Fetch the contents at a URL, display it raw.
 (global-set-key (kbd "C-x h") 'view-url)
