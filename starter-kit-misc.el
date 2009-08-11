@@ -31,7 +31,7 @@
       save-place-file (concat dotfiles-dir "places"))
 
 ;; Set this to whatever browser you use
-(setq browse-url-browser-function 'browse-default-macosx-browser)
+(setq browse-url-browser-function 'browse-url-default-macosx-browser)
 
 ;; Replace the contents of a selection with typed text
 (delete-selection-mode t)

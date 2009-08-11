@@ -125,7 +125,12 @@
 (global-set-key (kbd "C-c C-m") 'smex-major-mode-commands)
 
 ;; Fetch the contents at a URL, display it raw.
-(global-set-key (kbd "C-x h") 'view-url)
+(global-set-key (kbd "C-c C-u")
+                (lambda (arg)
+                  (interactive "P")
+                  (if (null arg)
+                      (browse-url-at-point (thing-at-point-url-at-point))
+                    (view-url))))
 
 ;; Help should search more than just commands
 (global-set-key (kbd "C-h a") 'apropos)
