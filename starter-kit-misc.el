@@ -4,6 +4,7 @@
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (turn-off-tool-bar)
   (tooltip-mode -1)
   (turn-off-tool-bar)
   (blink-cursor-mode -1))
