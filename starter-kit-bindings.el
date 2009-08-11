@@ -27,8 +27,8 @@
 (global-set-key (kbd "C-w") 'backward-kill-word)
 
 ;; Visualize the kill ring
-(global-set-key "\M-y" 'yank-pop-forward)
-(global-set-key "\C-\M-y" 'yank-pop-backward)
+(global-set-key (kbd "M-y") 'yank-pop-forward)
+(global-set-key (kbd "C-M-y") 'yank-pop-backward)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
