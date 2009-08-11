@@ -162,10 +162,9 @@ Symbols matching the text at point are put first in the completion list."
         (update-directory-autoloads autoload-dir))))
   (load autoload-file))
 
-;; TODO: fix this
 (defun sudo-edit (&optional arg)
   (interactive "p")
-  (if arg
+  (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 

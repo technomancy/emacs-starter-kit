@@ -2,8 +2,6 @@
 ;;
 ;; Part of the Emacs Starter Kit.
 
-;; TODO: switch to kbd invocations everywhere
-
 ;; You know, like Readline.
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
 
