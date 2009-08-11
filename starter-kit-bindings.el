@@ -12,6 +12,8 @@
 (global-set-key (kbd "C-x RET") 'smex)
 (global-set-key (kbd "C-c RET") 'smex-major-mode-commands)
 
+(global-set-key (kbd "M-x") 'ispell-word)
+
 ;; Why can't open-line just indent according to mode?
 (global-set-key (kbd "C-o") 'vi-open-next-line)
 
