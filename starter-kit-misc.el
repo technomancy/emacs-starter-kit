@@ -4,9 +4,7 @@
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (turn-off-tool-bar)
   (tooltip-mode -1)
-  (turn-off-tool-bar)
   (blink-cursor-mode -1))
 
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
@@ -49,9 +47,6 @@
 
 ;; Enable syntax highlighting for older Emacsen that have it off
 (global-font-lock-mode t)
-
-;; You really don't need this; trust me.
-(menu-bar-mode -1)
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
