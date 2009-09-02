@@ -1,4 +1,4 @@
-hc#+TITLE: Emacs Starter Kit
+#+TITLE: Emacs Starter Kit
 #+SEQ_TODO: PROPOSED TODO STARTED | DONE DEFERRED REJECTED
 #+OPTIONS: H:2 num:nil toc:t
 #+STARTUP: oddeven
