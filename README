@@ -1,9 +1,17 @@
-This should provide a saner set of defaults than you get normally with
-Emacs. It's intended for beginners, but it should provide a reasonable
-working environment for anyone using Emacs for dynamic languages. The
-main advantage of the Starter Kit is that it provides better default
-settings and bundles many useful libraries.
+This is a Literate Programming fork of the original Emacs Starter Kit
+which is located at http://github.com/technomancy/emacs-starter-kit/
 
-The latest version is at http://github.com/technomancy/emacs-starter-kit/
+This should provide a saner set of defaults than you get normally with
+Emacs. It's intended for beginners, but provides a good elisp
+initialization structure for all levels of users.
+
+The main advantage of this Emacs Starter Kit are
+- better default settings
+- inclusion of many useful libraries
+- "literate" customization embedded in Org-mode files
+- an organizational directory structure
+- git provides for version control, backup, and sharing
+
+The latest version is at http://github.com/eschulte/emacs-starter-kit/
 
 For more information see http://eschulte.github.com/emacs-starter-kit/
