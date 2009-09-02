@@ -13,12 +13,17 @@ and brighter; it simply makes everything else vanish.
 * Introduction
 
 This should provide a saner set of defaults than you get normally with
-Emacs. It's intended for beginners, but it should provide a reasonable
-working environment for anyone using Emacs for dynamic languages. The
-main advantage of the Starter Kit is that it provides better default
-settings and bundles many useful libraries.
+Emacs. It's intended for beginners, but provides a good elisp
+initialization structure for all levels of users.
 
-The latest version is at http://github.com/technomancy/emacs-starter-kit/
+The main advantage of this Emacs Starter Kit are
+- better default settings
+- inclusion of many useful libraries
+- "literate" customization embedded in Org-mode files
+- an organizational directory structure
+- git provides for version control, backup, and sharing
+
+The latest version is at http://github.com/eschulte/emacs-starter-kit/
 
 ** Learning
 
@@ -34,7 +39,17 @@ The [[http://emacswiki.org][Emacs Wiki]] is also very handy.
    install it directly from [[http://savannah.gnu.org/projects/emacs/][from source]] following the instructions in
    =nextstep/INSTALL=.  Windows users can get it [[http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip][from GNU]].
 2. Move the directory containing this file to =~/.emacs.d= [1]
-3. Launch Emacs!
+3. Install the Org-mode and Org-babel [[http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#submodules][submodules]] with the following
+   #+begin_src sh
+   git submodule init
+   git submodule update
+   #+end_src
+4. build Org-mode
+   #+begin_src sh
+   cd src/org/
+   make
+   #+end_src
+5. Launch Emacs!
 
 If you are missing some autoloads after an update (should manifest
 itself as "void function: foobar" errors) try M-x regen-autoloads.
