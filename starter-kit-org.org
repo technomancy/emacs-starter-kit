@@ -64,12 +64,14 @@ This code defines the =starter-kit-project= which is used to publish
 the documentation for the Starter Kit to html.
 
 #+begin_src emacs-lisp :results silent
-  (setq org-publish-project-alist
-        `(("starter-kit-documentation"
-           :base-directory ,dotfiles-dir
-           :base-extension "org"
-           :publishing-directory ,(expand-file-name "doc" dotfiles-dir)
-           :index-filename "starter-kit.org"
-           :auto-postamble nil)))
+  (unless (boundp 'org-publish-project-alist)
+    (setq org-publish-project-alist nil))
+  (add-to-list 'org-publish-project-alist
+               `(("starter-kit-documentation"
+                  :base-directory ,dotfiles-dir
+                  :base-extension "org"
+                  :publishing-directory ,(expand-file-name "doc" dotfiles-dir)
+                  :index-filename "starter-kit.org"
+                  :auto-postamble nil)))
 #+end_src
 
