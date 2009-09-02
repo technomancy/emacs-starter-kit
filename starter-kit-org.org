@@ -66,12 +66,13 @@ the documentation for the Starter Kit to html.
 #+begin_src emacs-lisp :results silent
   (unless (boundp 'org-publish-project-alist)
     (setq org-publish-project-alist nil))
-  (add-to-list 'org-publish-project-alist
-               `(("starter-kit-documentation"
-                  :base-directory ,dotfiles-dir
-                  :base-extension "org"
-                  :publishing-directory ,(expand-file-name "doc" dotfiles-dir)
-                  :index-filename "starter-kit.org"
-                  :auto-postamble nil)))
+  (let ((this-dir (file-name-directory (or load-file-name buffer-file-name))))
+    (add-to-list 'org-publish-project-alist
+                 `("starter-kit-documentation"
+                   :base-directory ,this-dir
+                   :base-extension "org"
+                   :publishing-directory ,(expand-file-name "doc" this-dir)
+                   :index-filename "starter-kit.org"
+                   :auto-postamble nil)))
 #+end_src
 
