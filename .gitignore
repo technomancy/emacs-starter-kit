@@ -22,3 +22,5 @@ tramp
 starter-kit*el
 starter-kit*html
 doc
+eshell/lastdir
+eshell/history

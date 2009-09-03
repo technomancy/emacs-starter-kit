@@ -31,3 +31,13 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
                     '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))
        (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)))
 #+end_src
+
+The =eshell= directory holds alias definitions and history
+information.  It is much like a =.bashrc= file for those who are
+familiar with bash.  This set the value of =eshell-directory-name= to
+point to the =eshell= directory in this directory.  The =alias= file
+is pre-populated with some generally applicable aliases.
+
+#+begin_src emacs-lisp
+  (setq eshell-directory-name (expand-file-name "eshell" dotfiles-dir))
+#+end_src
