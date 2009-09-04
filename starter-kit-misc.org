@@ -120,14 +120,6 @@ ido-mode is like magic pixie dust!
                                         (concat dotfiles-dir "backups")))))
 #+end_src
 
-** nxhtml stuff
-#+begin_src emacs-lisp
-(setq mumamo-chunk-coloring 'submode-colored
-      nxhtml-skip-welcome t
-      indent-region-mode t
-      rng-nxml-auto-validate-flag nil)
-#+end_src
-
 ** Associate modes with file extensions
 #+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
@@ -156,8 +148,4 @@ ido-mode is like magic pixie dust!
   '(progn
      (set-face-foreground 'magit-diff-add "green3")
      (set-face-foreground 'magit-diff-del "red3")))
-
-(eval-after-load 'nxhtml
-  '(eval-after-load 'zenburn
-     '(set-face-background 'mumamo-background-chunk-submode "gray22")))
 #+end_src

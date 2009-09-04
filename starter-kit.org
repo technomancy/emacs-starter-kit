@@ -187,13 +187,6 @@ backport some functionality to Emacs 22 if needed
   (require 'dominating-file)
 #+end_src
 
-this must be loaded before ELPA since it bundles its own
-out-of-date js stuff. TODO: fix it to use ELPA dependencies
-#+srcname: starter-kit-nxhtml
-#+begin_src emacs-lisp 
-  (load "elpa-to-submit/nxhtml/autostart")
-#+end_src
-
 *** Function for loading starter-kit-*
 #+srcname: starter-kit-load
 #+begin_src emacs-lisp 
