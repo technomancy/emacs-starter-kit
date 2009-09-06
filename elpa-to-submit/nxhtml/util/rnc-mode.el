@@ -57,6 +57,8 @@
 ;;   Changes since 1.0b:
 ;;     Added a couple of defvars for faces to handle differences
 ;;     between GNU Emacs and XEmacs.
+;;
+;; 2008-12-28: Changed forward-char-command => forward-char
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'font-lock)
@@ -79,7 +81,7 @@
 (defun rnc-make-regexp-choice (operands)
   "(op1 op2 ...) -> \"\\(op1\\|op2\\|...\\)\""
   (let ((result "\\("))
-    (mapcar (lambda (op) (setq result (concat result op "\\|"))) operands)
+    (mapc (lambda (op) (setq result (concat result op "\\|"))) operands)
     (concat (substring result 0 -2) "\\)")))
 
 ;; Font lock treats face names differently in GNU Emacs and XEmacs
@@ -210,7 +212,7 @@
 	    (beginning-of-line)
 	    (let ((pos (re-search-forward "\\S " (point-max) t)))
 	      (and pos (= (- pos 1) p))))
-      (forward-char-command))))
+      (forward-char))))
 
 (defvar rnc-mode-map () "Keymap used in RNC mode.")
 (when (not rnc-mode-map)

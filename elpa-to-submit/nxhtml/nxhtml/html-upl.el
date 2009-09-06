@@ -46,7 +46,7 @@
 ;;
 ;;; Code:
 (eval-when-compile (add-to-list 'load-path default-directory load-path))
-(require 'html-site)
+(eval-when-compile (require 'html-site))
 
 (defgroup html-upl nil
   "Customization group for html-upl."
@@ -89,9 +89,12 @@ The tools for html-upl includes:
                                      nil)))
     (browse-url url)))
 
+;;;###autoload
 (defun html-upl-upload-site-with-toc ()
   (interactive)
   (html-upl-upload-site1 t))
+
+;;;###autoload
 (defun html-upl-upload-site ()
   (interactive)
   (html-upl-upload-site1 nil))
@@ -139,6 +142,7 @@ The tools for html-upl includes:
     (unless (and host (< 0 (length host)))
       (error "Site %s has no ftp host defined" html-site-current))))
 
+;;;###autoload
 (defun html-upl-remote-dired (dirname)
   "Start dired for remote directory or its parent/ancestor."
   (interactive (list
@@ -187,6 +191,7 @@ The tools for html-upl includes:
       (when to-parent
         (message "Remote dir not found, showing ancestor %s" to-parent)))))
 
+;;;###autoload
 (defun html-upl-upload-file (filename)
   "Upload a single file in a site.
 For the definition of a site see `html-site-current'."
@@ -227,9 +232,12 @@ For the definition of a site see `html-site-current'."
       (message "Upload ready")
       )))
 
+;;;###autoload
 (defun html-upl-edit-remote-file ()
   (interactive)
   (html-upl-edit-remote-file1 nil))
+
+;;;###autoload
 (defun html-upl-edit-remote-file-with-toc ()
   (interactive)
   (html-upl-edit-remote-file1 t))
@@ -251,6 +259,7 @@ For the definition of a site see `html-site-current'."
          )
     (find-file remote-file)))
 
+;;;###autoload
 (defun html-upl-ediff-file (filename)
   "Run ediff on local and remote file.
 FILENAME could be either the remote or the local file."

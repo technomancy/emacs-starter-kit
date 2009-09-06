@@ -396,6 +396,7 @@ See also
 ;; `ert-search-after'. Probably this means adding something more to
 ;; the returned result.
 
+(defvar ert-messages-mark)
 (defun ert-get-messages (regexp)
   "Search *Messages* buffer for regular expression REGEXP.
 This should be used within `ert-deftest'.  Search begins where
@@ -404,12 +405,13 @@ the buffer ended when test started.
 See also:
  `ert-get-warnings'
  `ert-search-after'"
-  (ert-search-after messages-mark regexp))
+  (ert-search-after ert-messages-mark regexp))
 
+(defvar ert-warnings-mark)
 (defun ert-get-warnings (regexp)
   "Search *Warnings* buffer for regular expression REGEXP.
 See `ert-get-messages' for more information."
-  (ert-search-after messages-mark regexp))
+  (ert-search-after ert-warnings-mark regexp))
 
 
 ;;; Test selectors.
@@ -672,8 +674,8 @@ silently or calls the interactive debugger, as appropriate."
                 ;; FIXME: Do we need to store the old binding of this
                 ;; and consider it in `ert-run-test-debugger'?
                 (debug-ignored-errors nil)
-                (messages-mark (ert-end-of-messages))
-                (warnings-mark (ert-end-of-warnings)))
+                (ert-messages-mark (ert-end-of-messages))
+                (ert-warnings-mark (ert-end-of-warnings)))
             (funcall (ert-test-body (ert-test-execution-info-test info))))))
       (ert-pass))
     (setf (ert-test-execution-info-result info) (make-ert-test-passed)))
@@ -1324,22 +1326,22 @@ Ensures a final newline is inserted."
 (defun ert-read-test-selector ()
   "Read a regexp for test selection from minibuffer.
 The user can use TAB to see which tests match."
-  (let ((all-tests
-         (mapcar (lambda (rec) (format "%s" (elt rec 1)))
-                 (ert-select-tests "" t))
-         ;;'("ert-group1-1" "ert-group1-2" "ert-other")
-         )
-        regexp
-        ret
-        (get-completions
-         (lambda ()
-           (let* ((ret (save-match-data
-                         (mapcar (lambda (alt)
-                                   (when (string-match regexp alt)
-                                     alt))
-                                 all-tests))))
-             (setq ret (delq nil ret))
-             ret))))
+  (let* ((all-tests
+          (mapcar (lambda (rec) (format "%s" (elt rec 1)))
+                  (ert-select-tests "" t))
+          ;;'("ert-group1-1" "ert-group1-2" "ert-other")
+          )
+         regexp
+         ret
+         (get-completions
+          (lambda ()
+            (let* ((ret (save-match-data
+                          (mapcar (lambda (alt)
+                                    (when (string-match regexp alt)
+                                      alt))
+                                  all-tests))))
+              (setq ret (delq nil ret))
+              ret))))
     (setq all-tests (append all-tests
                             '(":new"
                               ":failed" ":passed" ":error"
@@ -2397,18 +2399,19 @@ This is an inverse of `add-to-list'."
     (loop for x in '(0 1 2 3 4 5 6 t) do
           (ert-should (equal (c x) (lisp x))))))
 
-;; Run tests and make sure they actually ran.
-(let ((window-configuration (current-window-configuration)))
-  (let ((ert-test-body-was-run nil))
-    ;; The buffer name chosen here should not compete with the default
-    ;; results buffer name for completion in `switch-to-buffer'.
-    (let ((stats (ert-run-tests-interactively "^ert-" " *ert self-tests*")))
-      (assert ert-test-body-was-run)
-      (when (zerop (+ (ert-stats-passed-unexpected stats)
-                      (ert-stats-failed-unexpected stats)
-                      (ert-stats-error-unexpected stats)))
-        ;; Hide results window only when everything went well.
-        (set-window-configuration window-configuration)))))
+(defun ert-run-self-tests ()
+  ;; Run tests and make sure they actually ran.
+  (let ((window-configuration (current-window-configuration)))
+    (let ((ert-test-body-was-run nil))
+      ;; The buffer name chosen here should not compete with the default
+      ;; results buffer name for completion in `switch-to-buffer'.
+      (let ((stats (ert-run-tests-interactively "^ert-" " *ert self-tests*")))
+        (assert ert-test-body-was-run)
+        (when (zerop (+ (ert-stats-passed-unexpected stats)
+                        (ert-stats-failed-unexpected stats)
+                        (ert-stats-error-unexpected stats)))
+          ;; Hide results window only when everything went well.
+          (set-window-configuration window-configuration))))))
 
 (provide 'ert)
 

@@ -1,0 +1,10 @@
+The problem seems to have to do with the { block pagestyle } thing
+below. If that is removed then the freezing does not happen.
+
+        <style type="text/css">
+        	{ block pagestyle }
+	p {
+		margin: 0;
+
+Try the files kubica-080516-freezing-i.html and dito j. The former
+freezes Emacs, but the latter does not.

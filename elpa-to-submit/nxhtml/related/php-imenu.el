@@ -33,7 +33,7 @@
 ;;;--------------cut here-------------------------------------------
 ;   ;; Load the php-imenu index function
 ;   (autoload 'php-imenu-create-index "php-imenu" nil t)
-;   ;; Add the index creation function to the php-mode-hook 
+;   ;; Add the index creation function to the php-mode-hook
 ;   (add-hook 'php-mode-user-hook 'php-imenu-setup)
 ;   (defun php-imenu-setup ()
 ;     (setq imenu-create-index-function (function php-imenu-create-index))
@@ -57,6 +57,7 @@
 ;;;
 ;;; Code:
 
+(eval-when-compile (require 'cl))
 (require 'imenu)
 (require 'thingatpt)
 
@@ -78,13 +79,13 @@
             "\\([a-zA-Z0-9_[:space:]\n]*\\)" ; extends / implements clauses
             "[{]")
     (lambda ()
-      (message "%S %S" 
-               (match-string-no-properties 3) 
-               (match-string-no-properties 1)) 
-      (concat (match-string-no-properties 3) 
-              " - " 
+      (message "%S %S"
+               (match-string-no-properties 3)
+               (match-string-no-properties 1))
+      (concat (match-string-no-properties 3)
+              " - "
               (match-string-no-properties 1)))
-    (lambda () 
+    (lambda ()
       (save-excursion
         (backward-up-list 1)
         (forward-sexp)
@@ -121,26 +122,26 @@
       result)))
 
 (defun php-imenu-create-index-helper (min max name)
-  (let ((combined-pattern 
-         (concat "\\(" 
+  (let ((combined-pattern
+         (concat "\\("
                  (mapconcat
-                  (function (lambda (pat) (first pat))) 
-		  php-imenu-patterns "\\)\\|\\(") 
+                  (function (lambda (pat) (first pat)))
+		  php-imenu-patterns "\\)\\|\\(")
 		 "\\)"))
         (index-alist '()))
     (goto-char min)
-    (save-match-data 
+    (save-match-data
       (while (re-search-forward combined-pattern max t)
         (let ((pos (set-marker (make-marker) (match-beginning 0)))
               (min (match-end 0))
-              (pat (save-excursion 
+              (pat (save-excursion
                      (goto-char (match-beginning 0))
-                     (find-if (function 
+                     (find-if (function
                                (lambda (pat) (looking-at (first pat))))
                               php-imenu-patterns))))
           (when (not pat)
             (message "php-imenu: How can no pattern get us here! %S" pos))
-          (when (and pat 
+          (when (and pat
                       (not (php-imenu-in-string-p))
                      )
             (let* ((name (funcall (second pat)))
@@ -165,7 +166,7 @@
   (save-match-data
     (or (in-string-p)
         (let ((pt (point)))
-          (save-excursion 
+          (save-excursion
             (and (re-search-backward "<<<\\([A-Za-z0-9_]+\\)$" nil t)
                  (not (re-search-forward (concat "^"
                                                  (match-string-no-properties 1)

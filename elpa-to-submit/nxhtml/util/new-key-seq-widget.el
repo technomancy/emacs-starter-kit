@@ -19,6 +19,8 @@
 ;;  New version of Kim's Emacs key-sequence widget. For inclusion in
 ;;  Emacs I hope.
 ;;
+;;  Fix-me: check what was included.
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:

@@ -53,6 +53,8 @@
   (file-name-directory (if load-file-name load-file-name buffer-file-name)))
 
 (pushnew emacstest-bin load-path)
+
+
 (require 'ert2)
 
 

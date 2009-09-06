@@ -44,16 +44,14 @@
 ;;
 ;;; Code:
 
+(eval-when-compile (require 'cl))
 (require 'ert2)
 
 (defun nxhtmltest-mumamo-error-messages ()
-  (ert-get-messages "^MuMaMo error"))
+  (ert-get-messages "^MU:MuMaMo error"))
 
 (defun nxhtmltest-should-no-mumamo-errors ()
   (ert-should (not (nxhtmltest-mumamo-error-messages))))
-
-(defun nxhtmltest-mumamo-error-messages ()
-  (ert-get-messages "^MuMaMo error"))
 
 (defun nxhtmltest-should-no-nxml-errors ()
   (ert-should (not (ert-get-messages "Internal nXML mode error"))))
@@ -103,10 +101,14 @@
 
 (defun nxhtmltest-fontify-as-usual (seconds prompt-mark)
   (font-lock-mode 1)
-  (font-lock-wait (nxhtmltest-be-really-idle seconds prompt-mark)))
+  ;; This does not work now since I deleted the function below:
+  (error "font-lock-wait not defined")
+  ;;(font-lock-wait (nxhtmltest-be-really-idle seconds prompt-mark))
+  )
 
 (defun nxhtmltest-fontify-w-timers-handlers ()
-    (dolist (timer (copy-list timer-idle-list))
+    ;;(dolist (timer (copy-list timer-idle-list))
+    (dolist (timer (copy-sequence timer-idle-list))
       (timer-event-handler timer))
     (redisplay t))
 

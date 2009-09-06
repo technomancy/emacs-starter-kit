@@ -1,9 +1,9 @@
 ;;; smarty-mode.el --- major mode for editing Smarty templates
 
 ;; Author:       Vincent DEBOUT <deboutv@free.fr>
-;; Maintainer:  Vincent DEBOUT <deboutv@free.fr>
-;; Keywords:    languages smarty templates
-;; WWW:         http://deboutv.free.fr/lisp/smarty/
+;; Maintainer:	Vincent DEBOUT <deboutv@free.fr>
+;; Keywords:	languages smarty templates
+;; WWW:		http://deboutv.free.fr/lisp/smarty/
 
 ;;; License
 
@@ -21,107 +21,25 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
-;;; Commentary:
-
-;; 2.3 Installation
-;; ================
-;;
-;; 2.3.1 Installation
-;; ------------------
-;;
-;; To install Smarty Mode you need to choose an installation directory
-;; (for example `/usr/local/share/lisp' or `c:\lisp'). The administrator
-;; must have the write rights on this directory.
-;;
-;; With your favorite unzip software, unzip the archive in the
-;; installation directory.
-;;
-;; Example:
-;;      cd /usr/local/share/lisp
-;;      tar zxvf smarty-0.0.4.tar.gz
-;; Now you have a `smarty' directory in the installation directory. This
-;; directory contains 2 files `smarty-mode.el' and `smarty-mode.elc' and
-;; another directory `docs' containing the documentation.
-;;
-;; You need to configure XEmacs. open you initialization file `init.el'
-;; (open the file or start XEmacs then choose the Options menu and Edit
-;; Init File). Add the following lines (the installation directory in
-;; this example is `/usr/local/share/lisp') :
-;;
-;;      (setq load-path
-;;            (append (list \"/usr/local/share/lisp/\") load-path))
-;;      (autoload 'smarty-mode \"smarty-mode\" \"Smarty Mode\" t)
-;;
-;; 2.3.2 Update
-;; ------------
-;;
-;; The update is easy. You need to unzip the archive in the installation
-;; directory to remove the old release.
-;;
-;; Example:
-;;      cd /usr/local/share/lisp
-;;      rm -rf smarty
-;;      tar zxvf smarty-0.0.4.tar.gz
-;;
-;; 2.4 Invoke Smarty-Mode
-;; ======================
-;;
-;; You have two possibilities to invoke the Smarty Mode.
-;;
-;;    - Manually: At each file opening you need to launch Smarty Mode
-;;      with the following command:
-;;
-;;      `M-x smarty-mode'
-;;
-;;    - Automatically: Add the following linesin your initialization
-;;      file `init.el' :
-;;
-;;           (setq auto-mode-alist
-;;                 (append
-;;                  '((\"\\.tpl$\" . smarty-mode))
-;;               auto-mode-alist))
-
-
-;;; History
-
-;; $Log: smarty-mode.el,v $
-
-;; Beta version 2008/01/16 Lennart Borgman
-;; - Changed to work with Viper
-;; - Changed to allow (expand-abbrev) to be called anywhere.
-;; - Moved the installation instructions to the beginning of the file.
-;; - Checked before insertion of { if it it feasable.
-;; - Initialized smarty-template-map the standard way
-
-;; Revision 1.6  2006/12/16 19:54:26  vincent
-;; Update release version
-;;
-;; Revision 1.5  2006/12/16 19:53:00  vincent
-;; Fix bug #15
-;;
-;; Revision 1.4  2006/12/16 14:59:46  vincent
-;; Fix bugs for release
-;;
-;; Revision 1.3  2006/11/19 12:29:53  vincent
-;; Fix highlight bug, add templates
-;;
-;; Revision 1.2  2006/11/12 11:44:18  vincent
-;; First release commit
-;;
-
-(defconst smarty-version "0.0.4"
+(defconst smarty-version "0.0.5"
   "Smarty Mode version number.")
 
-(defconst smarty-time-stamp "2006-12-16"
+(defconst smarty-time-stamp "2007-11-01"
   "Smarty Mode time stamp for last update.")
 
+(defconst smarty-is-xemacs (string-match "XEmacs" emacs-version)
+  "Non-nil if XEmacs is used.")
+
 (require 'font-lock)
-(require 'cc-mode)
-(require 'custom)
-(require 'etags)
+(when (not smarty-is-xemacs)
+  (require 'cc-mode)
+  (require 'custom)
+  (require 'etags))
 (eval-when-compile
-(require 'regexp-opt))
+  (require 'regexp-opt))
+(when smarty-is-xemacs
+  (require 'easymenu)
+  (require 'hippie-exp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customization
@@ -311,25 +229,25 @@ Otherwise, case is ignored."
 elements > `smarty-menu-max-size'."
   (if (> (length list) smarty-menu-max-size)
       (let ((remain list)
-            (result '())
-            (sublist '())
-            (menuno 1)
-            (i 0))
-        (while remain
-          (setq sublist (cons (car remain) sublist))
-          (setq remain (cdr remain))
-          (setq i (+ i 1))
-          (if (= i smarty-menu-max-size)
-              (progn
-                (setq result (cons (cons (format "%s %s" title menuno)
-                                         (nreverse sublist)) result))
-                (setq i 0)
-                (setq menuno (+ menuno 1))
-                (setq sublist '()))))
-        (and sublist
-             (setq result (cons (cons (format "%s %s" title menuno)
-                                      (nreverse sublist)) result)))
-        (nreverse result))
+	    (result '())
+	    (sublist '())
+	    (menuno 1)
+	    (i 0))
+	(while remain
+	  (setq sublist (cons (car remain) sublist))
+	  (setq remain (cdr remain))
+	  (setq i (+ i 1))
+	  (if (= i smarty-menu-max-size)
+	      (progn
+		(setq result (cons (cons (format "%s %s" title menuno)
+					 (nreverse sublist)) result))
+		(setq i 0)
+		(setq menuno (+ menuno 1))
+		(setq sublist '()))))
+	(and sublist
+	     (setq result (cons (cons (format "%s %s" title menuno)
+				      (nreverse sublist)) result)))
+	(nreverse result))
     list))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,15 +263,15 @@ The directory of the current source file is scanned."
   (interactive)
   (message "Scanning directory for source files ...")
   (let ((newmap (current-local-map))
-        (file-list (smarty-get-source-files))
-        menu-list found)
+	(file-list (smarty-get-source-files))
+	menu-list found)
     ;; Create list for menu
     (setq found nil)
     (while file-list
       (setq found t)
       (setq menu-list (cons (vector (car file-list)
-                                   (list 'find-file (car file-list)) t)
-                           menu-list))
+				   (list 'find-file (car file-list)) t)
+			   menu-list))
       (setq file-list (cdr file-list)))
     (setq menu-list (smarty-menu-split menu-list "Sources"))
     (when found (setq menu-list (cons "--" menu-list)))
@@ -362,7 +280,7 @@ The directory of the current source file is scanned."
     ;; Create menu
     (easy-menu-add menu-list)
     (easy-menu-define smarty-sources-menu newmap
-                      "Smarty source files menu" menu-list))
+		      "Smarty source files menu" menu-list))
   (message ""))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -433,6 +351,12 @@ The directory of the current source file is scanned."
       ["upper" smarty-template-upper t]
       ["wordwrap" smarty-template-wordwrap t])
      ("Plugins (Functions)"
+      ("BlockRepeatPlugin"
+       ["repeat" smarty-template-repeat t]
+       ["str_repeat" smarty-template-str-repeat t])
+      ("ClipCache"
+       ["clipcache" smarty-template-clipcache t]
+       ["include_clipcache" smarty-template-include-clipcache t])
       ("SmartyFormtool"
        ["formtool_checkall" smarty-template-formtool-checkall t]
        ["formtool_copy" smarty-template-formtool-copy t]
@@ -468,7 +392,7 @@ The directory of the current source file is scanned."
      ["Insert Date" smarty-template-insert-date t]
      ["Modify Date" smarty-template-modify t])
     "--"
-    ["Show Messages" smarty-show-messages]
+    ["Show Messages" smarty-show-messages :keys "C-c M-m"]
     ["Smarty Mode Documentation" smarty-doc-mode :keys "C-c C-h"]
     ["Version" smarty-version :keys "C-c C-v"]
     "--"
@@ -476,48 +400,48 @@ The directory of the current source file is scanned."
      ("Mode"
       ["Electric Mode"
        (progn (customize-set-variable 'smarty-electric-mode
-                                      (not smarty-electric-mode))
-              (smarty-mode-line-update))
+				      (not smarty-electric-mode))
+	      (smarty-mode-line-update))
        :style toggle :selected smarty-electric-mode :keys "C-c C-m C-e"]
       ["Stutter Mode"
        (progn (customize-set-variable 'smarty-stutter-mode
-                                      (not smarty-stutter-mode))
-              (smarty-mode-line-update))
+				      (not smarty-stutter-mode))
+	      (smarty-mode-line-update))
        :style toggle :selected smarty-stutter-mode :keys "C-c C-m C-s"]
       "--"
       ["Customize Group..." (customize-group 'smarty-mode) t])
      ("Menu"
       ["Source Menu"
        (customize-set-variable 'smarty-source-file-menu
-                               (not smarty-source-file-menu))
+			       (not smarty-source-file-menu))
        :style toggle :selected smarty-source-file-menu]
       "--"
       ["Customize Group..." (customize-group 'smarty-menu) t])
      ("Highlight"
       ["Highlight plugin functions"
        (progn (customize-set-variable 'smarty-highlight-plugin-functions
-                                      (not smarty-highlight-plugin-functions)))
+				      (not smarty-highlight-plugin-functions)))
        :style toggle :selected smarty-highlight-plugin-functions]
       "--"
       ["Customize Group..." (customize-group 'smarty-highlight) t])
      ("Template"
       ("Header"
        ["Header template..."
-        (customize-option 'smarty-file-header) t]
+	(customize-option 'smarty-file-header) t]
        ["Footer template..."
-        (customize-option 'smarty-file-footer) t]
+	(customize-option 'smarty-file-footer) t]
        ["Company..."
-        (customize-option 'smarty-company-name) t]
+	(customize-option 'smarty-company-name) t]
        ["Copyright..."
-        (customize-option 'smarty-copyright-string) t]
+	(customize-option 'smarty-copyright-string) t]
        ["Date format..."
-        (customize-option 'smarty-date-format) t]
+	(customize-option 'smarty-date-format) t]
        ["Modify date prefix..."
-        (customize-option 'smarty-modify-date-prefix-string) t]
+	(customize-option 'smarty-modify-date-prefix-string) t]
        ["Modify date on saving"
-        (customize-set-variable 'smarty-modify-date-on-saving
-                                (not smarty-modify-date-on-saving))
-        :style toggle :selected smarty-modify-date-on-saving]
+	(customize-set-variable 'smarty-modify-date-on-saving
+				(not smarty-modify-date-on-saving))
+	:style toggle :selected smarty-modify-date-on-saving]
        "--"
        ["Customize Group..." (customize-group 'smarty-header) t])
       "--"
@@ -529,17 +453,17 @@ The directory of the current source file is scanned."
        (customize-option 'smarty-right-delimiter) t]
       ["Use Intelligent Tab"
        (progn (customize-set-variable 'smarty-intelligent-tab
-                                      (not smarty-intelligent-tab))
-              (smarty-activate-customizations))
+				      (not smarty-intelligent-tab))
+	      (smarty-activate-customizations))
        :style toggle :selected smarty-intelligent-tab]
       ["Word Completion in Minibuffer"
        (progn (customize-set-variable 'smarty-word-completion-in-minibuffer
-                                      (not smarty-word-completion-in-minibuffer))
-              (message "Activate new setting by saving options and restarting Emacs"))
+				      (not smarty-word-completion-in-minibuffer))
+	      (message "Activate new setting by saving options and restarting Emacs"))
        :style toggle :selected smarty-word-completion-in-minibuffer]
       ["Completion is case sensitive"
        (customize-set-variable 'smarty-word-completion-case-sensitive
-                               (not smarty-word-completion-case-sensitive))
+			       (not smarty-word-completion-case-sensitive))
        :style toggle :selected smarty-word-completion-case-sensitive]
       "--"
       ["Customize Group..." (customize-group 'smarty-misc) t])
@@ -561,7 +485,7 @@ The directory of the current source file is scanned."
   (setq smarty-mode-menu-list (smarty-create-mode-menu))
   (easy-menu-add smarty-mode-menu-list)
   (easy-menu-define smarty-mode-menu smarty-mode-map
-                    "Menu keymap for Smarty Mode." smarty-mode-menu-list))
+		    "Menu keymap for Smarty Mode." smarty-mode-menu-list))
 
 
 
@@ -575,7 +499,7 @@ The directory of the current source file is scanned."
   "Regexp for Smarty functions.")
 
 (defconst smarty-01-functions
-  '("capture" "config_load" "foreach" "foreachelse" "include"
+  '("capture" "config_load" "foreach" "foreachelse" "include" 
     "include_php" "insert" "if" "elseif" "else" "ldelim" "rdelim"
     "literal" "php" "section" "sectionelse" "strip" "assign" "counter"
     "cycle" "debug" "eval" "fetch" "html_checkboxes" "html_image"
@@ -608,8 +532,9 @@ The directory of the current source file is scanned."
     "formtool_init" "formtool_move" "formtool_moveall"
     "formtool_movedown" "formtool_moveup" "formtool_remove"
     "formtool_rename" "formtool_save" "formtool_selectall"
-    "paginate_first" "paginate_last" "paginate_middle"
-    "paginate_next" "paginate_prev")
+    "paginate_first" "paginate_last" "paginate_middle" 
+    "paginate_next" "paginate_prev" "clipcache" "include_clipcache"
+    "repeat" "str_repeat")
   "Smarty plugins functions.")
 
 (defvar smarty-plugins-modifiers nil
@@ -624,11 +549,11 @@ The directory of the current source file is scanned."
 
 (defconst smarty-constants
   (eval-when-compile
-        (regexp-opt
-         '("TRUE" "FALSE" "NULL") t))
+	(regexp-opt
+	 '("TRUE" "FALSE" "NULL") t))
   "Smarty constants.")
-
-
+	   
+	
 ;; Syntax table creation
 (defvar smarty-mode-syntax-table nil
   "Syntax table for smarty-mode.")
@@ -640,7 +565,7 @@ The directory of the current source file is scanned."
   (if smarty-mode-syntax-table
       ()
     (setq smarty-mode-syntax-table (make-syntax-table))
-
+    
     ;; Make | a punctuation character
     (modify-syntax-entry ?| "." smarty-mode-syntax-table)
     ;; Make " a punctuation character so highlighing works withing html strings
@@ -675,17 +600,17 @@ message."
 (defun smarty-get-source-files (&optional full directory)
   "Get list of SMARTY source files in DIRECTORY or current directory."
   (let ((mode-alist auto-mode-alist)
-        filename-regexp)
+	filename-regexp)
     ;; create regular expressions for matching file names
     (setq filename-regexp "\\`[^.].*\\(")
     (while mode-alist
       (when (eq (cdar mode-alist) 'smarty-mode)
-        (setq filename-regexp
-              (concat filename-regexp (caar mode-alist) "\\|")))
+	(setq filename-regexp
+	      (concat filename-regexp (caar mode-alist) "\\|")))
       (setq mode-alist (cdr mode-alist)))
     (setq filename-regexp
-          (concat (substring filename-regexp 0
-                             (string-match "\\\\|$" filename-regexp)) "\\)"))
+	  (concat (substring filename-regexp 0
+			     (string-match "\\\\|$" filename-regexp)) "\\)"))
     ;; find files
     (smarty-directory-files
      (or directory default-directory) full filename-regexp)))
@@ -707,11 +632,12 @@ message."
 
 (defun smarty-warning-when-idle (&rest args)
   "Wait until idle, then print out warning STRING and beep."
-  (if noninteractive
-      (smarty-warning (apply 'format args) t)
-    (unless smarty-warnings
-      (smarty-run-when-idle .1 nil 'smarty-print-warnings))
-    (setq smarty-warnings (cons (apply 'format args) smarty-warnings))))
+  (save-match-data ;; runs in timer
+    (if noninteractive
+        (smarty-warning (apply 'format args) t)
+      (unless smarty-warnings
+        (smarty-run-when-idle .1 nil 'smarty-print-warnings))
+      (setq smarty-warnings (cons (apply 'format args) smarty-warnings)))))
 
 (defun smarty-warning (string &optional nobeep)
   "Print out warning STRING and beep."
@@ -751,21 +677,21 @@ Ignore byte-compiler warnings you might see."
   "Enable case insensitive search and switch to syntax table that includes '_',
 then execute BODY, and finally restore the old environment.  Used for
 consistent searching."
-  `(let ((case-fold-search t)           ; case insensitive search
-         (current-syntax-table (syntax-table))
-         result
-         (restore-prog                  ; program to restore enviroment
-          '(progn
-             ;; restore syntax table
-             (set-syntax-table current-syntax-table))))
+  `(let ((case-fold-search t)		; case insensitive search
+	 (current-syntax-table (syntax-table))
+	 result
+	 (restore-prog			; program to restore enviroment
+	  '(progn
+	     ;; restore syntax table
+	     (set-syntax-table current-syntax-table))))
      ;; use extended syntax table
      (set-syntax-table smarty-mode-ext-syntax-table)
      ;; execute BODY safely
      (setq result
-           (condition-case info
-               (progn ,@body)
-             (error (eval restore-prog) ; restore environment on error
-                    (error (cadr info))))) ; pass error up
+	   (condition-case info
+	       (progn ,@body)
+	     (error (eval restore-prog)	; restore environment on error
+		    (error (cadr info))))) ; pass error up
      ;; restore environment
      (eval restore-prog)
      result))
@@ -774,39 +700,39 @@ consistent searching."
   "Enable case insensitive search, switch to syntax table that includes '_',
 and remove `intangible' overlays, then execute BODY, and finally restore the
 old environment.  Used for consistent searching."
-  `(let ((case-fold-search t)           ; case insensitive search
-         (current-syntax-table (syntax-table))
-         result overlay-all-list overlay-intangible-list overlay
-         (restore-prog                  ; program to restore enviroment
-          '(progn
-             ;; restore syntax table
-             (set-syntax-table current-syntax-table)
-             ;; restore `intangible' overlays
-             (when (fboundp 'overlay-lists)
-               (while overlay-intangible-list
-                 (overlay-put (car overlay-intangible-list) 'intangible t)
-                 (setq overlay-intangible-list
-                       (cdr overlay-intangible-list)))))))
+  `(let ((case-fold-search t)		; case insensitive search
+	 (current-syntax-table (syntax-table))
+	 result overlay-all-list overlay-intangible-list overlay
+	 (restore-prog			; program to restore enviroment
+	  '(progn
+	     ;; restore syntax table
+	     (set-syntax-table current-syntax-table)
+	     ;; restore `intangible' overlays
+	     (when (fboundp 'overlay-lists)
+	       (while overlay-intangible-list
+		 (overlay-put (car overlay-intangible-list) 'intangible t)
+		 (setq overlay-intangible-list
+		       (cdr overlay-intangible-list)))))))
      ;; use extended syntax table
      (set-syntax-table smarty-mode-ext-syntax-table)
      ;; remove `intangible' overlays
      (when (fboundp 'overlay-lists)
        (setq overlay-all-list (overlay-lists))
        (setq overlay-all-list
-             (append (car overlay-all-list) (cdr overlay-all-list)))
+	     (append (car overlay-all-list) (cdr overlay-all-list)))
        (while overlay-all-list
-         (setq overlay (car overlay-all-list))
-         (when (memq 'intangible (overlay-properties overlay))
-           (setq overlay-intangible-list
-                 (cons overlay overlay-intangible-list))
-           (overlay-put overlay 'intangible nil))
-         (setq overlay-all-list (cdr overlay-all-list))))
+	 (setq overlay (car overlay-all-list))
+	 (when (memq 'intangible (overlay-properties overlay))
+	   (setq overlay-intangible-list
+		 (cons overlay overlay-intangible-list))
+	   (overlay-put overlay 'intangible nil))
+	 (setq overlay-all-list (cdr overlay-all-list))))
      ;; execute BODY safely
      (setq result
-           (condition-case info
-               (progn ,@body)
-             (error (eval restore-prog) ; restore environment on error
-                    (error (cadr info))))) ; pass error up
+	   (condition-case info
+	       (progn ,@body)
+	     (error (eval restore-prog)	; restore environment on error
+		    (error (cadr info))))) ; pass error up
      ;; restore environment
      (eval restore-prog)
      result))
@@ -817,9 +743,9 @@ old environment.  Used for consistent searching."
 (defun smarty-mode-line-update ()
   "Update the modeline string for Smarty major mode."
   (setq mode-name (concat "Smarty"
-                          (and (or smarty-electric-mode smarty-stutter-mode) "/")
-                          (and smarty-electric-mode "e")
-                          (and smarty-stutter-mode "s")))
+			  (and (or smarty-electric-mode smarty-stutter-mode) "/")
+			  (and smarty-electric-mode "e")
+			  (and smarty-stutter-mode "s")))
   (force-mode-line-update t))
 
 (defun smarty-electric-mode (arg)
@@ -827,8 +753,8 @@ old environment.  Used for consistent searching."
 Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
   (interactive "P")
   (setq smarty-electric-mode
-        (cond ((or (not arg) (zerop arg)) (not smarty-electric-mode))
-              ((> arg 0) t) (t nil)))
+	(cond ((or (not arg) (zerop arg)) (not smarty-electric-mode))
+	      ((> arg 0) t) (t nil)))
   (smarty-mode-line-update))
 
 (defun smarty-stutter-mode (arg)
@@ -836,8 +762,8 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
 Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
   (interactive "P")
   (setq smarty-stutter-mode
-        (cond ((or (not arg) (zerop arg)) (not smarty-stutter-mode))
-              ((> arg 0) t) (t nil)))
+	(cond ((or (not arg) (zerop arg)) (not smarty-stutter-mode))
+	      ((> arg 0) t) (t nil)))
   (smarty-mode-line-update))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -848,7 +774,7 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
   "Determine if point is in a Smarty literal."
   (save-excursion
     (let ((here (point))
-          start state)
+	  start state)
       (beginning-of-line)
       (setq start (point))
       (goto-char here)
@@ -864,8 +790,8 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
     (save-excursion
       (setq found (re-search-backward (regexp-quote (concat smarty-left-delimiter "*")) nil t))
       (when found
-        (setq result (re-search-forward (regexp-quote (concat "*" smarty-right-delimiter)) here t))
-        (setq result (not result))))
+	(setq result (re-search-forward (regexp-quote (concat "*" smarty-right-delimiter)) here t))
+	(setq result (not result))))
     result))
 
 (defun smarty-after-ldelim ()
@@ -877,8 +803,8 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
       (setq ldelim-point (point-marker))
       (goto-char here)
       (if (and (= here ldelim-point) ldelim-found)
-          t
-        nil))))
+	  t
+	nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Words to expand
@@ -901,11 +827,11 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
 
 (defun smarty-abbrev-list-init ()
   (setq smarty-abbrev-list
-        (append
-         (list nil) smarty-functions
-         (list nil) smarty-modifiers
-         (list nil) smarty-plugins-functions
-         (list nil) smarty-plugins-modifiers)))
+	(append
+	 (list nil) smarty-functions
+	 (list nil) smarty-modifiers
+	 (list nil) smarty-plugins-functions
+	 (list nil) smarty-plugins-modifiers)))
 
 (defvar smarty-expand-upper-case nil)
 
@@ -914,30 +840,30 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
   (unless old
     (he-init-string (he-dabbrev-beg) (point))
     (setq he-expand-list
-          (let ((abbrev-list smarty-abbrev-list)
-                (sel-abbrev-list '()))
-            (while abbrev-list
-           ;   (if (stringp (car abbrev-list))
-                ;  (insert (concat " " (car abbrev-list))))
-              (when (or (not (stringp (car abbrev-list)))
-                        (string-match
-                         (concat "^" he-search-string) (car abbrev-list)))
-                (setq sel-abbrev-list
-                      (cons (car abbrev-list) sel-abbrev-list)))
-              (setq abbrev-list (cdr abbrev-list)))
-            (nreverse sel-abbrev-list))))
+	  (let ((abbrev-list smarty-abbrev-list)
+		(sel-abbrev-list '()))
+	    (while abbrev-list
+	   ;   (if (stringp (car abbrev-list))
+		;  (insert (concat " " (car abbrev-list))))
+	      (when (or (not (stringp (car abbrev-list)))
+			(string-match
+			 (concat "^" he-search-string) (car abbrev-list)))
+		(setq sel-abbrev-list
+		      (cons (car abbrev-list) sel-abbrev-list)))
+	      (setq abbrev-list (cdr abbrev-list)))
+	    (nreverse sel-abbrev-list))))
   (while (and he-expand-list
-              (or (not (stringp (car he-expand-list)))
-                  (he-string-member (car he-expand-list) he-tried-table t)))
+	      (or (not (stringp (car he-expand-list)))
+		  (he-string-member (car he-expand-list) he-tried-table t)))
     (unless (stringp (car he-expand-list))
       (setq smarty-expand-upper-case (car he-expand-list)))
     (setq he-expand-list (cdr he-expand-list)))
   (if (null he-expand-list)
       (progn (when old (he-reset-string))
-             nil)
+	     nil)
     (he-substitute-string
      (if smarty-expand-upper-case
-         (upcase (car he-expand-list))
+	 (upcase (car he-expand-list))
        (car he-expand-list))
      t)
     (setq he-expand-list (cdr he-expand-list))
@@ -949,15 +875,15 @@ Turn on if ARG positive, turn off if ARG negative, toggle if ARG zero or nil."
 ;; function for expanding abbrevs and dabbrevs
 (defun smarty-expand-abbrev (arg))
 (fset 'smarty-expand-abbrev (make-hippie-expand-function
-                           '(try-expand-dabbrev
-                             try-expand-dabbrev-all-buffers
-                             smarty-try-expand-abbrev)))
+			   '(try-expand-dabbrev
+			     try-expand-dabbrev-all-buffers
+			     smarty-try-expand-abbrev)))
 
 ;; function for expanding parenthesis
 (defun smarty-expand-paren (arg))
 (fset 'smarty-expand-paren (make-hippie-expand-function
-                          '(try-expand-list
-                            try-expand-list-all-buffers)))
+			  '(try-expand-list
+			    try-expand-list-all-buffers)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Stuttering
@@ -975,16 +901,16 @@ else indent `correctly'."
     ;; expand word
     ((= (char-syntax (preceding-char)) ?w)
      (let ((case-fold-search (not smarty-word-completion-case-sensitive))
-           (case-replace nil)
-           (hippie-expand-only-buffers
-            (or (and (boundp 'hippie-expand-only-buffers)
-                     hippie-expand-only-buffers)
-                '(smarty-mode))))
+	   (case-replace nil)
+	   (hippie-expand-only-buffers
+	    (or (and (boundp 'hippie-expand-only-buffers)
+		     hippie-expand-only-buffers)
+		'(smarty-mode))))
        (smarty-expand-abbrev prefix-arg)))
     ;; expand parenthesis
     ((or (= (preceding-char) ?\() (= (preceding-char) ?\)))
      (let ((case-fold-search (not smarty-word-completion-case-sensitive))
-           (case-replace nil))
+	   (case-replace nil))
        (smarty-expand-paren prefix-arg))))
    (setq this-command 'smarty-electric-tab)))
 
@@ -992,7 +918,7 @@ else indent `correctly'."
   "Expand abbreviations and self-insert space(s)."
   (interactive "p")
   (let ((here (point-marker)) ldelim-found ldelim-point rdelim-found rdelim-point
-        delete-a)
+	delete-a)
     (setq ldelim-found (re-search-backward (regexp-quote smarty-left-delimiter) nil t))
     (re-search-forward (regexp-quote smarty-left-delimiter) here t)
     (setq ldelim-point (point-marker))
@@ -1002,93 +928,93 @@ else indent `correctly'."
     (setq rdelim-point (point-marker))
     (goto-char here)
   (cond ((and (= here ldelim-point) ldelim-found) (insert (concat "ldelim" smarty-right-delimiter)))
-        ((and (= here rdelim-point) rdelim-found)
-         (re-search-backward (regexp-quote (concat " " smarty-right-delimiter)) nil t)
-         (delete-char 1)
-         (insert (concat " " smarty-left-delimiter "rdelim"))
-         (goto-char here))
-        ((smarty-in-comment-p)
-         (self-insert-command count)
-         (cond ((>= (current-column) (+ 2 end-comment-column))
-                (backward-char 1)
-                (skip-chars-backward "^ \t\n")
-                (indent-new-comment-line)
-                (skip-chars-forward "^ \t\n")
-                (forward-char 1))
-               ((>= (current-column) end-comment-column)
-                (indent-new-comment-line))
-               (t nil)))
-        ((or (and (>= (preceding-char) ?a) (<= (preceding-char) ?z))
-             (and (>= (preceding-char) ?A) (<= (preceding-char) ?Z))
-             (and (>= (preceding-char) ?0) (<= (preceding-char) ?9)))
-         (progn
-           (setq here (point-marker))
-           (insert " ")
-           (setq delete-a t)
-           (if (re-search-backward "|" nil t)
-               (progn
-                 (setq found (re-search-forward (regexp-quote "B2Smilies") here t))
-                 (if (and found (= here (point-marker)))
-                     (replace-match "btosmilies")
-                   (setq found (re-search-forward (regexp-quote "bbcode2html") here t))
-                   (if (and found (= here (point-marker)))
-                       (replace-match "bbcodetohtml")
-                     (setq found (re-search-forward (regexp-quote "date_format2") here t))
-                     (if (and found (= here (point-marker)))
-                         (replace-match "date_formatto")
-                       (goto-char here)
-                       (setq delete-a nil)
-                       (delete-char 1)))))
-             (goto-char here)
-             (setq delete-a nil)
-             (delete-char 1)))
-         (smarty-prepare-search-1 (expand-abbrev))
-         (self-insert-command count)
-         (if (and delete-a (looking-at " "))
-             (delete-char 1)))
-        (t (self-insert-command count)))))
+	((and (= here rdelim-point) rdelim-found) 
+	 (re-search-backward (regexp-quote (concat " " smarty-right-delimiter)) nil t)
+	 (delete-char 1)
+	 (insert (concat " " smarty-left-delimiter "rdelim"))
+	 (goto-char here))
+	((smarty-in-comment-p)
+	 (self-insert-command count)
+	 (cond ((>= (current-column) (+ 2 end-comment-column))
+		(backward-char 1)
+		(skip-chars-backward "^ \t\n")
+		(indent-new-comment-line)
+		(skip-chars-forward "^ \t\n")
+		(forward-char 1))
+	       ((>= (current-column) end-comment-column)
+		(indent-new-comment-line))
+	       (t nil)))
+	((or (and (>= (preceding-char) ?a) (<= (preceding-char) ?z))
+	     (and (>= (preceding-char) ?A) (<= (preceding-char) ?Z))
+	     (and (>= (preceding-char) ?0) (<= (preceding-char) ?9)))
+	 (progn 
+	   (setq here (point-marker))
+	   (insert " ")
+	   (setq delete-a t)
+	   (if (re-search-backward "|" nil t)
+	       (progn 
+		 (setq found (re-search-forward (regexp-quote "B2Smilies") here t))
+		 (if (and found (= here (point-marker)))
+		     (replace-match "btosmilies")
+		   (setq found (re-search-forward (regexp-quote "bbcode2html") here t))
+		   (if (and found (= here (point-marker)))
+		       (replace-match "bbcodetohtml")
+		     (setq found (re-search-forward (regexp-quote "date_format2") here t))
+		     (if (and found (= here (point-marker)))
+			 (replace-match "date_formatto")
+		       (goto-char here)
+		       (setq delete-a nil)
+		       (delete-char 1)))))
+	     (goto-char here)
+	     (setq delete-a nil)
+	     (delete-char 1)))
+	 (smarty-prepare-search-1 (expand-abbrev))
+	 (self-insert-command count)
+	 (if (and delete-a (looking-at " "))
+	     (delete-char 1)))
+	(t (self-insert-command count)))))
 
-(defun smarty-electric-open-bracket (count)
+(defun smarty-electric-open-bracket (count) 
   "'(' --> '(', '((' --> '[', '[(' --> '{'"
   (interactive "p")
   (if (and smarty-stutter-mode (= count 1) (not (smarty-in-literal)))
       (if (= (preceding-char) ?\()
-          (progn (delete-char -1) (insert-char ?\[ 1))
-        (if (= (preceding-char) ?\[)
-            (progn (delete-char -1) (insert-char ?\{ 1))
-          (insert-char ?\( 1)))
+	  (progn (delete-char -1) (insert-char ?\[ 1))
+	(if (= (preceding-char) ?\[)
+	    (progn (delete-char -1) (insert-char ?\{ 1))
+	  (insert-char ?\( 1)))
     (self-insert-command count)))
 
-(defun smarty-electric-close-bracket (count)
+(defun smarty-electric-close-bracket (count) 
   "')' --> ')', '))' --> ']', '])' --> '}'"
   (interactive "p")
   (if (and smarty-stutter-mode (= count 1) (not (smarty-in-literal)))
       (progn
-        (if (= (preceding-char) ?\))
-            (progn (delete-char -1) (insert-char ?\] 1))
-          (if (= (preceding-char) ?\])
-              (progn (delete-char -1) (insert-char ?} 1))
-            (insert-char ?\) 1)))
-        (blink-matching-open))
+	(if (= (preceding-char) ?\))
+	    (progn (delete-char -1) (insert-char ?\] 1))
+	  (if (= (preceding-char) ?\])
+	      (progn (delete-char -1) (insert-char ?} 1))
+	    (insert-char ?\) 1)))
+	(blink-matching-open))
     (self-insert-command count)))
 
-(defun smarty-electric-star (count)
+(defun smarty-electric-star (count) 
   "After a left delimiter add a right delemiter to close the comment"
   (interactive "p")
   (let ((here (point-marker)) found)
     (if (and smarty-stutter-mode (= count 1) (not (smarty-in-literal)))
-        (progn
-          (setq found (re-search-backward (regexp-quote smarty-left-delimiter) nil t))
-          (re-search-forward (regexp-quote smarty-left-delimiter) here t)
-          (if (not (and (= here (point-marker)) found))
-              (progn (goto-char here)
-                     (self-insert-command count))
-            (self-insert-command count)
-            (insert " ")
-            (setq here (point-marker))
-            (insert " *")
-            (insert smarty-right-delimiter)
-            (goto-char here)))
+	(progn
+	  (setq found (re-search-backward (regexp-quote smarty-left-delimiter) nil t))
+	  (re-search-forward (regexp-quote smarty-left-delimiter) here t)
+	  (if (not (and (= here (point-marker)) found))
+	      (progn (goto-char here)
+		     (self-insert-command count))
+	    (self-insert-command count)
+	    (insert " ")
+	    (setq here (point-marker))
+	    (insert " *")
+	    (insert smarty-right-delimiter)
+	    (goto-char here)))
       (self-insert-command count))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1110,16 +1036,16 @@ else insert tab (used for word completion in Smarty minibuffer)."
    ;; expand word
    ((= (char-syntax (preceding-char)) ?w)
     (let ((case-fold-search (not smarty-word-completion-case-sensitive))
-          (case-replace nil)
-          (hippie-expand-only-buffers
-           (or (and (boundp 'hippie-expand-only-buffers)
-                    hippie-expand-only-buffers)
-               '(smarty-mode))))
+	  (case-replace nil)
+	  (hippie-expand-only-buffers
+	   (or (and (boundp 'hippie-expand-only-buffers)
+		    hippie-expand-only-buffers)
+	       '(smarty-mode))))
       (smarty-expand-abbrev prefix-arg)))
    ;; expand parenthesis
    ((or (= (preceding-char) ?\() (= (preceding-char) ?\)))
     (let ((case-fold-search (not smarty-word-completion-case-sensitive))
-          (case-replace nil))
+	  (case-replace nil))
       (smarty-expand-paren prefix-arg)))
    ;; insert tab
    (t (insert-tab))))
@@ -1133,7 +1059,7 @@ else insert tab (used for word completion in Smarty minibuffer)."
 ;; Abbrev ook bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst smarty-mode-abbrev-table nil
+(defvar smarty-mode-abbrev-table nil
   "Abbrev table to use in `smarty-mode' buffers.")
 
 (defun smarty-mode-abbrev-table-init ()
@@ -1141,86 +1067,88 @@ else insert tab (used for word completion in Smarty minibuffer)."
   (when smarty-mode-abbrev-table (clear-abbrev-table smarty-mode-abbrev-table))
   (define-abbrev-table 'smarty-mode-abbrev-table
     (append
-     ;; I changed the second element of the records below to be same
-     ;; as first instead of "". Using "" gives strange behaviour when
-     ;; (expand-abbrev) is called and point is after a space.
-     '(("capture" "capture" smarty-template-capture-hook 0)
-       ("config_load" "config_load" smarty-template-config-load-hook 0)
-       ("else" "else" smarty-template-else-hook 0)
-       ("elseif" "elseif" smarty-template-elseif-hook 0)
-       ("foreach" "foreach" smarty-template-foreach-hook 0)
-       ("foreachelse" "foreachelse" smarty-template-foreachelse-hook 0)
-       ("if" "if" smarty-template-if-hook 0)
-       ("include" "include" smarty-template-include-hook 0)
-       ("include_php" "include_php" smarty-template-include-php-hook 0)
-       ("insert" "insert" smarty-template-insert-hook 0)
-       ("ldelim" "ldelim" smarty-template-ldelim-hook 0)
-       ("literal" "literal" smarty-template-literal-hook 0)
-       ("php" "php" smarty-template-php-hook 0)
-       ("rdelim" "rdelim" smarty-template-rdelim-hook 0)
-       ("section" "section" smarty-template-section-hook 0)
-       ("sectionelse" "sectionelse" smarty-template-sectionelse-hook 0)
-       ("strip" "strip" smarty-template-strip-hook 0)
-       ("assign" "assign" smarty-template-assign-hook 0)
-       ("counter" "counter" smarty-template-counter-hook 0)
-       ("cycle" "cycle" smarty-template-cycle-hook 0)
-       ("debug" "debug" smarty-template-debug-hook 0)
-       ("eval" "eval" smarty-template-eval-hook 0)
-       ("fetch" "fetch"  smarty-template-fetch-hook 0)
-       ("html_checkboxes" "html_checkboxes" smarty-template-html-checkboxes-hook 0)
-       ("html_image" "html_image" smarty-template-html-image-hook 0)
-       ("html_options" "html_options" smarty-template-html-options-hook 0)
-       ("html_radios" "html_radios" smarty-template-html-radios-hook 0)
-       ("html_select_date" "html_select_date" smarty-template-html-select-date-hook 0)
-       ("html_select_time" "html_select_time" smarty-template-html-select-time-hook 0)
-       ("html_table" "html_table" smarty-template-html-table-hook 0)
-       ("mailto" "mailto" smarty-template-mailto-hook 0)
-       ("math" "math" smarty-template-math-hook 0)
-       ("popup" "popup" smarty-template-popup-hook 0)
-       ("popup_init" "popup_init" smarty-template-popup-init-hook 0)
-       ("textformat" "textformat" smarty-template-textformat-hook 0)
-       ("capitalize" "capitalize" smarty-template-capitalize-hook 0)
-       ("cat" "cat" smarty-template-cat-hook 0)
-       ("count_characters" "count_characters" smarty-template-count-characters-hook 0)
-       ("count_paragraphs" "count_paragraphs" smarty-template-count-paragraphs-hook 0)
-       ("count_sentences" "count_sentences" smarty-template-count-sentences-hook 0)
-       ("count_words" "count_words" smarty-template-count-words-hook 0)
-       ("date_format" "date_format" smarty-template-date-format-hook 0)
-       ("default" "default" smarty-template-default-hook 0)
-       ("escape" "escape" smarty-template-escape-hook 0)
-       ("indent" "indent" smarty-template-indent-hook 0)
-       ("lower" "lower" smarty-template-lower-hook 0)
-       ("nl2br" "nl2br" smarty-template-nl2br-hook 0)
-       ("regex_replace" "regex_replace" smarty-template-regex-replace-hook 0)
-       ("replace" "replace" smarty-template-replace-hook 0)
-       ("spacify" "spacify" smarty-template-spacify-hook 0)
-       ("string_format" "string_format" smarty-template-string-format-hook 0)
-       ("strip" "strip" smarty-template-vstrip-hook 0)
-       ("strip_tags" "strip_tags" smarty-template-strip-tags-hook 0)
-       ("truncate" "truncate" smarty-template-truncate-hook 0)
-       ("upper" "upper" smarty-template-upper-hook 0)
-       ("wordwrap" "wordwrap" smarty-template-wordwrap-hook 0)
-       ("validate" "validate" smarty-template-validate-hook 0)
-       ("formtool_checkall" "formtool_checkall" smarty-template-formtool-checkall-hook 0)
-       ("formtool_copy" "formtool_copy" smarty-template-formtool-copy-hook 0)
-       ("formtool_count_chars" "formtool_count_chars" smarty-template-formtool-count-chars-hook 0)
-       ("formtool_init" "formtool_init" smarty-template-formtool-init-hook 0)
-       ("formtool_move" "formtool_move" smarty-template-formtool-move-hook 0)
-       ("formtool_moveall" "formtool_moveall" smarty-template-formtool-moveall-hook 0)
-       ("formtool_movedown" "formtool_movedown" smarty-template-formtool-movedown-hook 0)
-       ("formtool_moveup" "formtool_moveup" smarty-template-formtool-moveup-hook 0)
-       ("formtool_remove" "formtool_remove" smarty-template-formtool-remove-hook 0)
-       ("formtool_rename" "formtool_rename" smarty-template-formtool-rename-hook 0)
-       ("formtool_save" "formtool_save" smarty-template-formtool-save-hook 0)
-       ("formtool_selectall" "formtool_selectall" smarty-template-formtool-selectall-hook 0)
-       ("paginate_first" "paginate_first" smarty-template-paginate-first-hook 0)
-       ("paginate_last" "paginate_last" smarty-template-paginate-last-hook 0)
-       ("paginate_middle" "paginate_middle" smarty-template-paginate-middle-hook 0)
-       ("paginate_next" "paginate_next" smarty-template-paginate-next-hook 0)
-       ("paginate_prev" "paginate_prev" smarty-template-paginate-prev-hook 0)
-       ("btosmilies" "btosmilies" smarty-template-btosmilies-hook 0)
-       ("bbcodetohtml" "bbcodetohtml" smarty-template-bbcodetohtml-hook 0)
-       ("date_formatto" "date_formatto" smarty-template-date-formatto-hook 0)))))
+     '(
+       ("capture" "" smarty-template-capture-hook 0)
+       ("config_load" "" smarty-template-config-load-hook 0)
+       ("else" "" smarty-template-else-hook 0)
+       ("elseif" "" smarty-template-elseif-hook 0)
+       ("foreach" "" smarty-template-foreach-hook 0)
+       ("foreachelse" "" smarty-template-foreachelse-hook 0)
+       ("if" "" smarty-template-if-hook 0)
+       ("include" "" smarty-template-include-hook 0)
+       ("include_php" "" smarty-template-include-php-hook 0)
+       ("insert" "" smarty-template-insert-hook 0)
+       ("ldelim" "" smarty-template-ldelim-hook 0)
+       ("literal" "" smarty-template-literal-hook 0)
+       ("php" "" smarty-template-php-hook 0)
+       ("rdelim" "" smarty-template-rdelim-hook 0)
+       ("section" "" smarty-template-section-hook 0)
+       ("sectionelse" "" smarty-template-sectionelse-hook 0)
+       ("strip" "" smarty-template-strip-hook 0)
+       ("assign" "" smarty-template-assign-hook 0)
+       ("counter" "" smarty-template-counter-hook 0)
+       ("cycle" "" smarty-template-cycle-hook 0)
+       ("debug" "" smarty-template-debug-hook 0)
+       ("eval" "" smarty-template-eval-hook 0)
+       ("fetch" ""  smarty-template-fetch-hook 0)
+       ("html_checkboxes" "" smarty-template-html-checkboxes-hook 0)
+       ("html_image" "" smarty-template-html-image-hook 0)
+       ("html_options" "" smarty-template-html-options-hook 0)
+       ("html_radios" "" smarty-template-html-radios-hook 0)
+       ("html_select_date" "" smarty-template-html-select-date-hook 0)
+       ("html_select_time" "" smarty-template-html-select-time-hook 0)
+       ("html_table" "" smarty-template-html-table-hook 0)
+       ("mailto" "" smarty-template-mailto-hook 0)
+       ("math" "" smarty-template-math-hook 0)
+       ("popup" "" smarty-template-popup-hook 0)
+       ("popup_init" "" smarty-template-popup-init-hook 0)
+       ("textformat" "" smarty-template-textformat-hook 0)
+       ("capitalize" "" smarty-template-capitalize-hook 0)
+       ("cat" "" smarty-template-cat-hook 0)
+       ("count_characters" "" smarty-template-count-characters-hook 0)
+       ("count_paragraphs" "" smarty-template-count-paragraphs-hook 0)
+       ("count_sentences" "" smarty-template-count-sentences-hook 0)
+       ("count_words" "" smarty-template-count-words-hook 0)
+       ("date_format" "" smarty-template-date-format-hook 0)
+       ("default" "" smarty-template-default-hook 0)
+       ("escape" "" smarty-template-escape-hook 0)
+       ("indent" "" smarty-template-indent-hook 0)
+       ("lower" "" smarty-template-lower-hook 0)
+       ("nl2br" "" smarty-template-nl2br-hook 0)
+       ("regex_replace" "" smarty-template-regex-replace-hook 0)
+       ("replace" "" smarty-template-replace-hook 0)
+       ("spacify" "" smarty-template-spacify-hook 0)
+       ("string_format" "" smarty-template-string-format-hook 0)
+       ("strip" "" smarty-template-vstrip-hook 0)
+       ("strip_tags" "" smarty-template-strip-tags-hook 0)
+       ("truncate" "" smarty-template-truncate-hook 0)
+       ("upper" "" smarty-template-upper-hook 0)
+       ("wordwrap" "" smarty-template-wordwrap-hook 0)
+       ("validate" "" smarty-template-validate-hook 0)
+       ("clipcache" "" smarty-template-clipcache-hook 0)
+       ("repeat" "" smarty-template-repeat-hook 0)
+       ("str_repeat" "" smarty-template-str-repeat-hook 0)
+       ("include_clipcache" "" smarty-template-include-clipcache-hook 0)
+       ("formtool_checkall" "" smarty-template-formtool-checkall-hook 0)
+       ("formtool_copy" "" smarty-template-formtool-copy-hook 0)
+       ("formtool_count_chars" "" smarty-template-formtool-count-chars-hook 0)
+       ("formtool_init" "" smarty-template-formtool-init-hook 0)
+       ("formtool_move" "" smarty-template-formtool-move-hook 0)
+       ("formtool_moveall" "" smarty-template-formtool-moveall-hook 0)
+       ("formtool_movedown" "" smarty-template-formtool-movedown-hook 0)
+       ("formtool_moveup" "" smarty-template-formtool-moveup-hook 0)
+       ("formtool_remove" "" smarty-template-formtool-remove-hook 0)
+       ("formtool_rename" "" smarty-template-formtool-rename-hook 0)
+       ("formtool_save" "" smarty-template-formtool-save-hook 0)
+       ("formtool_selectall" "" smarty-template-formtool-selectall-hook 0)
+       ("paginate_first" "" smarty-template-paginate-first-hook 0)
+       ("paginate_last" "" smarty-template-paginate-last-hook 0)
+       ("paginate_middle" "" smarty-template-paginate-middle-hook 0)
+       ("paginate_next" "" smarty-template-paginate-next-hook 0)
+       ("paginate_prev" "" smarty-template-paginate-prev-hook 0)
+       ("btosmilies" "" smarty-template-btosmilies-hook 0)
+       ("bbcodetohtml" "" smarty-template-bbcodetohtml-hook 0)
+       ("date_formatto" "" smarty-template-date-formatto-hook 0)))))
 
 ;; initialize abbrev table for Smarty Mode
 (smarty-mode-abbrev-table-init)
@@ -1233,36 +1161,29 @@ else insert tab (used for word completion in Smarty minibuffer)."
   "Do function, if syntax says abbrev is a keyword, invoked by hooked abbrev,
 but not if inside a comment or quote)."
   (if (or (smarty-in-literal)
-          (smarty-in-comment-p))
+	  (smarty-in-comment-p))
       (progn
-        (insert " ")
-        (unexpand-abbrev)
-        (delete-char -1))
+	(insert " ")
+	(unexpand-abbrev)
+	(delete-char -1))
     (if (not smarty-electric-mode)
-        (progn
-          (insert " ")
-          (unexpand-abbrev)
-          (backward-word 1)
-          (delete-char 1))
-      ;; last-command-event (alias last-command-char) is not always a
-      ;; char. An example is that Viper calls expand-abbrev when
-      ;; escape is pressed. The event is then 'escape.
-      (let* ((base-event (event-basic-type last-command-event))
-             (invoke-char (when (char-valid-p base-event) base-event))
-             (abbrev-mode -1)
-             (smarty-template-invoked-by-hook t))
-        ;;(setq invoke-char last-command-char) ;; to get the orig err
-        (let ((caught (catch 'abort
-                        (funcall func))))
-          (when (stringp caught) (message caught)))
-        (when invoke-char
-          (when (= invoke-char ?-) (setq abbrev-start-location (point))))
-        ;; delete CR which is still in event queue
-        (if (fboundp 'enqueue-eval-event)
-            (enqueue-eval-event 'delete-char -1)
-          (delete-char -1))))))
-;;           (setq unread-command-events        ; push back a delete char
-;;                 (list (smarty-character-to-event ?\177))))))))
+	(progn
+	  (insert " ")
+	  (unexpand-abbrev)
+	  (backward-word 1)
+	  (delete-char 1))
+      (let ((invoke-char last-command-char)
+	    (abbrev-mode -1)
+	    (smarty-template-invoked-by-hook t))
+	(let ((caught (catch 'abort
+			(funcall func))))
+	  (when (stringp caught) (message caught)))
+	(when (= invoke-char ?-) (setq abbrev-start-location (point)))
+	;; delete CR which is still in event queue
+	(if (fboundp 'enqueue-eval-event)
+	    (enqueue-eval-event 'delete-char -1)
+	  (setq unread-command-events	; push back a delete char
+		(list (smarty-character-to-event ?\177))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Fontification
@@ -1270,45 +1191,41 @@ but not if inside a comment or quote)."
 
 (defvar smarty-font-lock-keywords-1
   (list
-
+   
    ;; Fontify built-in functions
    (cons
-        (concat (regexp-quote smarty-left-delimiter) "[/]*" smarty-functions-regexp)
-        '(1 font-lock-keyword-face))
+	(concat (regexp-quote smarty-left-delimiter) "[/]*" smarty-functions-regexp)
+	'(1 font-lock-keyword-face))
 
    (cons
-        (concat "\\<\\(" smarty-constants "\\)\\>")
-        'font-lock-constant-face)
+	(concat "\\<\\(" smarty-constants "\\)\\>")
+	'font-lock-constant-face)
 
-   (cons (concat "\\(" (regexp-quote (concat smarty-left-delimiter "*")) "\\(\\s-\\|\\w\\|\\s.\\|\\s_\\|\\s(\\|\\s)\\|\\s\\\\)*" (regexp-quote (concat "*" smarty-right-delimiter)) "\\)")
-         'font-lock-comment-face)
+   (cons (concat "\\(" (regexp-quote (concat smarty-left-delimiter "*")) "\\(\\s-\\|\\w\\|\\s.\\|\\s_\\|\\s(\\|\\s)\\|\\s\\\\)*" (regexp-quote (concat "*" smarty-right-delimiter)) "\\)") 
+	 'font-lock-comment-face)
 
    )
-  "Subdued level highlighting for Smarty mode.")
-
-;; I believe default is defined in Xemacs but not in GNU Emacs.
-(unless (boundp 'default)
-  (defvar default 'default))
+  "Subdued level highlighting for Smarty mode.") 
 
 (defconst smarty-font-lock-keywords-2
   (append
-   smarty-font-lock-keywords-1
+   smarty-font-lock-keywords-1  
    (list
 
-        ;; Fontify variable names (\\sw\\|\\s_\\) matches any word character +
-        ;; underscore
-        '("\\$\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face)) ; $variable
-        '("->\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face t t)) ; ->variable
-        '("\\.\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face t t)) ; .variable
-        '("->\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*(" (1 font-lock-function-name-face t t)) ; ->function_call
-        '("\\<\\(\\(?:\\sw\\|\\s_\\)+\\s-*\\)(" (1 font-lock-function-name-face)) ; word(
-        '("\\<\\(\\(?:\\sw\\|\\s_\\)+\\s-*\\)[[]" (1 font-lock-variable-name-face)) ; word[
-        '("\\<[0-9]+" . default)                        ; number (also matches word)
+	;; Fontify variable names (\\sw\\|\\s_\\) matches any word character +
+	;; underscore
+	'("\\$\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face)) ; $variable
+	'("->\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face t t)) ; ->variable
+	'("\\.\\(\\(?:\\sw\\|\\s_\\)+\\)" (1 font-lock-variable-name-face t t)) ; .variable
+	'("->\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*(" (1 font-lock-function-name-face t t)) ; ->function_call
+	'("\\<\\(\\(?:\\sw\\|\\s_\\)+\\s-*\\)(" (1 font-lock-function-name-face)) ; word(
+	'("\\<\\(\\(?:\\sw\\|\\s_\\)+\\s-*\\)[[]" (1 font-lock-variable-name-face)) ; word[
+	'("\\<[0-9]+" . default)			; number (also matches word)
 
-        ;; Fontify strings
-        ;;'("\"\\([^\"]*\\)\"[^\"]+" (1 font-lock-string-face t t))
-        ))
-
+	;; Fontify strings
+	;;'("\"\\([^\"]*\\)\"[^\"]+" (1 font-lock-string-face t t))
+	))
+  
    "Medium level highlighting for Smarty mode.")
 
 (defconst smarty-font-lock-keywords-3
@@ -1318,7 +1235,7 @@ but not if inside a comment or quote)."
     ;; Fontify modifiers
     (cons (concat "|\\(" smarty-modifiers-regexp "\\)[:|]+") '(1 font-lock-function-name-face))
     (cons (concat "|\\(" smarty-modifiers-regexp "\\)" (regexp-quote smarty-right-delimiter)) '(1 font-lock-function-name-face))
-
+    
     ;; Fontify config vars
     (cons (concat (regexp-quote smarty-left-delimiter) "\\(#\\(?:\\sw\\|\\s_\\)+#\\)") '(1 font-lock-constant-face))))
   "Balls-out highlighting for Smarty mode.")
@@ -1342,70 +1259,76 @@ but not if inside a comment or quote)."
 ;;; Mode map
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar smarty-template-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "\C-ba" 'smarty-template-capture)
-    (define-key map "\C-bc" 'smarty-template-config-load)
-    (define-key map "\C-b\M-e" 'smarty-template-else)
-    (define-key map "\C-b\C-e" 'smarty-template-elseif)
-    (define-key map "\C-b\C-f" 'smarty-template-foreach)
-    (define-key map "\C-b\M-f" 'smarty-template-foreachelse)
-    (define-key map "\C-bf" 'smarty-template-if)
-    (define-key map "\C-b\C-i" 'smarty-template-include)
-    (define-key map "\C-b\M-i" 'smarty-template-include-php)
-    (define-key map "\C-bi" 'smarty-template-insert)
-    (define-key map "\C-bl" 'smarty-template-ldelim)
-    (define-key map "\C-b\C-l" 'smarty-template-literal)
-    (define-key map "\C-bp" 'smarty-template-php)
-    (define-key map "\C-br" 'smarty-template-rdelim)
-    (define-key map "\C-b\C-s" 'smarty-template-section)
-    (define-key map "\C-b\M-s" 'smarty-template-sectionelse)
-    (define-key map "\C-bs" 'smarty-template-strip)
-    (define-key map "\C-ca" 'smarty-template-assign)
-    (define-key map "\C-co" 'smarty-template-counter)
-    (define-key map "\C-cc" 'smarty-template-cycle)
-    (define-key map "\C-cd" 'smarty-template-debug)
-    (define-key map "\C-ce" 'smarty-template-eval)
-    (define-key map "\C-cf" 'smarty-template-fetch)
-    (define-key map "\C-c\C-hc" 'smarty-template-html-checkboxes)
-    (define-key map "\C-c\C-hi" 'smarty-template-html-image)
-    (define-key map "\C-c\C-ho" 'smarty-template-html-options)
-    (define-key map "\C-c\C-hr" 'smarty-template-html-radios)
-    (define-key map "\C-c\C-hd" 'smarty-template-html-select-date)
-    (define-key map "\C-c\C-hm" 'smarty-template-html-select-time)
-    (define-key map "\C-c\C-ht" 'smarty-template-html-table)
-    (define-key map "\C-ci" 'smarty-template-mailto)
-    (define-key map "\C-ch" 'smarty-template-math)
-    (define-key map "\C-c\C-p" 'smarty-template-popup)
-    (define-key map "\C-c\M-p" 'smarty-template-popup-init)
-    (define-key map "\C-ct" 'smarty-template-textformat)
-    (define-key map "\C-vp" 'smarty-template-capitalize)
-    (define-key map "\C-vc" 'smarty-template-cat)
-    (define-key map "\C-v\C-cc" 'smarty-template-count-characters)
-    (define-key map "\C-v\C-cp" 'smarty-template-count-paragraphs)
-    (define-key map "\C-v\C-cs" 'smarty-template-count-sentences)
-    (define-key map "\C-v\C-cw" 'smarty-template-count-words)
-    (define-key map "\C-vf" 'smarty-template-date-format)
-    (define-key map "\C-vd" 'smarty-template-default)
-    (define-key map "\C-ve" 'smarty-template-escape)
-    (define-key map "\C-vi" 'smarty-template-indent)
-    (define-key map "\C-vl" 'smarty-template-lower)
-    (define-key map "\C-vn" 'smarty-template-nl2br)
-    (define-key map "\C-vx" 'smarty-template-regex-replace)
-    (define-key map "\C-v\C-p" 'smarty-template-replace)
-    (define-key map "\C-vy" 'smarty-template-spacify)
-    (define-key map "\C-vs" 'smarty-template-string-format)
-    (define-key map "\C-v\C-s" 'smarty-template-vstrip)
-    (define-key map "\C-v\M-s" 'smarty-template-strip-tags)
-    (define-key map "\C-vt" 'smarty-template-truncate)
-    (define-key map "\C-vu" 'smarty-template-upper)
-    (define-key map "\C-vw" 'smarty-template-wordwrap)
-    (define-key map "\C-h" 'smarty-template-header)
-    (define-key map "\C-f" 'smarty-template-footer)
-    (define-key map "\C-di" 'smarty-template-insert-date)
-    (define-key map "\C-dm" 'smarty-template-modify)
-    map)
+(defvar smarty-template-map nil
   "Keymap for Smarty templates.")
+
+(defun smarty-template-map-init ()
+  "Initialize `smarty-template-map'."
+  (setq smarty-template-map (make-sparse-keymap))
+  ;; key bindings for Smarty templates
+  (define-key smarty-template-map "\C-ba" 'smarty-template-capture)
+  (define-key smarty-template-map "\C-bc" 'smarty-template-config-load)
+  (define-key smarty-template-map "\C-b\M-e" 'smarty-template-else)
+  (define-key smarty-template-map "\C-b\C-e" 'smarty-template-elseif)
+  (define-key smarty-template-map "\C-b\C-f" 'smarty-template-foreach)
+  (define-key smarty-template-map "\C-b\M-f" 'smarty-template-foreachelse)
+  (define-key smarty-template-map "\C-bf" 'smarty-template-if)
+  (define-key smarty-template-map "\C-b\C-i" 'smarty-template-include)
+  (define-key smarty-template-map "\C-b\M-i" 'smarty-template-include-php)
+  (define-key smarty-template-map "\C-bi" 'smarty-template-insert)
+  (define-key smarty-template-map "\C-bl" 'smarty-template-ldelim)
+  (define-key smarty-template-map "\C-b\C-l" 'smarty-template-literal)
+  (define-key smarty-template-map "\C-bp" 'smarty-template-php)
+  (define-key smarty-template-map "\C-br" 'smarty-template-rdelim)
+  (define-key smarty-template-map "\C-b\C-s" 'smarty-template-section)
+  (define-key smarty-template-map "\C-b\M-s" 'smarty-template-sectionelse)
+  (define-key smarty-template-map "\C-bs" 'smarty-template-strip)
+  (define-key smarty-template-map "\C-ca" 'smarty-template-assign)
+  (define-key smarty-template-map "\C-co" 'smarty-template-counter)
+  (define-key smarty-template-map "\C-cc" 'smarty-template-cycle)
+  (define-key smarty-template-map "\C-cd" 'smarty-template-debug)
+  (define-key smarty-template-map "\C-ce" 'smarty-template-eval)
+  (define-key smarty-template-map "\C-cf" 'smarty-template-fetch)
+  (define-key smarty-template-map "\C-c\C-hc" 'smarty-template-html-checkboxes)
+  (define-key smarty-template-map "\C-c\C-hi" 'smarty-template-html-image)
+  (define-key smarty-template-map "\C-c\C-ho" 'smarty-template-html-options)
+  (define-key smarty-template-map "\C-c\C-hr" 'smarty-template-html-radios)
+  (define-key smarty-template-map "\C-c\C-hd" 'smarty-template-html-select-date)
+  (define-key smarty-template-map "\C-c\C-hm" 'smarty-template-html-select-time)
+  (define-key smarty-template-map "\C-c\C-ht" 'smarty-template-html-table)
+  (define-key smarty-template-map "\C-ci" 'smarty-template-mailto)
+  (define-key smarty-template-map "\C-ch" 'smarty-template-math)
+  (define-key smarty-template-map "\C-c\C-p" 'smarty-template-popup)
+  (define-key smarty-template-map "\C-c\M-p" 'smarty-template-popup-init)
+  (define-key smarty-template-map "\C-ct" 'smarty-template-textformat)
+  (define-key smarty-template-map "\C-vp" 'smarty-template-capitalize)
+  (define-key smarty-template-map "\C-vc" 'smarty-template-cat)
+  (define-key smarty-template-map "\C-v\C-cc" 'smarty-template-count-characters)
+  (define-key smarty-template-map "\C-v\C-cp" 'smarty-template-count-paragraphs)
+  (define-key smarty-template-map "\C-v\C-cs" 'smarty-template-count-sentences)
+  (define-key smarty-template-map "\C-v\C-cw" 'smarty-template-count-words)
+  (define-key smarty-template-map "\C-vf" 'smarty-template-date-format)
+  (define-key smarty-template-map "\C-vd" 'smarty-template-default)
+  (define-key smarty-template-map "\C-ve" 'smarty-template-escape)
+  (define-key smarty-template-map "\C-vi" 'smarty-template-indent)
+  (define-key smarty-template-map "\C-vl" 'smarty-template-lower)
+  (define-key smarty-template-map "\C-vn" 'smarty-template-nl2br)
+  (define-key smarty-template-map "\C-vx" 'smarty-template-regex-replace)
+  (define-key smarty-template-map "\C-v\C-p" 'smarty-template-replace)
+  (define-key smarty-template-map "\C-vy" 'smarty-template-spacify)
+  (define-key smarty-template-map "\C-vs" 'smarty-template-string-format)
+  (define-key smarty-template-map "\C-v\C-s" 'smarty-template-vstrip)
+  (define-key smarty-template-map "\C-v\M-s" 'smarty-template-strip-tags)
+  (define-key smarty-template-map "\C-vt" 'smarty-template-truncate)
+  (define-key smarty-template-map "\C-vu" 'smarty-template-upper)
+  (define-key smarty-template-map "\C-vw" 'smarty-template-wordwrap)
+  (define-key smarty-template-map "\C-h" 'smarty-template-header)
+  (define-key smarty-template-map "\C-f" 'smarty-template-footer)
+  (define-key smarty-template-map "\C-di" 'smarty-template-insert-date)
+  (define-key smarty-template-map "\C-dm" 'smarty-template-modify))
+
+;; initialize template map for Smarty Mode
+(smarty-template-map-init)
 
 (defun smarty-mode-map-init ()
   "Initialize `smarty-mode-map'."
@@ -1441,8 +1364,8 @@ but not if inside a comment or quote)."
 (mapcar
  (function
   (lambda (sym)
-    (put sym 'delete-selection t)    ; for `delete-selection-mode' (Emacs)
-    (put sym 'pending-delete t)))    ; for `pending-delete-mode' (XEmacs)
+    (put sym 'delete-selection t)	; for `delete-selection-mode' (Emacs)
+    (put sym 'pending-delete t)))	; for `pending-delete-mode' (XEmacs)
  '(smarty-electric-space
    smarty-electric-tab
    smarty-electric-open-bracket
@@ -1451,7 +1374,9 @@ but not if inside a comment or quote)."
 
 ;;;###autoload
 (defun smarty-mode ()
-  "Mode for editing php smarty files.
+  "Smarty Mode
+***********
+
 Smarty Mode is a GNU XEmacs major mode for editing Smarty templates.
 
 1 Introduction
@@ -1482,6 +1407,10 @@ Features (new features in bold) :
         - Variable Modifiers
 
         - Plugin (Functions)
+             * BlockRepeatPlugin
+
+             * ClipCache
+
              * Smarty Formtool
 
              * Smarty Paginate
@@ -1499,7 +1428,105 @@ Features (new features in bold) :
 
 
 
-This manual describes Smarty Mode version 0.0.4.
+This manual describes Smarty Mode version 0.0.5.
+
+2 Installation
+**************
+
+2.1 Requirements
+================
+
+Smarty Mode is a XEmacs major mode that needs the following
+software/packages:
+
+   * XEmacs (http://www.xemacs.org/).
+
+   * `font-lock' mode generaly installed with XEmacs.
+
+   * `assoc' mode generaly installed with XEmacs.
+
+   * `easymenu' mode generaly installed with XEmacs.
+
+   * `hippie-exp' mode generaly installed with XEmacs.
+
+Before continuing, you must be sure to have all this packages
+installed.
+
+2.2 Download
+============
+
+Two internet address to download Smarty Mode :
+
+   * Principal: Smarty-Mode 0.0.5
+     (http://deboutv.free.fr/lisp/smarty/download/smarty-0.0.5.tar.gz)
+     (http://deboutv.free.fr/lisp/smarty/)
+
+   * Secondary: Smarty-Mode 0.0.5
+     (http://www.morinie.fr/lisp/smarty/download/smarty-0.0.5.tar.gz)
+     (http://www.morinie.fr/lisp/smarty/)
+
+   * Old releases: Smarty-Mode
+     (http://deboutv.free.fr/lisp/smarty/download.php)
+     (http://deboutv.free.fr/lisp/smarty/)
+
+2.3 Installation
+================
+
+2.3.1 Installation
+------------------
+
+To install Smarty Mode you need to choose an installation directory
+(for example `/usr/local/share/lisp' or `c:\lisp'). The administrator
+must have the write rights on this directory.
+
+With your favorite unzip software, unzip the archive in the
+installation directory.
+
+Example:
+     cd /usr/local/share/lisp
+     tar zxvf smarty-0.0.5.tar.gz
+Now you have a `smarty' directory in the installation directory. This
+directory contains 2 files `smarty-mode.el' and `smarty-mode.elc' and
+another directory `docs' containing the documentation.
+
+You need to configure XEmacs. open you initialization file `init.el'
+(open the file or start XEmacs then choose the Options menu and Edit
+Init File). Add the following lines (the installation directory in
+this example is `/usr/local/share/lisp') :
+
+     (setq load-path
+           (append (list \"/usr/local/share/lisp/\") load-path))
+     (autoload 'smarty-mode \"smarty-mode\" \"Smarty Mode\" t)
+
+2.3.2 Update
+------------
+
+The update is easy. You need to unzip the archive in the installation
+directory to remove the old release.
+
+Example:
+     cd /usr/local/share/lisp
+     rm -rf smarty
+     tar zxvf smarty-0.0.5.tar.gz
+
+2.4 Invoke Smarty-Mode
+======================
+
+You have two possibilities to invoke the Smarty Mode.
+
+   - Manually: At each file opening you need to launch Smarty Mode
+     with the following command:
+
+     `M-x smarty-mode'
+
+   - Automatically: Add the following linesin your initialization
+     file `init.el' :
+
+          (setq auto-mode-alist
+                (append
+                 '((\"\\.tpl$\" . smarty-mode))
+          	 auto-mode-alist))
+
 
 3 Customization
 ***************
@@ -1679,16 +1706,16 @@ part.
 
 4.1.1 Functions
 ---------------
-\\<smarty-mode-map>
+
 `smarty-show-messages'
      Menu: Smarty -> Show Messages
-     Keybinding: `C-c M-m' \\[smarty-show-messages]
+     Keybinding: `C-c M-m'
      Description: This function opens the *Messages* buffer to
      display previous error messages.
 
 `smarty-doc-mode'
      Menu: Smarty -> Smarty Mode Documentation
-     Keybinding: `C-c C-h' \\[smarty-doc-mode]
+     Keybinding: `C-c C-h'
      Description: This function opens the *Help* buffer and prints in
      it the Smarty Mode documentation.
 
@@ -1859,25 +1886,25 @@ For Smarty functions, see PDF or HTML documentation.
       (setq smarty-font-lock-keywords smarty-font-lock-keywords-4)
     (setq smarty-font-lock-keywords smarty-font-lock-keywords-3))
   (setq font-lock-defaults
-                '((smarty-font-lock-keywords)
-                nil ; Keywords only (i.e. no comment or string highlighting
-                t   ; case fold
-                nil ; syntax-alist
-                nil ; syntax-begin
-                ))
-
+		'((smarty-font-lock-keywords)
+		nil ; Keywords only (i.e. no comment or string highlighting
+		t   ; case fold
+		nil ; syntax-alist
+		nil ; syntax-begin
+		))
+  
   (setq font-lock-maximum-decoration t
-                case-fold-search t)
+		case-fold-search t)
 
   ;; add source file menu
   (if smarty-source-file-menu (smarty-add-source-files-menu))
   ;; add Smarty menu
   (easy-menu-add smarty-mode-menu-list)
   (easy-menu-define smarty-mode-menu smarty-mode-map
-                    "Menu keymap for Smarty Mode." smarty-mode-menu-list)
+		    "Menu keymap for Smarty Mode." smarty-mode-menu-list)
 
   (message "Smarty Mode %s.%s" smarty-version
-           (if noninteractive "" "  See menu for documentation and release notes."))
+	   (if noninteractive "" "  See menu for documentation and release notes."))
   (smarty-mode-line-update)
   (run-hooks 'smarty-mode-hook))
 
@@ -1908,25 +1935,25 @@ For Smarty functions, see PDF or HTML documentation.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun smarty-template-field (prompt &optional follow-string optional
-                                   begin end is-string string-char default)
+				   begin end is-string string-char default)
   "Prompt for string and insert it in buffer with optional FOLLOW-STRING.
 If OPTIONAL is nil, the prompt is left if an empty string is inserted.  If
 an empty string is inserted, return nil and call `smarty-template-undo' for
 the region between BEGIN and END.  IS-STRING indicates whether a string
 with double-quotes is to be inserted.  DEFAULT specifies a default string."
   (let ((position (point))
-        string)
+	string)
     (insert "<" prompt ">")
     (if (not (> (length string-char) 0))
-        (setq string-char "\""))
+	(setq string-char "\""))
     (setq string
-          (condition-case ()
-              (read-from-minibuffer (concat prompt ": ")
-                                    (or (and is-string (cons (concat string-char string-char) 1)) default)
-                                    smarty-minibuffer-local-map)
-            (quit (if (and optional begin end)
-                      (progn (beep) "")
-                    (keyboard-quit)))))
+	  (condition-case ()
+	      (read-from-minibuffer (concat prompt ": ")
+				    (or (and is-string (cons (concat string-char string-char) 1)) default)
+				    smarty-minibuffer-local-map)
+	    (quit (if (and optional begin end)
+		      (progn (beep) "")
+		    (keyboard-quit)))))
     (when (or (not (equal string "")) optional)
       (delete-region position (point)))
     (when (and (equal string "") optional begin end)
@@ -1941,31 +1968,21 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
 (defun smarty-template-undo (begin end)
   "Undo aborted template by deleting region and unexpanding the keyword."
   (cond (smarty-template-invoked-by-hook
-         (goto-char end)
-         (insert " ")
-         (delete-region begin end)
-         (unexpand-abbrev))
-        (t (delete-region begin end))))
+	 (goto-char end)
+	 (insert " ")
+	 (delete-region begin end)
+	 (unexpand-abbrev))
+	(t (delete-region begin end))))
 
-(defun smarty-template-generic-function (label close-label field mandatory-count &optional infinite special-field)
+(defun smarty-template-generic-function (label close-label field mandatory-count &optional infinite special-field force-var)
   "Generic function template 'label field1= field2=..."
   (interactive)
   (let ((start (point)) found here result-value elt continue field-count stop prompt)
     (if smarty-template-invoked-by-hook
-        (setq found (smarty-after-ldelim))
-      (let ((here (point)))
-        (let ((last-left (search-backward smarty-left-delimiter nil t)))
-          (when last-left
-            (goto-char here)
-            (unless (search-backward smarty-right-delimiter last-left t)
-              (goto-char here)
-              ;;(error "Can't insert left delimiter '%s' here" smarty-left-delimiter)
-              (lwarn t :warning "Can't insert left delimiter '%s' here" smarty-left-delimiter)
-              )))
-        (goto-char here))
+	(setq found (smarty-after-ldelim))
       (insert smarty-left-delimiter)
       (setq found t))
-    ;;(insert label) ;; Already done
+    (insert label)
     (setq here (point-marker))
     (insert " ")
     (when found
@@ -1974,82 +1991,84 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
       (setq field-count 0)
       (setq stop nil)
       (while (and elt continue)
-        (setq prompt (car elt))
-        (when (not special-field)
-          (insert prompt "="))
-        (setq result-value (smarty-template-field prompt nil t))
-        (if (and (not result-value)
-                 (< field-count mandatory-count))
-            (progn (setq continue nil)
-                   (delete-region start (point))
-                   (insert (concat label " "))
-                   (setq stop t))
-          (if (not result-value)
-              (setq continue nil)
-            (setq here (point-marker))
-            (insert " ")))
-        (setq field-count (+ 1 field-count))
-        (setq elt (cdr elt)))
-      (when (and infinite continue)
-        (while continue
-          (setq result-value (smarty-template-field "var_name" "=" t here))
-          (if (not result-value)
-              (setq continue nil)
-            (setq continue (smarty-template-field "var_value" nil t here))
-            (setq here (point-marker))
-            (insert " "))))
+	(setq prompt (car elt))
+	(when (not special-field)
+	  (insert prompt "="))
+	(setq result-value (smarty-template-field prompt nil t))
+	(if (and (not result-value)
+		 (< field-count mandatory-count))
+	    (progn (setq continue nil)
+		   (delete-region start (point))
+		   (insert (concat label " "))
+		   (setq stop t))
+	  (if (not result-value)
+	      (setq continue nil)
+	    (setq here (point-marker))
+	    (insert " ")))
+	(setq field-count (+ 1 field-count))
+	(setq elt (cdr elt)))
+      (when (and infinite (or continue force-var))
+	(when (not continue)
+	  (delete-region here (point))
+	  (insert " "))
+	(setq continue t)
+	(while continue
+	  (setq result-value (smarty-template-field "var_name" "=" t here))
+	  (if (not result-value)
+	      (setq continue nil)
+	    (setq continue (smarty-template-field "var_value" nil t here))
+	    (setq here (point-marker))
+	    (insert " "))))
       (when (not stop)
-        (delete-region here (point))
-        (if (> 0 mandatory-count)
-            (delete-char -1))
-        (if special-field
-            (delete-char -1))
-        (insert smarty-right-delimiter)
-        (setq here (point-marker))
-        (if close-label
-            (insert smarty-left-delimiter "/" label smarty-right-delimiter))
-        (goto-char here)))))
+	(delete-region here (point))
+	(if (> 0 mandatory-count)
+	    (delete-char -1))
+	(insert smarty-right-delimiter)
+	(setq here (point-marker))
+	(if close-label
+	    (insert smarty-left-delimiter "/" label smarty-right-delimiter))
+	(goto-char here)))))
 
 (defun smarty-template-generic-modifier (label field mandatory-count)
   "Generic modifier template '|label:field1:field2..."
   (interactive)
   (let ((start (point)) found here result-value elt continue field-count stop prompt)
-    (setq found (re-search-backward (concat (regexp-quote smarty-left-delimiter) "\\$\\(\\w+\\)" (regexp-quote "|")) nil t))
+    (setq found (re-search-backward (concat (regexp-quote smarty-left-delimiter) "\\$\\(\\sw\\|\\s.\\)+" (regexp-quote "|")) nil t))
     (if found
-        (progn
-          (setq found (re-search-forward (regexp-quote smarty-right-delimiter) start t))
-          (if (not found)
-              (progn
-                (goto-char start)
-                (insert label)
-                (setq here (point-marker))
-                (setq elt field)
-                (setq continue t)
-                (setq field-count 0)
-                (setq stop nil)
-                (while (and elt continue)
-                  (setq prompt (car elt))
-                  (insert ":")
-                  (setq result-value (smarty-template-field prompt nil t))
-                  (if (and (not result-value)
-                           (< field-count mandatory-count))
-                      (progn (setq continue nil)
-                             (delete-region start (point))
-                             (insert (concat label " "))
-                             (setq stop t))
-                    (if (not result-value)
-                        (setq continue nil)
-                      (setq here (point-marker))
-                      (insert ":")))
-                  (setq field-count (+ 1 field-count))
-                  (setq elt (cdr elt)))
-                (when (not stop)
-                  (delete-region here (point))
-                  (if (not (or (looking-at smarty-right-delimiter)
-                               (looking-at "|")))
-                      (insert smarty-right-delimiter))))
-            (goto-char start)
-            (insert label " ")))
+	(progn
+	  (setq found (re-search-forward (regexp-quote smarty-right-delimiter) start t))
+	  (if (not found)
+	      (progn
+		(goto-char start)
+		(insert label)
+		(setq here (point-marker))
+		(setq elt field)
+		(setq continue t)
+		(setq field-count 0)
+		(setq stop nil)
+		(while (and elt continue)
+		  (setq prompt (car elt))
+		  (insert ":")
+		  (setq result-value (smarty-template-field prompt nil t))
+		  (if (and (not result-value)
+			   (< field-count mandatory-count))
+		      (progn (setq continue nil)
+			     (delete-region start (point))
+			     (insert (concat label " "))
+			     (setq stop t))
+		    (if (not result-value)
+			(setq continue nil)
+		      (setq here (point-marker))
+		      (insert ":")))
+		  (setq field-count (+ 1 field-count))
+		  (setq elt (cdr elt)))
+		(when (not stop)
+		  (delete-region here (point))
+		  (if (not (or (looking-at smarty-right-delimiter)
+			       (looking-at "|")))
+		      (insert smarty-right-delimiter))))
+	    (goto-char start)
+	    (insert label " ")))
       (goto-char start)
       (insert label " "))))
 
@@ -2170,6 +2189,10 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
 
 (defun smarty-template-validate-hook ()
   (smarty-hooked-abbrev 'smarty-template-validate))
+(defun smarty-template-clipcache-hook ()
+  (smarty-hooked-abbrev 'smarty-template-clipcache))
+(defun smarty-template-include-clipcache-hook ()
+  (smarty-hooked-abbrev 'smarty-template-include-clipcache))
 (defun smarty-template-formtool-checkall-hook ()
   (smarty-hooked-abbrev 'smarty-template-formtool-checkall))
 (defun smarty-template-formtool-copy-hook ()
@@ -2371,7 +2394,7 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
 (defun smarty-template-math ()
   "Insert a math statement."
   (interactive)
-  (smarty-template-generic-function "math" nil '("equation" "var" "format" "assign") 2 t))
+  (smarty-template-generic-function "math" nil '("equation" "format" "assign") 1 t nil t))
 
 (defun smarty-template-popup ()
   "Insert a popup statement."
@@ -2499,6 +2522,26 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
   (interactive)
   (smarty-template-generic-function "validate" nil '("field" "criteria" "message" "form" "transform" "trim" "empty" "halt" "assign" "append" "page") 3))
 
+(defun smarty-template-repeat ()
+  "Insert a repeat statement."
+  (interactive)
+  (smarty-template-generic-function "repeat" nil '("count" "assign") 1))
+
+(defun smarty-template-str_repeat ()
+  "Insert a str_repeat statement."
+  (interactive)
+  (smarty-template-generic-function "str_repeat" nil '("string" "count" "assign") 2))
+
+(defun smarty-template-clipcache ()
+  "Insert a clipcache statement."
+  (interactive)
+  (smarty-template-generic-function "clipcache" nil '("id" "group" "ttl" "ldelim" "rdelim") 3))
+
+(defun smarty-template-include-clipcache ()
+  "Insert a include_clipcache statement."
+  (interactive)
+  (smarty-template-generic-function "include_clipcache" nil '("file" "cache_id" "cache_lifetime" "ldelim" "rdelim") 3))
+
 (defun smarty-template-formtool-checkall ()
   "Insert a formtool_checkall statement."
   (interactive)
@@ -2606,19 +2649,19 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
   "Resolve environment variables in STRING."
   (while (string-match "\\(.*\\)${?\\(\\(\\w\\|_\\)+\\)}?\\(.*\\)" string)
     (setq string (concat (match-string 1 string)
-                         (getenv (match-string 2 string))
-                         (match-string 4 string))))
+			 (getenv (match-string 2 string))
+			 (match-string 4 string))))
   string)
 
 (defun smarty-insert-string-or-file (string)
   "Insert STRING or file contents if STRING is an existing file name."
   (unless (equal string "")
     (let ((file-name
-           (progn (string-match "^\\([^\n]+\\)" string)
-                  (smarty-resolve-env-variable (match-string 1 string)))))
+	   (progn (string-match "^\\([^\n]+\\)" string)
+		  (smarty-resolve-env-variable (match-string 1 string)))))
       (if (file-exists-p file-name)
-           (forward-char (cadr (insert-file-contents file-name)))
-        (insert string)))))
+	   (forward-char (cadr (insert-file-contents file-name)))
+	(insert string)))))
 
 (defun smarty-template-insert-date ()
   "Insert date in appropriate format."
@@ -2637,8 +2680,8 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
   (unless (equal smarty-file-header "")
     (let (pos)
       (save-excursion
-        (smarty-insert-string-or-file smarty-file-header)
-        (setq pos (point-marker)))
+	(smarty-insert-string-or-file smarty-file-header)
+	(setq pos (point-marker)))
       (smarty-template-replace-header-keywords
        (point-min-marker) pos file-title))))
 
@@ -2648,10 +2691,10 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
   (unless (equal smarty-file-footer "")
     (let (pos)
       (save-excursion
-        (setq pos (point-marker))
-        (smarty-insert-string-or-file smarty-file-footer)
-        (unless (= (preceding-char) ?\n)
-          (insert "\n")))
+	(setq pos (point-marker))
+	(smarty-insert-string-or-file smarty-file-footer)
+	(unless (= (preceding-char) ?\n)
+	  (insert "\n")))
       (smarty-template-replace-header-keywords pos (point-max-marker)))))
 
 (defun smarty-template-replace-header-keywords (beg end &optional file-title is-model)
@@ -2661,42 +2704,42 @@ with double-quotes is to be inserted.  DEFAULT specifies a default string."
      (save-excursion
        (goto-char beg)
        (while (search-forward "<filename>" end t)
-         (replace-match (buffer-name) t t))
+	 (replace-match (buffer-name) t t))
        (goto-char beg)
        (while (search-forward "<copyright>" end t)
-         (replace-match smarty-copyright-string t t))
+	 (replace-match smarty-copyright-string t t))
        (goto-char beg)
        (while (search-forward "<author>" end t)
-         (replace-match "" t t)
-         (insert (user-full-name))
-         (when user-mail-address (insert "  <" user-mail-address ">")))
+	 (replace-match "" t t)
+	 (insert (user-full-name))
+	 (when user-mail-address (insert "  <" user-mail-address ">")))
        (goto-char beg)
        (while (search-forward "<login>" end t)
-         (replace-match (user-login-name) t t))
+	 (replace-match (user-login-name) t t))
        (goto-char beg)
        (while (search-forward "<company>" end t)
-         (replace-match smarty-company-name t t))
+	 (replace-match smarty-company-name t t))
        (goto-char beg)
        ;; Replace <RCS> with $, so that RCS for the source is
        ;; not over-enthusiastic with replacements
        (while (search-forward "<RCS>" end t)
-         (replace-match "$" nil t))
+	 (replace-match "$" nil t))
        (goto-char beg)
        (while (search-forward "<date>" end t)
-         (replace-match "" t t)
-         (smarty-template-insert-date))
+	 (replace-match "" t t)
+	 (smarty-template-insert-date))
        (goto-char beg)
        (while (search-forward "<year>" end t)
-         (replace-match (format-time-string "%Y" nil) t t))
+	 (replace-match (format-time-string "%Y" nil) t t))
        (goto-char beg)
        (let (string)
-         (while
-             (re-search-forward "<\\(\\(\\w\\|\\s_\\)*\\) string>" end t)
-           (setq string (read-string (concat (match-string 1) ": ")))
-           (replace-match string t t)))
+	 (while
+	     (re-search-forward "<\\(\\(\\w\\|\\s_\\)*\\) string>" end t)
+	   (setq string (read-string (concat (match-string 1) ": ")))
+	   (replace-match string t t)))
        (goto-char beg)
        (when (and (not is-model) (search-forward "<cursor>" end t))
-         (replace-match "" t t))))))
+	 (replace-match "" t t))))))
 
 (provide 'smarty-mode)
 ;;; smarty-mode.el ends here

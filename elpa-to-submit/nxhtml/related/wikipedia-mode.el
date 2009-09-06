@@ -1780,7 +1780,8 @@ does wikipedia-unfill-region."
 
 
 
-(add-hook 'outline-minor-mode-hook  'wikipedia-outline-magic-keys)
+;;(add-hook 'outline-minor-mode-hook  'wikipedia-outline-magic-keys)
+(add-hook 'wikipedia-mode-hook  'wikipedia-outline-magic-keys)
 
 (defun wikipedia-outline-magic-keys ()
   (interactive)

@@ -134,7 +134,7 @@ from flymakes dito list for file names."
       (let ((major (overlay-get ovl 'mumamo-major-mode))
             (rec (assq major flymu-allowed-major-modes)))
         (when rec
-          (cdr rec)))
+          (setq ad-return-value (cdr rec))))
     ad-do-it))
 (ad-activate 'flymake-get-file-name-mode-and-masks)
 

@@ -38,6 +38,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'imenu))
+
 (defvar html-imenu-title "Index"
   "*Title of the menu which will be added to the menubar.")
 

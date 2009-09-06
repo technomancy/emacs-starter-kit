@@ -54,7 +54,7 @@
 (require 'udev-cedet)
 (udev-cedet-load-cedet t)
 
-(require 'udev-ecb)
+(eval-and-compile (require 'udev-ecb))
 (udev-ecb-load-ecb)
 
 (ecb-byte-compile)

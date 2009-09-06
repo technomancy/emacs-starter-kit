@@ -61,43 +61,43 @@
 
 ;;;
 
-(defun mumamo-aspnet-add-me()
-  "Make mumamo aware of the ASP.Net extension."
-  (add-to-list 'mumamo-chunk-family-list
-               '("ASP.Net nXhtml Family" nxhtml-mode
-                 (mumamo-chunk-aspnet
-                  mumamo-chunk-aspnet-script
-                  mumamo-chunk-inlined-style
-                  mumamo-chunk-inlined-script
-                  mumamo-chunk-style=
-                  mumamo-chunk-onjs=
-                  ))
-               t)
-  (add-to-list 'mumamo-chunk-family-list
-               '("ASP.Net XHTML Family" html-mode
-                 (mumamo-chunk-aspnet
-                  mumamo-chunk-aspnet-script
-                  mumamo-chunk-inlined-style
-                  mumamo-chunk-inlined-script
-                  mumamo-chunk-style=
-                  mumamo-chunk-onjs=
-                  ))
-               t)
+;; (defun mumamo-aspnet-add-me()
+;;   "Make mumamo aware of the ASP.Net extension."
+;;   (add-to-list 'mumamo-chunk-family-list
+;;                '("ASP.Net nXhtml Family" nxhtml-mode
+;;                  (mumamo-chunk-aspnet
+;;                   mumamo-chunk-aspnet-script
+;;                   mumamo-chunk-inlined-style
+;;                   mumamo-chunk-inlined-script
+;;                   mumamo-chunk-style=
+;;                   mumamo-chunk-onjs=
+;;                   ))
+;;                t)
+;;   (add-to-list 'mumamo-chunk-family-list
+;;                '("ASP.Net XHTML Family" html-mode
+;;                  (mumamo-chunk-aspnet
+;;                   mumamo-chunk-aspnet-script
+;;                   mumamo-chunk-inlined-style
+;;                   mumamo-chunk-inlined-script
+;;                   mumamo-chunk-style=
+;;                   mumamo-chunk-onjs=
+;;                   ))
+;;                t)
 
 
-  (add-to-list 'mumamo-filenames-list
-               '("\\.aspx\\'" "ASP.Net nXhtml Family"))
-  ;; Make it SET for current session in Custom.
-  (customize-set-variable 'mumamo-filenames-list mumamo-filenames-list)
-  (customize-set-value 'mumamo-filenames-list mumamo-filenames-list)
+;;   (add-to-list 'mumamo-filenames-list
+;;                '("\\.aspx\\'" "ASP.Net nXhtml Family"))
+;;   ;; Make it SET for current session in Custom.
+;;   (customize-set-variable 'mumamo-filenames-list mumamo-filenames-list)
+;;   (customize-set-value 'mumamo-filenames-list mumamo-filenames-list)
 
-  ;; this is how to set up mode aliases, should we need them.
-  (add-to-list 'mumamo-major-modes '(csharp-mode csharp-mode))
-  (add-to-list 'mumamo-major-modes '(vbnet-mode vbnet-mode))
-  ;; Make it SET for current session in Custom.
-  (customize-set-variable 'mumamo-major-modes mumamo-major-modes)
-  (customize-set-value 'mumamo-major-modes mumamo-major-modes)
-  )
+;;   ;; this is how to set up mode aliases, should we need them.
+;;   (add-to-list 'mumamo-major-modes '(csharp-mode csharp-mode))
+;;   (add-to-list 'mumamo-major-modes '(vbnet-mode vbnet-mode))
+;;   ;; Make it SET for current session in Custom.
+;;   (customize-set-variable 'mumamo-major-modes mumamo-major-modes)
+;;   (customize-set-value 'mumamo-major-modes mumamo-major-modes)
+;;   )
 
 
 ;;; aspnet
@@ -128,15 +128,19 @@ Internal variable.")
 
 (defun mumamo-aspnet-get-mode-for-chunk (&optional chunk-type)
   (cond ((eq chunk-type 'script)
-         (mumamo-mode-from-modespec
+         (mumamo-get-major-mode-substitute
           (or (if (looking-at mumamo-aspnet-language-regex)
                   (mumamo-aspnet-mode-spec-for-language (match-string 1))
                   (mumamo-aspnet-get-page-language-mode-spec))
-              'fundamental-mode)))
+              'fundamental-mode)
+          'fontification))
         ((eq chunk-type 'directive)
          'fundamental-mode)
-        (t (mumamo-mode-from-modespec
-            (mumamo-aspnet-get-page-language-mode-spec)))))
+        ;;(t (mumamo-mode-from-modespec
+        (t (mumamo-get-major-mode-substitute
+            (mumamo-aspnet-get-page-language-mode-spec)
+            'fontification
+            ))))
 
 
 (defun mumamo-chunk-aspnet(pos min max)
@@ -148,7 +152,8 @@ Internal variable.")
                               'mumamo-search-fw-exc-end-jsp))
 
 (defun mumamo-search-bw-exc-start-aspnet(pos min)
-  (let ((exc-start (mumamo-search-bw-exc-start-str pos min "<%")))
+  ;;(let ((exc-start (mumamo-search-bw-exc-start-str pos min "<%")))
+  (let ((exc-start (mumamo-chunk-start-bw-str pos min "<%")))
     (when (and exc-start
                (<= exc-start pos))
       (cons exc-start
@@ -212,6 +217,8 @@ Internal variable.")
                               'mumamo-search-fw-exc-start-aspnet-script
                               'mumamo-search-fw-exc-end-inlined-script))
 
+;; Fix-me: define a multi major mode for asp. Or maybe just drop this
+;; file?
 
 (provide 'mumamo-aspnet)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

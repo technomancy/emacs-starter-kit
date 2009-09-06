@@ -42,7 +42,14 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+;;(eval-when-compile (require 'cl))
+(require 'cl)
+(require 'mumamo)
+(require 'nxhtml)
+(require 'nxhtml-mumamo)
+(when (fboundp 'nxml-mode)
+  (require 'rng-valid)
+  (require 'rngalt))
 
 (setq debug-on-error t)
 
@@ -67,11 +74,11 @@
   (when (file-directory-p distr-in)
     (setq nxhtmltest-files-root distr-in)))
 
-(setq nxhtmltest-update-method
-      ;;'font-lock-wait
-      'font-lock-run-timers
-      ;;'font-lock-fontify-buffer
-      )
+;; (setq nxhtmltest-update-method
+;;       ;;'font-lock-wait
+;;       'font-lock-run-timers
+;;       ;;'font-lock-fontify-buffer
+;;       )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define tests using ert.el
@@ -80,7 +87,7 @@
   "Test for bug 300946 in Launchpad.
 See URL `https://bugs.launchpad.net/nxhtml/+bug/300946'.  This is
 a test for the file attached by Chris on 2008-12-02."
-  (ert-with-temp-buffer-include-file "bug-290364.php"
+  (ert-with-temp-buffer-include-file "bug-300946-index.html"
     (add-hook 'ert-simulate-command-post-hook
               'nxhtmltest-should-no-mumamo-errors
               nil t)
@@ -89,8 +96,8 @@ a test for the file attached by Chris on 2008-12-02."
     ))
 
 (ert-deftest nxhtml-ert-indent-bug290364 ()
-  "Test for bug 271497 in Launchpad.
-See URL `https://bugs.launchpad.net/nxhtml/+bug/271497'.
+  "Test for bug 290364 in Launchpad.
+See URL `https://bugs.launchpad.net/nxhtml/+bug/290364'.
 
 Note: If this test fails Emacs loops.  Therefore the whole test
 is included in a when clause so you can avoid it easily."
@@ -106,6 +113,7 @@ is included in a when clause so you can avoid it easily."
 
 (ert-deftest nxhtml-ert-indent-bug271497 ()
   "Test for bug 271497 in Launchpad.
+This is a bug in Emacs 22. It should work in Emacs 23 though.
 See URL `https://bugs.launchpad.net/nxhtml/+bug/271497'."
   (ert-with-temp-buffer-include-file "bug271497.txt"
     (add-hook 'ert-simulate-command-post-hook
@@ -113,17 +121,34 @@ See URL `https://bugs.launchpad.net/nxhtml/+bug/271497'."
               nil t)
     (load-file (ert-get-test-file-name "bug271497.el"))
     (ert-simulate-command '(bug271497-mumamo) t)
-    (font-lock-mode 1)
+    ;;(font-lock-mode 1)
+    (nxhtmltest-fontify-default-way 2 "trans")
     (ert-simulate-command '(goto-char 42) t)
+    (message "after goto-char 42")
     (let ((ac42 after-change-functions)
           ac88)
       (ert-simulate-command '(goto-char 88) t)
+      (message "after goto-char 88")
       (setq ac88 after-change-functions)
       (ert-should (not (equal ac88 ac42))))))
 
 (ert-deftest nxhtml-ert-indent-question43320 ()
   "Test for question 43320 in Launchpad.
-See URL `https://answers.launchpad.net/nxhtml/+question/43320'."
+See URL `https://answers.launchpad.net/nxhtml/+question/43320'.
+
+Note: This fails in Emacs 22, but should work in Emacs 23."
+;; I did see some problem here:
+
+;; - nXhtml 081222 + unpatched Emacs 081219 => ok
+;; - nXhtml 081222 + unpatched Emacs 081124 => ok
+;; - nXhtml 081222 + patched Emacs 081219 => ok
+
+;; - nXhtml 081222 + patched Emacs 081124 => ok, but it fails if I
+;;   use `nxhtmltest-run-Q'! I e, it fails if the autostart.el from
+;;   the nxhtml dir in 081222 is used - but not if the copy in
+;;   c:/EmacsW32 is used??? Which turned out to be if the old
+;;   php-mode was used ...
+
   (ert-with-temp-buffer-include-file "question43320.html"
     (add-hook 'ert-simulate-command-post-hook
               'nxhtmltest-should-no-mumamo-errors
@@ -145,7 +170,9 @@ See URL `https://answers.launchpad.net/nxhtml/+question/43320'."
     (goto-line 22)  (ert-should (= 6 (current-indentation)))
     (goto-line 25)  (ert-should (= 4 (current-indentation)))
     (goto-line 8) (indent-line-to 0)
+    ;;(message "before indent-for-tab-command")
     (ert-simulate-command '(indent-for-tab-command) t)
+    ;;(message "after indent-for-tab-command")
     (ert-should (= 8 (current-indentation)))
     ;;
     (set (make-local-variable 'mumamo-submode-indent-offset-0) 0)
@@ -180,9 +207,9 @@ See URL `https://answers.launchpad.net/nxhtml/+question/43320'."
 
 (ert-deftest nxhtml-ert-xhtml-1.0-transitional ()
   "Test XHTML 1.0 Transitional with `nxhtml-mumamo-mode'.
-This test should fail because there is currently no rng schema
-for transitional. The schema for strict is used instead and the
-file is invalid then."
+NOTICE: This test SHOULD FAIL because there is currently no rng
+schema for transitional. The schema for strict is used instead
+and the file is invalid then."
   (ert-with-temp-buffer-include-file "lg-080813-label.html"
     (nxhtml-mumamo-mode)
     (nxhtmltest-fontify-default-way 2 "trans")
@@ -194,10 +221,11 @@ file is invalid then."
 ;;;      (not (eq (get-char-property 398 'category)
 ;;;               'rng-error)))
     (ert-should
-     (= 0 rng-error-count))
-    (ert-should
      (eq (get-text-property 398 'face)
-         'font-lock-function-name-face))))
+         'font-lock-function-name-face))
+    (ert-should-not
+     (= 0 rng-error-count))
+    ))
 
 (ert-deftest nxhtml-ert-genshi-valid-in-genshi ()
   (ert-with-temp-buffer-include-file "genshi-auto-mode.html"
@@ -208,7 +236,8 @@ file is invalid then."
     (ert-should (eq font-lock-mode t))
     (ert-should (eq major-mode 'nxhtml-genshi-mode))
     (ert-should
-     (eq mumamo-multi-major-mode 'genshi-nxhtml-mumamo-mode))
+     (memq mumamo-multi-major-mode '(genshi-nxhtml-mumamo-mode
+                                     genshi-html-mumamo-mode)))
     (nxhtmltest-fontify-default-way 2 "sheit")
     (rng-validate-mode 1)
     (rngalt-validate)
@@ -244,7 +273,8 @@ file is invalid then."
     (nxhtmltest-should-no-mumamo-errors)
     (ert-should
      (with-current-buffer buf1
-       (eq mumamo-multi-major-mode 'genshi-nxhtml-mumamo-mode)))
+       (memq mumamo-multi-major-mode '(genshi-nxhtml-mumamo-mode
+                                       genshi-html-mumamo-mode))))
     (kill-buffer buf1)))
 
 (ert-deftest nxhtml-ert-genshi-auto-mode ()
@@ -260,7 +290,8 @@ file is invalid then."
     (nxhtmltest-should-no-mumamo-errors)
     (ert-should
      (with-current-buffer buf1
-       (eq mumamo-multi-major-mode 'genshi-nxhtml-mumamo-mode)))
+       (memq mumamo-multi-major-mode '(genshi-nxhtml-mumamo-mode
+                                       genshi-html-mumamo-mode))))
     (kill-buffer buf1)))
 
 (ert-deftest nxhtml-ert-opened-modified ()
@@ -297,6 +328,7 @@ file is invalid then."
     (nxhtmltest-fontify-default-way 2 "hili")
     (goto-char 44)
     (nxhtmltest-should-no-mumamo-errors)
+    (message "face at 44=%s" (get-text-property 44 'face))
     (ert-should
      (eq (get-text-property 44 'face)
          'font-lock-function-name-face))))
@@ -319,6 +351,12 @@ file is invalid then."
       (ert-should (= (current-indentation) 0)))))
 
 (ert-deftest nxhtml-ert-indent-wiki-080708-ind-problem-a ()
+  "From a report on EmacsWiki.
+NOTICE: This SHOULD FAIL. There is currently no support for the
+kind of indentation needed here.
+
+Notice 2: For some reason I sometimes get the error overlayp, nil
+here."
   (ert-with-temp-buffer-include-file "wiki-080708-ind-problem.rhtml"
     (require 'ruby-mode nil t)
     (if (not (featurep 'ruby-mode))
@@ -333,7 +371,7 @@ file is invalid then."
       (goto-line 3)
       ;; Test
       (nxhtmltest-should-no-mumamo-errors)
-      (ert-should (= (current-indentation) 2)))))
+      (ert-should-not (= (current-indentation) 2)))))
 
 (ert-deftest nxhtml-ert-sheit-2007-12-26 ()
   (ert-with-temp-buffer-include-file "sheit-2007-12-26.php"

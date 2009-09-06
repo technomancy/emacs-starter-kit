@@ -1787,6 +1787,7 @@ Do not record undo information during evaluation of BODY."
     )
   )
 
+;;;###autoload
 (defun htmlfontify-buffer (&optional srcdir file)
   "Create a new buffer, named for the current buffer + a .html extension,
 containing an inline css-stylesheet and formatted css-markup html

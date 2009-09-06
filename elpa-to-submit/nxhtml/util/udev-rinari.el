@@ -44,7 +44,7 @@
 ;;
 ;;; Code:
 
-(require 'udev)
+(eval-when-compile (require 'udev))
 
 (defgroup udev-rinari nil
   "Customization group for udev-rinari."
@@ -82,11 +82,11 @@
     ;;udev-rinari-install
     ))
 
+(defvar udev-rinari-update-buffer nil)
+
 (defun udev-rinari-buffer-name (mode)
   "Return a name for current compilation buffer ignoring MODE."
-  (udev-buffer-name " *Updating Rinari %s*" udev-rinari-update-buffer mode))
-
-(defvar udev-rinari-update-buffer nil)
+  (udev-buffer-name "*Updating Rinari %s*" udev-rinari-update-buffer mode))
 
 (defun udev-rinari-check-conflicts ()
   "Check if Rinari and ruby-mode already loaded and from where.
@@ -154,6 +154,7 @@ see `udev-rinari-dir' and `udev-rinari-load-rinari'."
       (setq udev-rinari-fetch-buffer (current-buffer)))))
 
 (defvar udev-rinari-diff-file nil)
+(defvar udev-rinari-fetch-diff-buffer nil)
 
 (defun udev-rinari-fetch-diff (log-buffer)
   "Fetch diff between local Rinari sources and dev repository."
@@ -171,8 +172,6 @@ see `udev-rinari-dir' and `udev-rinari-load-rinari'."
                    'udev-rinari-buffer-name)
                 (setq udev-continue-on-error-function 'udev-cvs-diff-continue)
                 (current-buffer)))))))
-
-(defvar udev-rinari-fetch-diff-buffer nil)
 
 (defun udev-rinari-check-diff (log-buffer)
   "Check output from svn diff command for merge conflicts."

@@ -47,6 +47,7 @@
 (require 'flymake)
 
 ;; (unless (boundp 'flymake-mode-map) (defvar flymake-mode-map (make-sparse-keymap)))
+(defvar flymake-mode-map) ;; silence compiler
 
 (define-key flymake-mode-map [(control ?c) ?! ?e] 'flymake-display-err-menu-for-current-line)
 (define-key flymake-mode-map [(control ?c) ?! ?n] 'flymake-goto-next-error)

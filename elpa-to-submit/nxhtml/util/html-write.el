@@ -2,16 +2,18 @@
 ;;
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: 2008-10-03T01:29:44+0200 Thu
-(defconst html-write:version "0.5") ;; Version:
-;; Last-Updated: 2008-10-04 Sat
+(defconst html-write:version "0.6") ;; Version:
+;; Last-Updated: 2008-12-26 Fri
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `backquote', `bytecomp', `cl', `flyspell', `ispell', `mumamo',
-;;   `sgml-mode'.
+  ;; `appmenu', `backquote', `bytecomp', `cl', `flyspell', `ispell',
+  ;; `mail-prsvr', `mlinks', `mm-util', `mumamo', `ourcomments-util',
+  ;; `rx', `sgml-mode', `timer', `url-expand', `url-methods',
+  ;; `url-parse', `url-util', `url-vars'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -45,8 +47,8 @@
 ;;
 ;;; Code:
 
-(require 'mumamo) ;; Just for the defmacro ...
-(require 'mlinks nil t)
+;;(require 'mumamo) ;; Just for the defmacro ...
+;;(require 'mlinks nil t)
 
 (defgroup html-write nil
   "Customization group for html-write."
@@ -148,7 +150,7 @@ OVERLAY is the overlay added by `html-write-hide-tags' for this tag."
         (overlay-put overlay 'help-echo href)
         (overlay-put overlay 'mouse-face 'highlight)
         (if (eq ?# (string-to-char href))
-            (setq href (concat "file:///" buffer-name href))
+            (setq href (concat "file:///" buffer-file-name href))
           (when (file-exists-p href)
             (setq href (expand-file-name href))))
         (overlay-put overlay 'html-write-url href))
@@ -281,11 +283,12 @@ See that variable for START, END and PRE-LEN."
   "Inner function for `html-write-post-command'."
   (save-restriction
     (widen)
+    ;;(message "html-write-pending-changes=%s" html-write-pending-changes)
     (dolist (pend html-write-pending-changes)
       (assert (markerp (car pend)))
       (assert (markerp (cdr pend))))
     (let ((pending html-write-pending-changes)
-          pending2
+          pending2 pend2
           pend pend-next
           (here (point-marker))
           (min-ovl (point-max))
@@ -336,12 +339,12 @@ See that variable for START, END and PRE-LEN."
                 (setcdr pend (copy-marker ovl-max)))
               ))))
       ;; Sort
-      (when dbg (message "Sort"))
+      (when dbg (message "Sort pending2"))
       (setq pending (sort pending2
-                           (lambda (rec-a rec-b)
-                             (if (= (car rec-a) (car rec-b))
-                                 (< (cdr rec-a) (cdr rec-b))
-                               (< (car rec-a) (car rec-b))))))
+                          (lambda (rec-a rec-b)
+                            (if (= (car rec-a) (car rec-b))
+                                (< (cdr rec-a) (cdr rec-b))
+                              (< (car rec-a) (car rec-b))))))
       ;; Extend end
       (when dbg (message "== Extend end"))
       (let ((high-end (point-min))
@@ -383,16 +386,16 @@ See that variable for START, END and PRE-LEN."
                     (if (eq ?< (char-after (1- (point))))
                         ;; Inside finished tag
                         (when dbg (message "Inside finished tag"))
-                        (if (eq ?/ (char-after))
-                            ;; End tag
-                            (progn
-                              (when dbg (message "End tag"))
-                              (setq end this->-pos+1))
-                          ;; Start tag
-                          (when dbg (message "Start tag 2"))
-                          (unless (eobp) (forward-char))
-                          (skip-chars-forward "^>")
-                          (setq end (point)))
+                      (if (eq ?/ (char-after))
+                          ;; End tag
+                          (progn
+                            (when dbg (message "End tag"))
+                            (setq end this->-pos+1))
+                        ;; Start tag
+                        (when dbg (message "Start tag 2"))
+                        (unless (eobp) (forward-char))
+                        (skip-chars-forward "^>")
+                        (setq end (point)))
                       ;; Between > and >
                       (when dbg (message "Between > and >"))
                       (setq end this->-pos+1)
@@ -457,46 +460,61 @@ See that variable for START, END and PRE-LEN."
             (setcar pend low-start))))
 
       ;; delete dublicates, merge
-      (when dbg (message "== delete dublicates, merge"))
+      (when dbg (message "== delete dublicates, merge, pending=%s" pending))
       (setq pending2 pending)
       (setq pending nil)
       (while pending2
         (setq pend2 (car pending2))
         (setq pending2 (cdr pending2))
-          ;; The list is sorted
-          (when dbg (message "The list is sorted"))
-          (setq pend (car pending))
-          (if (not pend)
-              (setq pending (cons pend2 pending))
-            (cond
-             ((= (car pend2) (car pend))
-              (when (> (cdr pend2) (cdr pend))
-                (setcdr pend (cdr pend2))))
-             ((<= (car pend2) (1+ (cdr pend)))
-              (setcdr pend (cdr pend2)))
-             ;; Probably never happens?
-             ((equal pend2 pend) nil)
-             (t
-              (setq pending (cons pend2 pending)))
-             )))
+        (setq pend (car pending))
+        ;; The list is sorted
+        (when dbg (message "The list is sorted, pend=%s, pend2=%s" pend pend2))
+        (if (not pend)
+            (setq pending (cons pend2 pending))
+          (assert (>= (car pend) (car pend2)) t)
+          (cond
+           ((= (car pend2) (car pend))
+            (when (> (cdr pend2) (cdr pend))
+              (when dbg (message "here"))
+              (setcdr pend (cdr pend2))))
+           ((<= (car pend2) (1+ (cdr pend)))
+            (when dbg (message "here 2"))
+            (setcar pend (car pend2)))
+           ;; Probably never happens?
+           ((equal pend2 pend)
+            (when dbg (message "here nil"))
+            nil)
+           (t
+            (when dbg (message "here t"))
+            (setq pending (cons pend2 pending)))
+           ))
+        (when dbg (message "at while end, pending=%s" pending))
+        )
       (setq pending (reverse pending))
       (setq pending (assq-delete-all nil pending))
+      (when dbg (message "Before dolist (pend pending)=%s" pending))
       (dolist (pend pending)
         (goto-char (car pend)) (goto-char (cdr pend))
+        (when dbg (message "After goto-char (pend pending)"))
         (html-write-reveal-tags (car pend) (cdr pend))
-        (html-write-hide-tags (car pend) (cdr pend)))
+        (when dbg (message "After html-write-reveal-tags (pend pending)"))
+        (html-write-hide-tags (car pend) (cdr pend))
+        (when dbg (message "After html-write-hide-tags (pend pending)"))
+        )
       (setq html-write-pending-changes nil)
       (goto-char here))))
 
 (defun html-write-hide-tags (start end)
   "Hide tags matching `html-write-tag-list' between START and END."
   (let ((here (point-marker))
-        (buffer-name (buffer-file-name)))
+        (buffer-name (buffer-file-name))
+        (dbg nil))
     (save-restriction
       (widen)
       (goto-char start)
       (save-match-data
         (let ((hide-tags-regexp (html-write-make-hide-tags-regexp)))
+          (when dbg (message "before search start=%s end=%s, point=%s" start end (point)))
           (while (re-search-forward hide-tags-regexp end t)
             (let* ((ovl (make-overlay (match-beginning 0) (match-end 0)
                                       nil t nil))
@@ -555,6 +573,11 @@ rendered text.
 
 See the customization group `html-write' for more information about
 faces.
+
+The following keys are defined when you are on a tag handled by
+this minor mode:
+
+\\{html-write-keymap}
 
 IMPORTANT: Most commands you use works also on the text that is
 hidden.  The movement commands is an exception, but as soon as

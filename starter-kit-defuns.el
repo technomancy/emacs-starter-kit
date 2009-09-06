@@ -86,6 +86,9 @@ Symbols matching the text at point are put first in the completion list."
 (defun turn-on-whitespace ()
   (whitespace-mode t))
 
+(defun turn-on-paredit ()
+  (paredit-mode t))
+
 (defun turn-off-tool-bar ()
   (tool-bar-mode -1))
 
@@ -203,6 +206,15 @@ Symbols matching the text at point are put first in the completion list."
        (lambda (endp delimiter)
          (equal (char-syntax (char-before)) ?\")))
   (paredit-mode 1))
+
+(defun toggle-fullscreen ()
+  (interactive)
+  ;; TODO: this only works for X. patches welcome for other OSes.
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                         '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                         '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0)))
+
 
 ;; A monkeypatch to cause annotate to ignore whitespace
 (defun vc-git-annotate-command (file buf &optional rev)

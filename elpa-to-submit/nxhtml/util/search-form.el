@@ -20,6 +20,8 @@
 ;;
 ;;  http://lists.gnu.org/archive/html/emacs-devel/2008-05/msg00152.html
 ;;
+;; NOT QUITE READY! Tagged files have not been tested.
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
@@ -69,33 +71,50 @@
       (setq ido-ignore-item-temp-list bufs))
     (nreverse (mapcar #'get-buffer bufs))))
 
-(defun search-form-notify-1 (use-search-field use-replace-field w &rest ignore)
+(defun search-form-notify-1 (use-search-field
+                             use-replace-field
+                             w
+                             hide-form
+                             display-orig-buf)
   (let ((search-string  (when use-search-field  (widget-value search-form-sfield)))
         (replace-string (when use-replace-field (widget-value search-form-rfield)))
         (search-form-buffer (current-buffer))
         (this-search (widget-get w :do-search))
         (do-it t))
-    (when (and use-search-field
+    (if (and use-search-field
                (= 0 (length search-string)))
-      (setq do-it nil)
-      (message "Please specify a search string"))
-    (when (and use-replace-field
-               (= 0 (length replace-string)))
-      (setq do-it nil)
-      (message "Please specify a replace string"))
+        (progn
+          (setq do-it nil)
+          (message "Please specify a search string"))
+      (when (and use-replace-field
+                 (= 0 (length replace-string)))
+        (setq do-it nil)
+        (message "Please specify a replace string")))
     (when do-it
-      (set-window-configuration search-form-win-config)
-      (funcall this-search w)
-      (kill-buffer search-form-buffer))))
+      (if hide-form
+          (progn
+            (set-window-configuration search-form-win-config)
+            (funcall this-search search-string)
+            ;;(kill-buffer search-form-buffer)
+            )
+        (when display-orig-buf
+          (let ((win (display-buffer search-form-current-buffer t)))
+            (select-window win t)))
+        ;;(funcall this-search search-string))
+        (funcall this-search w)
+        ))))
 
 (defun search-form-notify-no-field (w &rest ignore)
-  (search-form-notify-1 nil nil w))
+  (search-form-notify-1 nil nil w nil t))
 
 (defun search-form-notify-sfield (w &rest ignore)
-  (search-form-notify-1 t nil w))
+  (search-form-notify-1 t nil w nil t))
+
+(defun search-form-notify-sfield-nobuf (w &rest ignore)
+  (search-form-notify-1 t nil w nil nil))
 
 (defun search-form-notify-both-fields (w &rest ignore)
-  (search-form-notify-1 t t w))
+  (search-form-notify-1 t t w nil t))
 
 (defvar search-form-current-buffer nil)
 
@@ -110,14 +129,21 @@
   (widget-insert " " descr)
   (widget-insert "\n"))
 
-(defun search-form-insert-search (title search-fun descr do-search-fun)
+(defun search-form-insert-search (title search-fun descr do-search-fun no-buf)
   (widget-insert "  ")
   (let ((button-title (format " %-15s " title)))
-    (widget-create 'push-button
-                   :do-search do-search-fun
-                   :notify 'search-form-notify-sfield
-                   :current-buffer search-form-current-buffer
-                   button-title))
+    (if no-buf
+        (widget-create 'push-button
+                       :do-search do-search-fun
+                       :notify 'search-form-notify-sfield-nobuf
+                       :current-buffer search-form-current-buffer
+                       button-title)
+      (widget-create 'push-button
+                     :do-search do-search-fun
+                     :notify 'search-form-notify-sfield
+                     :current-buffer search-form-current-buffer
+                     button-title)
+      ))
   (widget-insert " " descr " ")
   (search-form-insert-help search-fun)
   (widget-insert "\n"))
@@ -131,9 +157,11 @@
   (widget-insert (format "  %s: " descr))
   (widget-create 'push-button
                  :do-search do-forward-fun
-                 :notify (if use-sfield
-                             'search-form-notify-sfield
-                           'search-form-notify-no-field)
+                 :use-sfield use-sfield
+                 :notify '(lambda (widget &rest event)
+                            (if (widget-get widget :use-sfield)
+                                (search-form-notify-sfield widget)
+                              (search-form-notify-no-field widget)))
                  :current-buffer search-form-current-buffer
                  " Forward ")
   (widget-insert " ")
@@ -141,9 +169,11 @@
   (widget-insert "  ")
   (widget-create 'push-button
                  :do-search do-backward-fun
-                 :notify (if use-sfield
-                             'search-form-notify-sfield
-                           'search-form-notify-no-field)
+                 :use-sfield use-sfield
+                 :notify '(lambda (widget &rest event)
+                            (if (widget-get widget :use-sfield)
+                                (search-form-notify-sfield widget)
+                              (search-form-notify-no-field widget)))
                  :current-buffer search-form-current-buffer
                  " Backward ")
   (widget-insert " ")
@@ -174,7 +204,9 @@
 (make-variable-buffer-local 'search-form-win-config)
 (put 'search-form-win-config 'permanent-local t)
 
+;;;###autoload
 (defun search-form ()
+  "Display a form for search and replace."
   (interactive)
   (let* ((buf-name "*Search Form*")
          (cur-buf (current-buffer))
@@ -200,8 +232,12 @@
       (set (make-local-variable 'widget-link-prefix) "")
       (set (make-local-variable 'widget-link-suffix) ""))
 
-    (widget-insert (propertize "Emacs Search/Replace Form" 'face 'font-lock-comment-face)
-                   "\n\n")
+    (widget-insert (propertize "Search/Replace, buffer: " 'face 'font-lock-comment-face))
+    (widget-insert (format "%s" (buffer-name search-form-current-buffer)))
+    (let ((file (buffer-file-name search-form-current-buffer)))
+      (when file
+        (insert " (" file ")")))
+    (widget-insert "\n\n")
     (search-form-insert-fb
      "Incremental String Search" nil
      'isearch-forward
@@ -216,81 +252,73 @@
      'isearch-backward-regexp
      (lambda (w) (call-interactively 'isearch-backward-regexp)))
 
+    ;; Fix-me: in multiple buffers, from buffer-list
+
     (widget-insert (make-string (window-width) ?-) "\n")
 
-    (widget-insert "Search:")
+    (widget-insert "Search: ")
     (setq search-form-sfield
           (widget-create 'editable-field
-                         :size 60))
+                         :size 58))
     (widget-insert "\n\n")
     (widget-insert (propertize "* Buffers:" 'face 'font-lock-comment-face) "\n")
-    (search-form-insert-fb
-     "String Search" t
-     'nonincremental-search-forward
-     (lambda (w) (call-interactively 'nonincremental-search-forward search-string))
-     'nonincremental-search-backward
-     (lambda (w) (call-interactively 'nonincremental-search-backward search-string)))
+    (search-form-insert-fb "String Search" t
+                           'nonincremental-search-forward
+                           (lambda (w) (nonincremental-search-forward search-string))
+                           'nonincremental-search-backward
+                           (lambda (w) (nonincremental-search-backward search-string)))
 
-    (search-form-insert-fb
-     "Regexp Search" t
-     'nonincremental-re-search-forward
-     (lambda (w) (call-interactively 'nonincremental-re-search-forward search-string))
-     'nonincremental-re-search-backward
-     (lambda (w) (call-interactively 'nonincremental-re-search-backward search-string)))
+    (search-form-insert-fb "Regexp Search" t
+                           'nonincremental-re-search-forward
+                           (lambda (w) (nonincremental-re-search-forward search-string))
+                           'nonincremental-re-search-backward
+                           (lambda (w) (nonincremental-re-search-backward search-string)))
 
     ;; occur
-    (search-form-insert-search
-     "Occur"
-     'occur
-     "Lines in buffer"
-     (lambda (w)
-       (with-current-buffer (widget-get w :current-buffer)
-         (occur search-string))))
+    (search-form-insert-search "Occur" 'occur
+                               "Lines in buffer"
+                               (lambda (w)
+                                 (with-current-buffer (widget-get w :current-buffer)
+                                   (occur search-string)))
+                               t)
 
     ;; multi-occur
-    (search-form-insert-search
-     "Multi-Occur"
-     'multi-occur
-     "Lines in specified buffers"
-     (lambda (w)
-       (let ((bufs (search-form-multi-occur-get-buffers)))
-         (multi-occur bufs search-string))))
+    ;; Fix-me: This should be done from buffer-list. Have juri finished that?
+    (search-form-insert-search "Multi-Occur" 'multi-occur
+                               "Lines in specified buffers"
+                               (lambda (w)
+                                 (let ((bufs (search-form-multi-occur-get-buffers)))
+                                   (multi-occur bufs search-string)))
+                               t)
     ;;
     (widget-insert "\n")
     (widget-insert (propertize "* Files:" 'face 'font-lock-comment-face)
                    "\n")
 
-    (search-form-insert-search
-     "lgrep"
-     'lgrep
-     "Grep in directory"
-     (lambda (w)
-       (with-current-buffer (widget-get w :current-buffer)
-         (lgrep search-string))))
-    (search-form-insert-search
-     "rgrep"
-     'rgrep
-     "Grep in directory tree"
-     (lambda (w)
-       (with-current-buffer (widget-get w :current-buffer)
-         (rgrep search-string))))
+    (search-form-insert-search "Search in Dir" 'lgrep
+                               "Grep in directory"
+                               'search-form-lgrep
+                               t)
+    (search-form-insert-search "Search in Tree" 'rgrep
+                               "Grep in directory tree"
+                               'search-form-rgrep
+                               t)
 
     (widget-insert "\n")
 
-    (search-form-insert-search
-     "Tagged Files"
-     'tags-search
-     "Search files in tags table"
-     (lambda (w)
-       (with-current-buffer (widget-get w :current-buffer)
-         (tags-search search-string))))
+    (search-form-insert-search "Tagged Files" 'tags-search
+                               "Search files in tags table"
+                               (lambda (w)
+                                 (with-current-buffer (widget-get w :current-buffer)
+                                   (tags-search search-string)))
+                               t)
 
     (widget-insert (make-string (window-width) ?-) "\n")
 
-    (widget-insert "Replace:")
+    (widget-insert "Replace: ")
     (setq search-form-rfield
           (widget-create 'editable-field
-                         :size 60))
+                         :size 58))
     (widget-insert "\n\n")
 
     (widget-insert (propertize "* Buffers:" 'face 'font-lock-comment-face) "\n")
@@ -308,6 +336,18 @@
 
     (widget-insert "\n" (propertize "* Files:" 'face 'font-lock-comment-face) "\n")
 
+    ;; fix-me: rdir-query-replace (from to file-regexp root &optional delimited)
+    (search-form-insert-replace "Replace in Dir"
+                                'query-replace-regexp
+                                "Replace in files in directory"
+                                'search-form-ldir-replace)
+    (search-form-insert-replace "Replace in Tree"
+                                'query-replace-regexp
+                                "Replace in files in directory tree"
+                                'search-form-rdir-replace)
+
+    (widget-insert "\n")
+
     (search-form-insert-replace "Tagged Files"
                                 'query-replace-regexp
                                 "Replace in files in tags tables"
@@ -322,6 +362,42 @@
     (widget-forward 1)
     ))
 
+(defun search-form-lgrep (w)
+  (search-form-r-or-lgrep w t))
+
+(defun search-form-rgrep (w)
+  (search-form-r-or-lgrep w nil))
+
+(defun search-form-r-or-lgrep (w l)
+  (with-current-buffer (widget-get w :current-buffer)
+    (let* ((regexp search-string)
+           (files (grep-read-files regexp))
+           (dir (read-directory-name (if l "In directory: "
+                                       "Base directory: ")
+                                     nil default-directory t)))
+      (if l
+          (lgrep regexp files dir)
+        (rgrep regexp files dir)
+        ))))
+
+(defun search-form-ldir-replace (w)
+  (search-form-l-or-r-dir-replace w t))
+
+(defun search-form-rdir-replace (w)
+  (search-form-l-or-r-dir-replace w nil))
+
+(defun search-form-l-or-r-dir-replace (w l)
+  (let ((files (replace-read-files search-string replace-string))
+        (dir (read-directory-name (if l
+                                      "In directory: "
+                                    "In directory tree: ")
+                                  nil
+                                  (file-name-directory
+                                   (buffer-file-name search-form-current-buffer))
+                                  t)))
+    (if l
+        (ldir-query-replace search-string replace-string files dir)
+      (rdir-query-replace search-string replace-string files dir))))
 
 (provide 'search-form)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

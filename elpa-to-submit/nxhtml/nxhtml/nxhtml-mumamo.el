@@ -3,14 +3,14 @@
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: 2008-03-10T19:04:20+0100 Mon
 (defconst nxhtml-mumamo:version "0.5")
-;; Last-Updated: x
+;; Last-Updated: 2009-01-06 Tue
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   None
+  ;; `backquote', `bytecomp', `mumamo', `mumamo-fun'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -44,6 +44,9 @@
 ;;
 ;;; Code:
 
+(eval-when-compile (require 'cl))
+(eval-when-compile (require 'nxhtml))
+(eval-when-compile (require 'rng-valid nil t))
 (require 'mumamo-fun)
 
 ;; (defgroup nxhtml-auto-val-head nil
@@ -75,10 +78,12 @@
 ;;;###autoload
 (define-mumamo-multi-major-mode nxhtml-mumamo-mode
   "Turn on multiple major modes for (X)HTML with main mode `nxhtml-mode'.
-This covers inlined style and javascript and PHP."
+This covers inlined style and javascript and PHP.
+
+See also `mumamo-alt-php-tags-mode'."
   ("nXhtml Family" nxhtml-mode
    (mumamo-chunk-xml-pi
-    ;;mumamo-chunk-xml-pi2
+    mumamo-chunk-alt-php
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
@@ -150,6 +155,7 @@ This also covers inlined style and javascript."
    (mumamo-chunk-genshi%
     mumamo-chunk-genshi$
     mumamo-chunk-xml-pi
+    mumamo-chunk-alt-php
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
@@ -191,7 +197,6 @@ This also covers inlined style and javascript."
    (
     mumamo-chunk-mjt$
     mumamo-chunk-xml-pi
-    ;;mumamo-chunk-xml-pi2
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=

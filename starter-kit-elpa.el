@@ -38,7 +38,10 @@ just have to assume it's online."
 ;; On your first run, this should pull in all the base packages.
 (when (esk-online?)
   (unless package-archive-contents (package-refresh-contents))
-  (starter-kit-elpa-install))
+  (starter-kit-elpa-install)
+  (unless (or (member 'nxml package-activated-list)
+              (member 'nxml-mode package-activated-list))
+    (package-install 'nxml)))
 
 ;; Workaround for an ELPA bug that people are reporting but I've been
 ;; unable to reproduce:

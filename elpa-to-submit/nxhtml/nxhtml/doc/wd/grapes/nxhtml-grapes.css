@@ -72,6 +72,10 @@ acronym {font-weight: bold; border-bottom: 1px dashed #000; cursor: help}
 p, li, dt, dd {
     margin-right: 1em;
 }
+dt {
+    margin-top:    1em;
+    margin-bottom: 0.5em;
+}
 li ul li {
     margin-right: 0;
 }
