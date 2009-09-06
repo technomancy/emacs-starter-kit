@@ -33,9 +33,8 @@
   '(progn
      (require 'rcirc-color)
      (require 'rcirc-completion)
-     (require 'rcirc-reconnect)
-
      (require 'dbus)
+
      (dbus-register-signal :system "org.freedesktop.NetworkManager"
                       "/org/freedesktop/NetworkManager" "org.freedesktop.NetworkManager"
                       "StateChanged"
@@ -43,7 +42,9 @@
 
      (setq rcirc-authinfo '(("freenode" nickserv "technomancy" "technomancy"))
            rcirc-default-nick "technomancy"
-           rcirc-server-alist '(("irc.freenode.net" :channels ("#emacs" "#seattle.rb" "#clojure"))))
+           rcirc-server-alist '(("irc.freenode.net"
+                                 :channels ("#emacs" "#seattle.rb"
+                                            "#clojure" "#sonian" "#sonian-safe"))))
 
      (add-hook 'rcirc-mode-hook (lambda ()
                                   (set (make-local-variable 'scroll-conservatively)
@@ -59,7 +60,6 @@
     (rcirc-cmd-quit "disconnected"))
   ;; 3 is magic-dbus-speak for "CONNECTED"
   (when (member 3 state)
-    (message "Connected!")
     (rcirc nil)))
 
 (defun irc ()
@@ -92,7 +92,7 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/conkeror/contrib/run-conkeror")
 
-(clojure-slime-config "/home/phil/src/")
+(clojure-slime-config)
 
 ;; (eval-after-load 'swank-clojure
 ;;   '(add-to-list 'swank-clojure-extra-vm-args
@@ -135,3 +135,20 @@
 ;;; registers
 (set-register ?n '(file . "~/documents/notes.org"))
 (set-register ?p '(file . "~/.emacs.d/phil.el"))
+
+;; processing
+(add-to-list 'load-path "/home/phil/src/processing-emacs/")
+(autoload 'processing-mode "processing-mode" "Processing mode" t)
+(add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
+(setq processing-location "/home/phil/src/processing-1.0.6/")
+
+;; Java crap
+
+(defun insert-property ()
+  "XML! it's awesome."
+  (interactive)
+  (let ((name (read-from-minibuffer "Property Name: "))
+        (value (read-from-minibuffer "Property Value: ")))
+    (insert (format
+             "<property>\n  <name>%s</name>\n  <value>%s</value>\n</property>\n"
+             name value))))
