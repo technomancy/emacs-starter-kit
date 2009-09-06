@@ -146,3 +146,17 @@ Key Bindings.
 (provide 'starter-kit-bindings)
 ;;; starter-kit-bindings.el ends here
 #+end_src
+** Org-mode
+Two global binding for Org-mode (see [[file:starter-kit-org.org][starter-kit-org]])
+
+The [[http://orgmode.org/manual/Agenda-Views.html#Agenda-Views][Org-mode agenda]] is good to have close at hand
+#+begin_src emacs-lisp
+(define-key global-map "\C-ca" 'org-agenda)
+#+end_src
+
+Org-mode supports [[http://orgmode.org/manual/Hyperlinks.html#Hyperlinks][links]], this command allows you to store links
+globally for later insertion into an Org-mode buffer.  See
+[[http://orgmode.org/manual/Handling-links.html#Handling-links][Handling-links]] in the Org-mode manual.
+#+begin_src emacs-lisp
+(define-key global-map "\C-cl" 'org-store-link)
+#+end_src
