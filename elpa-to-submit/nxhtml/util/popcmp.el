@@ -43,7 +43,7 @@
 ;;
 ;;; Code:
 
-(require 'ourcomments-util)
+(eval-when-compile (require 'ourcomments-util))
 
 (defgroup popcmp nil
   "Customization group for popup completion."
@@ -51,21 +51,103 @@
   :group 'nxhtml
   :group 'convenience)
 
-(define-toggle popcmp-popup-completion t
-  "Use a popup menu for some completions if non-nil.
-When completion is used for alternatives tighed to text at the
-point in buffer it may make sense to use a popup menu for
-completion.  This variable let you decide whether normal style
-completion or popup style completion should be used then.
+;; (define-toggle popcmp-popup-completion t
+;;   "Use a popup menu for some completions if non-nil.
 
-This style of completion is not implemented for all completions.
-It is implemented for specific cases but the choice of completion
-style is managed generally by this variable for all these cases.
+;; ***** Obsolete: Use `popcmp-completion-style' instead.
+
+;; When completion is used for alternatives tighed to text at the
+;; point in buffer it may make sense to use a popup menu for
+;; completion.  This variable let you decide whether normal style
+;; completion or popup style completion should be used then.
+
+;; This style of completion is not implemented for all completions.
+;; It is implemented for specific cases but the choice of completion
+;; style is managed generally by this variable for all these cases.
+
+;; See also the options `popcmp-short-help-beside-alts' and
+;; `popcmp-group-alternatives' which are also availabe when popup
+;; completion is available."
+;;   :tag "Popup style completion"
+;;   :group 'popcmp)
+
+(defun popcmp-cant-use-style (style)
+  (save-match-data ;; runs in timer
+    (describe-variable 'popcmp-completion-style)
+    (message (propertize "popcmp-completion-style: style `%s' is not available"
+                         'face 'secondary-selection)
+             style)))
+
+
+
+
+
+;;(popcmp-set-completion-style 'company-mode)
+(defun popcmp-set-completion-style (val)
+  "Internal use, set `popcmp-completion-style' to VAL."
+  (assert (memq val '(popcmp-popup emacs-default company-mode anything)) t)
+  (case val
+    ('company-mode (unless (fboundp 'company-mode)
+                     (require 'company-mode nil t))
+                   (unless (fboundp 'company-mode)
+                     (run-with-idle-timer 1 nil 'popcmp-cant-use-style val)
+                     (setq val 'popcmp-popup)))
+    ('anything     (unless (fboundp 'anything)
+                     (require 'anything nil t))
+                   (unless (fboundp 'anything)
+                     (run-with-idle-timer 1 nil 'popcmp-cant-use-style val)
+                     (setq val 'popcmp-popup))))
+  (set-default 'popcmp-completion-style val)
+  (unless (eq val 'company-mode)
+    (when (and (boundp 'global-company-mode)
+               global-company-mode)
+      (global-company-mode -1))
+    (remove-hook 'after-change-major-mode-hook 'company-set-major-mode-backend)
+    (remove-hook 'mumamo-after-change-major-mode-hook 'mumamo-turn-on-company-mode))
+  (when (eq val 'company-mode)
+    (unless (and (boundp 'global-company-mode)
+                 global-company-mode)
+      (global-company-mode 1))
+    (add-hook 'after-change-major-mode-hook 'company-set-major-mode-backend)
+    (add-hook 'mumamo-after-change-major-mode-hook 'mumamo-turn-on-company-mode)))
+
+;; fix-me: move to mumamo.el
+(defun mumamo-turn-on-company-mode ()
+  (when (and (boundp 'company-mode)
+             company-mode)
+    (company-mode 1)
+    (company-set-major-mode-backend)))
+
+(defcustom popcmp-completion-style (cond
+                                    ;;((and (fboundp 'global-company-mode) 'company-mode) 'company-mode)
+                                    (t 'popcmp-popup))
+  "Completion style.
+The currently available completion styles are:
+
+- popcmp-popup: Use OS popup menus (default).
+- emacs-default: Emacs default completion.
+- Company Mode completion.
+- anything: The Anything elisp lib completion style.
+
+The style of completion set here is not implemented for all
+completions.  The scope varies however with which completion
+style you have choosen.
+
+For information about Company Mode and how to use it see URL
+`http://www.emacswiki.org/emacs/CompanyMode'.
+
+For information about Anything and how to use it see URL
+`http://www.emacswiki.org/emacs/Anything'.
 
 See also the options `popcmp-short-help-beside-alts' and
 `popcmp-group-alternatives' which are also availabe when popup
 completion is available."
-  :tag "Popup style completion"
+  :type '(choice (const company-mode)
+                 (const popcmp-popup)
+                 (const emacs-default)
+                 (const anything))
+  :set (lambda (sym val)
+         (popcmp-set-completion-style val))
   :group 'popcmp)
 
 (define-toggle popcmp-short-help-beside-alts t
@@ -74,7 +156,7 @@ If this is non-nil a short help text is shown beside each
 alternative for which such a help text is available.
 
 This works in the same circumstances as
-`popcmp-popup-completion'."
+`popcmp-completion-style'."
   :tag "Short help beside alternatives"
   :group 'popcmp)
 
@@ -85,7 +167,7 @@ sets. If this option is non-nil then you will first choose a set
 and then an alternative within this set.
 
 This works in the same circumstances as
-`popcmp-popup-completion'."
+`popcmp-completion-style'."
   :tag "Group alternatives"
   :group 'popcmp)
 
@@ -134,9 +216,41 @@ This works in the same circumstances as
     alt))
 
 (defun popcmp-remove-help (alt-with-help)
-  (replace-regexp-in-string " -- .*" "" alt-with-help))
+  (when alt-with-help
+    (replace-regexp-in-string " -- .*" "" alt-with-help)))
 
-(defun popcmp-completing-read-nopop (prompt
+(defun popcmp-anything (prompt collection
+                               predicate require-match
+                               initial-input hist def inherit-input-method
+                               alt-help alt-sets)
+  (let* ((table collection)
+         (alt-sets2 (apply 'append (mapcar 'cdr alt-sets)))
+         (cands (cond ((not (listp table)) alt-sets2)
+                     (t table)))
+         ret-val
+         (source `((name . "Completion candidates")
+                   (candidates . ,cands)
+                   (action . (("Select current alternative (press TAB to see it again)" . (lambda (candidate)
+                                            (setq ret-val candidate))))))))
+    (anything (list source) initial-input prompt)
+    ret-val))
+
+(defun popcmp-completing-read-1 (prompt collection
+                                        predicate require-match
+                                        initial-input hist2 def inherit-input-method alt-help alt-sets)
+  ;; Fix-me: must rename hist to hist2 in par list. Emacs bug?
+  (cond
+   ((eq popcmp-completion-style 'emacs-default)
+    (completing-read prompt collection predicate require-match initial-input hist2 def inherit-input-method))
+   ((eq popcmp-completion-style 'anything)
+    (popcmp-anything prompt collection predicate require-match initial-input hist2 def inherit-input-method
+                     alt-help alt-sets))
+   ((eq popcmp-completion-style 'company-mode)
+    ;; No way to read this from company-mode, use emacs-default
+    (completing-read prompt collection predicate require-match initial-input hist2 def inherit-input-method))
+   (t (error "Do not know popcmp-completion-style %S" popcmp-completion-style))))
+
+(defun popcmp-completing-read-other (prompt
                                     table
                                     &optional predicate require-match
                                     initial-input pop-hist def inherit-input-method
@@ -155,27 +269,33 @@ This works in the same circumstances as
                                 sets))
              set)
         (setq set
-              (downcase
-               (completing-read (concat
-                                 (substring prompt 0 (- (length prompt) 2))
-                                 ", select group: ")
-                                set-names
-                                nil t
-                                nil nil nil inherit-input-method)))
-        (if (= 0 (length set))
+              (popcmp-completing-read-1 (concat
+                                         (substring prompt 0 (- (length prompt) 2))
+                                         ", select group: ")
+                                        set-names
+                                        nil t
+                                        nil nil nil inherit-input-method nil nil))
+        (if (or (not set) (= 0 (length set)))
             (setq alts nil)
+          (setq set (downcase set))
           (setq alts (popcmp-getset-alts set sets)))))
     (if (not alts)
         ""
-      (when popcmp-short-help-beside-alts
-        (setq alts (mapcar (lambda (a)
-                             (popcmp-add-help a alt-help))
-                           alts)))
-      (popcmp-remove-help
-       (completing-read prompt
-                        alts ;table
-                        predicate require-match
-                        initial-input pop-hist def inherit-input-method)))))
+      (if (= 1 (length alts))
+          (car alts)
+        (when popcmp-short-help-beside-alts
+          (setq alts (mapcar (lambda (a)
+                               (popcmp-add-help a alt-help))
+                             alts)))
+        (popcmp-remove-help
+         ;;(completing-read prompt
+         (popcmp-completing-read-1 prompt
+                                   alts ;table
+                                   predicate require-match
+                                   initial-input pop-hist def inherit-input-method
+                                   ;;alt-help alt-sets
+                                   nil nil
+                                   ))))))
 
 (defun popcmp-completing-read-pop (prompt
                                   table
@@ -192,7 +312,6 @@ This works in the same circumstances as
           (message "No alternative found")
           nil)
       (let ((pop-map (make-sparse-keymap prompt))
-            (where (point-to-coord (point)))
             (sets (when (and popcmp-group-alternatives alt-sets)
                     (popcmp-getsets matching-alts alt-sets)))
             (add-alt (lambda (k tg)
@@ -218,6 +337,7 @@ This works in the same circumstances as
         (popup-menu-at-point pop-map)
         completion))))
 
+(defvar popcmp-in-buffer-allowed nil)
 (defun popcmp-completing-read (prompt
                               table
                               &optional predicate require-match
@@ -230,7 +350,7 @@ purpose is to provide a popup style menu for completion when
 completion is tighed to text at point in a buffer. If a popup
 menu is used it will be shown at window point. Whether a popup
 menu or minibuffer completion is used is governed by
-`popcmp-popup-completion'.
+`popcmp-completion-style'.
 
 The variables PROMPT, TABLE, PREDICATE, REQUIRE-MATCH,
 INITIAL-INPUT, POP-HIST, DEF and INHERIT-INPUT-METHOD all have the
@@ -245,24 +365,51 @@ ALT-SETS should be nil or an association list that has as keys
 groups and as second element an alternative that should go into
 this group.
 "
-  (popcmp-mark-completing initial-input)
-  (unwind-protect
-      (if popcmp-popup-completion
-          (popcmp-completing-read-pop
-           prompt
-           table
-           predicate require-match
-           initial-input pop-hist def inherit-input-method
-           alt-help
-           alt-sets)
-        (popcmp-completing-read-nopop
-         prompt
-         table
-         predicate require-match
-         initial-input pop-hist def inherit-input-method
-         alt-help
-         alt-sets))
-    (popcmp-unmark-completing)))
+  (if (and popcmp-in-buffer-allowed
+           (eq popcmp-completion-style 'company-mode)
+           (boundp 'company-mode)
+           company-mode)
+      (progn
+        (add-hook 'company-completion-finished-hook 'nxhtml-complete-tag-do-also-for-state-completion t)
+        ;;(remove-hook 'company-completion-finished-hook 'nxhtml-complete-tag-do-also-for-state-completion)
+        (call-interactively 'company-nxml)
+        initial-input)
+
+    (popcmp-mark-completing initial-input)
+    (let ((err-sym 'quit)
+          (err-val nil)
+          ret)
+      (unwind-protect
+          (if (eq popcmp-completion-style 'popcmp-popup)
+              (progn
+                (setq err-sym nil)
+                (popcmp-completing-read-pop
+                 prompt
+                 table
+                 predicate require-match
+                 initial-input pop-hist def inherit-input-method
+                 alt-help
+                 alt-sets))
+            ;;(condition-case err
+                (prog1
+                    (setq ret (popcmp-completing-read-other
+                               prompt
+                               table
+                               predicate require-match
+                               initial-input pop-hist def inherit-input-method
+                               alt-help
+                               alt-sets))
+                  ;; Unless quit or error in Anything we come here:
+                  ;;(message "ret=(%S)" ret)
+                  (when (and ret (not (string= ret "")))
+                    (setq err-sym nil)))
+              ;; (error
+              ;;  ;;(message "err=%S" err)
+              ;;  (setq err-sym (car err))
+              ;;  (setq err-val (cdr err))))
+                )
+        (popcmp-unmark-completing)
+        (when err-sym (signal err-sym err-val))))))
 
 (defvar popcmp-mark-completing-ovl nil)
 

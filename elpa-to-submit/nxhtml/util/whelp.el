@@ -96,9 +96,8 @@ The third argument DOC is a documentation string for the widget."
   (setq describe-temp-help-buffer (get-buffer-create "*Copy of *Help* Buffer for Description*")))
 
 (defun describe-field (pos)
-  "Describe field at point or cursor."
-  (interactive
-   (list (point)))
+  "Describe field at marker POS."
+  (interactive (list (point)))
   (unless (markerp pos) (setq pos (copy-marker pos)))
   (when (eq (marker-buffer pos) (get-buffer (help-buffer)))
     (with-current-buffer (describe-get-temp-help-buffer)
@@ -107,25 +106,27 @@ The third argument DOC is a documentation string for the widget."
                 (buffer-string)))
       (goto-char (marker-position pos))
       (setq pos (point-marker))))
-  (cond ((let* ((field (get-char-property pos 'field))
-                (wbutton (get-char-property pos 'button))
-                (doc (get-char-property pos 'widget-doc))
-                (widget (or field wbutton doc)))
-           (and widget
+  (let (field wbutton doc button widget)
+    (with-current-buffer (marker-buffer pos)
+      (setq field (get-char-property pos 'field))
+      (setq wbutton (get-char-property pos 'button))
+      (setq doc (get-char-property pos 'widget-doc))
+      (setq button (button-at pos))
+      (setq widget (or field wbutton doc)))
+    (cond ((and widget
                 (if (symbolp widget)
                     (get widget 'widget-type)
                   (and (consp widget)
-                       (get (widget-type widget) 'widget-type)))))
-         (describe-widget pos)
-         )
-        ((button-at pos)
-         (describe-button pos))
-        ((and (eq major-mode 'Info-mode)
-              (memq (get-text-property (point) 'font-lock-face)
-                    '(info-xref info-xref-visited)))
-         (message "info link"))
-        (t
-         (message "No widget or button at point"))))
+                       (get (widget-type widget) 'widget-type))))
+           (describe-widget pos))
+          (button
+           (describe-button pos))
+          ((and (eq major-mode 'Info-mode)
+                (memq (get-text-property pos 'font-lock-face)
+                      '(info-xref info-xref-visited)))
+           (message "info link"))
+          (t
+           (message "No widget or button at point")))))
 
 (defun describe-insert-header (pos)
   (widget-insert
@@ -980,3 +981,5 @@ The :value of the widget shuld be the button to be browsed."
            )
          )
         (print-help-return-message)))))
+
+(provide 'whelp)

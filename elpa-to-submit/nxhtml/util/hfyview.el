@@ -3,9 +3,9 @@
 ;; Copyright (C) 2005, 2006, 2007 by Lennart Borgman
 
 ;; Author: Lennart Borgman
-;; Created: Fri Oct 21 00:11:07 2005
-;; Version: 0.63
-;; Last-Updated: 2008-03-20T19:36:39+0100 Thu
+;; Created: Fri Oct 21 2005
+(defconst hfyview:version "0.63") ;; Version:
+;; Last-Updated: 2009-08-04 Tue
 ;; Keywords: printing
 ;; URL: http://OurComments.org/Emacs/DL/elisp/hfyview.el
 ;; Compatibility:
@@ -13,7 +13,7 @@
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `easymenu', `htmlfontify'.
+;; `easymenu'.
 ;;
 ;;
 ;; You can find htmlfontify.el at
@@ -73,9 +73,57 @@
 ;;
 ;;; Code:
 
-
-(require 'htmlfontify)
+(eval-when-compile (require 'cl))
+(eval-when-compile (require 'htmlfontify))
 (require 'easymenu)
+
+(defvar hfyview-selected-window)
+
+(defvar hfyview-mode-emulation-map
+  (let ((m (make-sparse-keymap)))
+    ;;(define-key m [apps] 'hfyview-frame)
+    m))
+
+;;(define-key hfyview-mode-emulation-map [apps] 'hfy-show-grabbed)
+
+(defvar hfyview-mode-emulation-maps
+  (list (cons 'hfyview-mode hfyview-mode-emulation-map)))
+
+;; Fix-me: which are needed?
+(defconst hfyview-mode-other-maps
+  '(
+    hfyview-mode-emulation-map
+    minibuffer-local-completion-map
+    minibuffer-local-filename-completion-map
+    minibuffer-local-isearch-map
+    minibuffer-local-map
+    minibuffer-local-must-match-filename-map
+    minibuffer-local-must-match-map
+    minibuffer-local-ns-map
+    viper-minibuffer-map
+    isearch-mode-map))
+
+(define-minor-mode hfyview-mode
+  "Define some useful keys for `hfyview-frame' etc.
+Put this mode in `emulation-mode-map-alists' so they can be used
+at any time."
+  :global t
+  :group 'htmlfontify
+  (if hfyview-mode
+      (progn
+        (add-hook 'pre-command-hook 'hfy-grab-minibuffer-content)
+        (add-hook 'post-command-hook 'hfy-grab-echo-content)
+        (add-to-list 'emulation-mode-map-alists 'hfyview-mode-emulation-maps)
+        (dolist (map hfyview-mode-other-maps)
+          (define-key (symbol-value map) [(apps)] 'hfyview-frame)
+          ;;(define-key (symbol-value map) [(apps)] 'hfy-show-grabbed)
+          )
+        )
+    (remove-hook 'pre-command-hook 'hfy-grab-minibuffer-content)
+    (remove-hook 'post-command-hook 'hfy-grab-echo-content)
+    (setq emulation-mode-map-alists (delq 'hfyview-mode-emulation-maps emulation-mode-map-alists))
+    (dolist (map hfyview-mode-other-maps)
+      (define-key (symbol-value map) [(apps)] nil))))
 
 (defun hfyview-fontify-region (start end)
   ;; If the last command in mumamo resulted in a change of major-mode
@@ -91,11 +139,13 @@
           (htmlfontify-buffer))
       (htmlfontify-buffer))))
 
-(defun hfyview-buffer-1(start end)
+(defun hfyview-buffer-1(start end show-source)
   (let ((hbuf (hfyview-fontify-region start end)))
     (with-current-buffer hbuf
       (setq buffer-file-name nil)
-      (browse-url-of-buffer))))
+      (browse-url-of-buffer))
+    (when show-source (switch-to-buffer-other-window hbuf))
+    hbuf))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -154,24 +204,49 @@ the Quick Print entry."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;; Interactive commands
 
-(defun hfyview-buffer (&optional region-only)
-  "Convert buffer to html preserving faces and show in web browser."
-  (interactive)
-  (hfyview-buffer-1 nil nil))
+;;;###autoload
+(defun hfyview-buffer (arg)
+  "Convert buffer to html preserving faces and show in web browser.
+With command prefix also show created HTML source in other window."
+  (interactive "P")
+  (hfyview-buffer-1 nil nil arg))
 
-(defun hfyview-region ()
-  "Convert region to html preserving faces and show in web browser."
-  (interactive)
-  (hfyview-buffer-1 (region-beginning) (region-end)))
+;;;###autoload
+(defun hfyview-region (arg)
+  "Convert region to html preserving faces and show in web browser.
+With command prefix also show created HTML source in other window."
+  (interactive "P")
+  (hfyview-buffer-1 (region-beginning) (region-end) arg))
 
-(defun hfyview-window ()
-  "Convert window to html preserving faces and show in web browser."
-  (interactive)
-  (hfyview-buffer-1 (window-start) (window-end)))
+;;;###autoload
+(defun hfyview-window (arg)
+  "Convert window to html preserving faces and show in web browser.
+With command prefix also show created HTML source in other window."
+  (interactive "P")
+  (hfyview-buffer-1 (window-start) (window-end) arg))
+
+;;;###autoload
+(defun hfyview-frame (whole-buffers)
+  "Convert frame to html preserving faces and show in web browser.
+Make an XHTML view of the current Emacs frame. Put it in a buffer
+named *hfyview-frame* and show that buffer in a web browser.
+
+If WHOLE-BUFFERS is non-nil then the whole content of the buffers
+is shown in the XHTML page, otherwise just the part that is
+visible currently on the frame.
+
+With command prefix also show created HTML source in other window."
+  (interactive (list (y-or-n-p "Enter y for whole buffers, n for only visible part: ")))
+  (let ((title "Emacs - Frame Dump")
+        buf)
+    (setq title (frame-parameter (selected-frame) 'name))
+    (setq buf (hfyview-frame-1 whole-buffers title))
+    (when current-prefix-arg
+      (switch-to-buffer-other-window buf))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;; Interactive commands
+;;;;;; Internal commands
 
 (defconst hfyview-modline-format
   ;; There seems to be a bug in Firefox that prevents this from
@@ -386,6 +461,10 @@ body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 50
   (or (hfy-triplet "SystemActiveTitle")
       (hfy-triplet "blue")))
 
+(defvar hfy-grabbed-echo-content nil)
+(defvar hfy-grabbed-minibuffer-content nil)
+(defvar hfyview-prompt-face nil)
+
 (defun hfyview-frame-minibuff (use-grabbed)
   (if (and use-grabbed
            (or hfy-grabbed-echo-content
@@ -420,8 +499,8 @@ body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 50
           (setq bdy-end (point))
           (list (buffer-substring css-start css-end)
                 (buffer-substring bdy-start bdy-end))))
-    (let ((mini-bg (face-attribute prompt-face :background))
-          (mini-fg (face-attribute prompt-face :foreground)))
+    (let ((mini-bg (face-attribute hfyview-prompt-face :background))
+          (mini-fg (face-attribute hfyview-prompt-face :foreground)))
       (if (eq mini-fg 'unspecified)
           (setq mini-fg "")
         (setq mini-fg (concat "color:" (hfy-triplet mini-fg) "; ")))
@@ -450,13 +529,15 @@ body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 50
          html
          css
          ;; (face-attribute 'minibuffer-prompt :foreground)
-         (prompt-face (plist-get minibuffer-prompt-properties 'face))
+         (hfyview-prompt-face (plist-get minibuffer-prompt-properties 'face))
          minibuf
          (frame-width (* 0.56 (frame-width)))
          table-style
          (icon-file (expand-file-name "../etc/images/icons/emacs_16.png" exec-directory))
          (img-tag (if (file-exists-p icon-file)
                       (concat "<img src=\"file://" icon-file "\" height=\"16\" width=\"16\" />")))
+	 mini-css
+	 mini-html
          )
     (setq table-style
           (format "border: solid %s; width:%sem;"
@@ -492,54 +573,15 @@ body { font-family: outline-courier new;  font-stretch: normal;  font-weight: 50
               "</tr>\n"
               "</table>\n"
               hfyview-xhtml-footer)
-      (browse-url-of-buffer))))
+      (browse-url-of-buffer)
+      outbuf)))
 
-(defun hfyview-frame (whole-buffers)
-  "Convert frame to html preserving faces and show in web browser.
-Make an XHTML view of the current Emacs frame. Put it in a buffer
-named *hfyview-frame* and show that buffer in a web browser.
-
-If WHOLE-BUFFERS is non-nil then the whole content of the buffers
-is shown in the XHTML page, otherwise just the part that is
-visible currently on the frame."
-  (interactive (list (y-or-n-p "Enter y for whole buffers, n for only visible part: ")))
-  (let ((title "Emacs - Frame Dump"))
-    (setq title (frame-parameter (selected-frame) 'name))
-    (hfyview-frame-1 whole-buffers title)))
-
-(defvar hfyview-mode-emulation-map
-  (let ((m (make-sparse-keymap)))
-    ;;(define-key m [apps] 'hfyview-frame)
-    m))
-
-;;(define-key hfyview-mode-emulation-map [apps] 'hfy-show-grabbed)
-
-(defvar hfyview-mode-emulation-maps
-  (list (cons 'hfyview-mode hfyview-mode-emulation-map)))
-
-;; Fix-me: which are needed?
-(defconst hfyview-mode-other-maps
-  '(
-    hfyview-mode-emulation-map
-    minibuffer-local-completion-map
-    minibuffer-local-filename-completion-map
-    minibuffer-local-isearch-map
-    minibuffer-local-map
-    minibuffer-local-must-match-filename-map
-    minibuffer-local-must-match-map
-    minibuffer-local-ns-map
-    viper-minibuffer-map
-    isearch-mode-map))
-
-(defvar hfy-grabbed-minibuffer-content nil)
 ;; (global-set-key [f7] '(lambda () (interactive) (message "grabbed=%s" hfy-grabbed-minibuffer-content)))
 ;; (global-set-key [f7] '(lambda () (interactive) (message "grabbed cm=%s" hfy-grabbed-echo-content)))
 ;; (global-set-key [f7] '(lambda () (interactive) (message "grabbed cm=%s, mb=%s" hfy-grabbed-echo-content hfy-grabbed-minibuffer-content)))
 ;; (defun hfy-show-grabbed ()
 ;;   (interactive)
 ;;   (message "grabbed cm=%s, mb=%s" hfy-grabbed-echo-content hfy-grabbed-minibuffer-content))
-
-(defvar hfy-grabbed-echo-content nil)
 
 (defun hfy-grab-echo-content ()
   (setq hfy-grabbed-echo-content (current-message)))
@@ -553,30 +595,6 @@ visible currently on the frame."
               (buffer-substring
                (point-min) (point-max)))
             )))
-
-(define-minor-mode hfyview-mode
-  "Define some useful keys for `hfyview-frame' etc.
-Put this mode in `emulation-mode-map-alists' so they can be used
-at any time."
-  :global t
-  :group 'htmlfontify
-  (if hfyview-mode
-      (progn
-        (add-hook 'pre-command-hook 'hfy-grab-minibuffer-content)
-        (add-hook 'post-command-hook 'hfy-grab-echo-content)
-        (add-to-list 'emulation-mode-map-alists 'hfyview-mode-emulation-maps)
-        (dolist (map hfyview-mode-other-maps)
-          (define-key (symbol-value map) [(apps)] 'hfyview-frame)
-          ;;(define-key (symbol-value map) [(apps)] 'hfy-show-grabbed)
-          )
-        )
-    (remove-hook 'pre-command-hook 'hfy-grab-minibuffer-content)
-    (remove-hook 'post-command-hook 'hfy-grab-echo-content)
-    (setq emulation-mode-map-alists (delq 'hfyview-mode-emulation-maps emulation-mode-map-alists))
-    (dolist (map hfyview-mode-other-maps)
-      (define-key (symbol-value map) [(apps)] nil))
-    )
-  )
 
 ;;(add-hook 'pre-command-hook 'grab-minibuffer-content nil t)
 ;;(remove-hook 'pre-command-hook 'grab-minibuffer-content) t)

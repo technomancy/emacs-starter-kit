@@ -73,15 +73,16 @@
         (when (looking-at "[a-z-]+")
           (match-string-no-properties 0))))))
 
-
+;;;###autoload
 (defun xhtml-help-show-css-ref ()
-  "Show css reference for css property name at point."
+  "Show CSS reference for CSS property name at point."
   (interactive)
   (let ((css-prop (xhtml-help-css-prop-at-point)))
     (setq css-prop (read-from-minibuffer "Get help for CSS property: " css-prop))
     (when css-prop
       (xhtml-help-browse-css css-prop))))
 
+;;;###autoload
 (defun xhtml-help-tag-at-point ()
   "Get xhtml tag name at or before point."
   (save-excursion
@@ -91,6 +92,7 @@
                (looking-at "</?\\([[:alnum:]]+\\)"))
       (match-string-no-properties 1))))
 
+;;;###autoload
 (defun xhtml-help-show-tag-ref ()
   "Show xhtml reference for tag name at or before point."
   (interactive)
@@ -110,7 +112,7 @@
           (const "http://www.w3.org/")
           (const "http://xhtml.com/")
           (const "http://www.w3schools.com/")
-          (const "http://learningforlife.fsu.edu/")
+          ;;(const "http://learningforlife.fsu.edu/")
           )
   :group 'xhtml-help)
 
@@ -134,12 +136,10 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
           notvalid)
     (when (member default notvalid)
       (setq default (car choices)))
-    ;;(error "%s" choices)
     (completing-read (concat "Fetch " prompt " reference from: ")
                      choices
                      nil
                      t
-                     ;;xhtml-help-refurl
                      default
                      '(choices . 1))))
 
@@ -198,17 +198,17 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
                    "text_")
                 (  t ""))
                css-prop ".asp"))
-           (  (equal refurl "http://learningforlife.fsu.edu/")
-              (let ((css-prop2 css-prop)
-                    (cc)
-                    (ii 0))
-                (while (< ii (length css-prop))
-                  (setq cc (substring css-prop2 ii (1+ ii)))
-                  (when (equal cc "-")
-                    (store-substring css-prop2 ii "_"))
-                  (setq ii (1+ ii)))
-                (concat
-                 refurl "webmaster/references/css/" css-prop2 ".cfm")))
+           ;; (  (equal refurl "http://learningforlife.fsu.edu/")
+           ;;    (let ((css-prop2 css-prop)
+           ;;          (cc)
+           ;;          (ii 0))
+           ;;      (while (< ii (length css-prop))
+           ;;        (setq cc (substring css-prop2 ii (1+ ii)))
+           ;;        (when (equal cc "-")
+           ;;          (store-substring css-prop2 ii "_"))
+           ;;        (setq ii (1+ ii)))
+           ;;      (concat
+           ;;       refurl "webmaster/references/css/" css-prop2 ".cfm")))
            (  (equal refurl "http://www.w3.org/")
               (let ((properties "")
                     (prop-def ""))
@@ -304,56 +304,56 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
                 (  t
                    (concat "tag_" tag ".asp")
                    ))))
-           (  (equal refurl "http://learningforlife.fsu.edu/")
-               (concat
-                refurl "webmaster/references/xhtml/tags/"
-                (cond
-                 (   (member tag '("body" "head" "html" "title"))
-                     "structure/")
-                 (   (member tag '("abbr" "acronym" "address" "blockquote" "br" "cite"
-                                   "code" "dfn" "div" "em" "h1" "h2" "h3" "h4" "h5" "h6"
-                                   "kbd" "p" "pre" "q" "samp" "span" "strong" "var"))
-                     "text/")
-                 (   (member tag '("a"))
-                     "hypertext/")
-                 (   (member tag '("dl" "dd" "dt" "ol" "ul" "li"))
-                     "list/")
-                 (   (member tag '("object" "param"))
-                     "object/")
-                 (   (member tag '("b" "big" "hr" "i" "small" "sub" "sup" "tt"))
-                     "presentation/")
-                 (   (member tag '("del" "ins"))
-                     "edit/")
-                 (   (member tag '("bdo"))
-                     "bidirectional/")
-                 (   (member tag '("button" "fieldset" "form" "input" "label" "legend"
-                                   "select" "optgroup" "option" "textarea"))
-                     "forms/")
-                 (   (member tag '("caption" "col" "colgroup" "table" "tbody" "td"
-                                   "tfoot" "th" "thead" "tr"))
-                     "table/")
-                 (   (member tag '("img"))
-                     "image/")
-                 (   (member tag '("area" "map"))
-                     "client/")
-                 (   (member tag '("area" "map"))
-                     "client/")
-                 (   (member tag '("meta"))
-                     "meta/")
-                 (   (member tag '("noscript" "script"))
-                     "scripting/")
-                 (   (member tag '("style"))
-                     "stylesheet/")
-                 (   (member tag '("link"))
-                     "link/")
-                 (   (member tag '("base"))
-                     "base/")
-                 (   (member tag '("base"))
-                     "base/")
-                 (   (member tag '("ruby" "rbc" "rtc" "rb" "rt" "rp"))
-                     "ruby/")
-                 )
-                tag ".cfm"))
+           ;; (  (equal refurl "http://learningforlife.fsu.edu/")
+           ;;     (concat
+           ;;      refurl "webmaster/references/xhtml/tags/"
+           ;;      (cond
+           ;;       (   (member tag '("body" "head" "html" "title"))
+           ;;           "structure/")
+           ;;       (   (member tag '("abbr" "acronym" "address" "blockquote" "br" "cite"
+           ;;                         "code" "dfn" "div" "em" "h1" "h2" "h3" "h4" "h5" "h6"
+           ;;                         "kbd" "p" "pre" "q" "samp" "span" "strong" "var"))
+           ;;           "text/")
+           ;;       (   (member tag '("a"))
+           ;;           "hypertext/")
+           ;;       (   (member tag '("dl" "dd" "dt" "ol" "ul" "li"))
+           ;;           "list/")
+           ;;       (   (member tag '("object" "param"))
+           ;;           "object/")
+           ;;       (   (member tag '("b" "big" "hr" "i" "small" "sub" "sup" "tt"))
+           ;;           "presentation/")
+           ;;       (   (member tag '("del" "ins"))
+           ;;           "edit/")
+           ;;       (   (member tag '("bdo"))
+           ;;           "bidirectional/")
+           ;;       (   (member tag '("button" "fieldset" "form" "input" "label" "legend"
+           ;;                         "select" "optgroup" "option" "textarea"))
+           ;;           "forms/")
+           ;;       (   (member tag '("caption" "col" "colgroup" "table" "tbody" "td"
+           ;;                         "tfoot" "th" "thead" "tr"))
+           ;;           "table/")
+           ;;       (   (member tag '("img"))
+           ;;           "image/")
+           ;;       (   (member tag '("area" "map"))
+           ;;           "client/")
+           ;;       (   (member tag '("area" "map"))
+           ;;           "client/")
+           ;;       (   (member tag '("meta"))
+           ;;           "meta/")
+           ;;       (   (member tag '("noscript" "script"))
+           ;;           "scripting/")
+           ;;       (   (member tag '("style"))
+           ;;           "stylesheet/")
+           ;;       (   (member tag '("link"))
+           ;;           "link/")
+           ;;       (   (member tag '("base"))
+           ;;           "base/")
+           ;;       (   (member tag '("base"))
+           ;;           "base/")
+           ;;       (   (member tag '("ruby" "rbc" "rtc" "rb" "rt" "rp"))
+           ;;           "ruby/")
+           ;;       )
+           ;;      tag ".cfm"))
            (  t (error "Bad value for xhtml-help-refurl: %s" refurl))
            )))
     (browse-url url)))

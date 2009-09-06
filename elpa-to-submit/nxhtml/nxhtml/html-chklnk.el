@@ -47,14 +47,17 @@
 
 (eval-when-compile (add-to-list 'load-path default-directory load-path))
 (eval-when-compile
-  (let ((load-path load-path)
-        (this-dir (file-name-directory
-                   (if load-file-name load-file-name buffer-file-name))))
-    (add-to-list 'load-path (expand-file-name "../../lisp" this-dir))
-    (require 'w32shell nil t)))
+  (when (> emacs-major-version 22)
+    (let* ((load-path load-path)
+           (this-file (or load-file-name
+                          (when (boundp 'bytecomp-filename) bytecomp-filename)
+                          buffer-file-name))
+           (this-dir (file-name-directory this-file)))
+      (add-to-list 'load-path (expand-file-name "../../lisp" this-dir))
+      (require 'w32shell nil t))))
 
 
-(require 'html-site)
+(eval-when-compile (require 'html-site))
 (require 'compile)
 
 (defgroup html-chklnk nil

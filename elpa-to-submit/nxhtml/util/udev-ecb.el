@@ -45,29 +45,36 @@
 ;;; Code:
 
 
-(require 'udev)
+(eval-when-compile (require 'udev))
 
 (defgroup udev-ecb nil
   "Customization group for udev-ecb."
   :group 'nxhtml)
 
-(defcustom udev-ecb-dir "~/ecb-cvs/"
+(defcustom udev-ecb-dir "~/.emacs.d/udev/ecb-cvs/"
   "Directory where to put CVS ECB sources."
   :type 'directory
   :group 'udev-ecb)
 
+(defun udev-ecb-cvs-dir ()
+  "Return cvs root directory."
+  (file-name-as-directory (expand-file-name "ecb" udev-ecb-dir)))
+
+(defvar udev-ecb-miss-cedet nil)
+
 (defun udev-ecb-load-ecb ()
-  (let ((semantic-found (locate-library "semantic"))
-        (eieio-found (locate-library "eieio")))
-    ;; Speedbar is included in Emacs now
-    (unless semantic-found (message "Can't find semantic"))
-    (unless eieio-found (message "Can't find eieio"))
-    (if (not (and semantic-found eieio-found))
-        (progn
-          (message "Can't load ECB")
-          (message "Try M-x udev-cedet-update first"))
-      (let ((ecb-path (expand-file-name "ecb/" udev-ecb-dir)))
-        (add-to-list 'load-path ecb-path)
+  "Load fetched ECB."
+  (setq udev-ecb-miss-cedet nil)
+  (unless (featurep 'ecb)
+    (add-to-list 'load-path (udev-ecb-cvs-dir))
+    (let ((msg nil))
+      (unless (or msg (featurep 'cedet)) (setq msg "CEDET is not loaded"))
+      (unless (or msg (locate-library "semantic")) (setq msg "can't find CEDET Semantic"))
+      (unless (or msg (locate-library "eieio")) (setq msg "can't find CEDET eieio"))
+      (if msg
+          (progn
+            (setq udev-ecb-miss-cedet (format "Can't load ECB because %s." msg))
+            (ourcomments-warning udev-ecb-miss-cedet))
         (require 'ecb nil t)))))
 
 (defcustom udev-ecb-load-ecb nil
@@ -79,10 +86,12 @@
          (when val
            (udev-ecb-load-ecb)))
   ;; ecb-activate, ecb-customize-most-important to menu
+  :set-after '(udev-cedet-load-cedet)
   :group 'udev-ecb)
 
 (defvar udev-ecb-steps
   '(udev-ecb-fetch
+    udev-ecb-fix-bad-files
     udev-ecb-fetch-diff
     udev-ecb-check-diff
     udev-ecb-install
@@ -90,17 +99,22 @@
 
 (defun udev-ecb-buffer-name (mode)
   "Return a name for current compilation buffer ignoring MODE."
-  (udev-buffer-name " *Updating ECB %s*" udev-ecb-update-buffer mode))
+  (udev-buffer-name "*Updating ECB %s*" udev-ecb-update-buffer mode))
 
 (defvar udev-ecb-update-buffer nil)
 
-(defun udev-ecb-check-cedet ()
-  (unless (and (locate-library "semantic")
-               (locate-library "eieio"))
-    (if (not (y-or-n-p "CEDET must be installed first.  Do that now? "))
-        (error "Can't install ECB without CEDET")
-      (require 'udev-cedet)
-      (udev-cedet-update))))
+(defun udev-ecb-has-cedet ()
+  (cond
+   ((not (and (locate-library "semantic")
+                (locate-library "eieio")))
+    (message (propertize "CEDET must be installed and loaded first"
+                         'face 'secondary-selection))
+    nil)
+   ((not (featurep 'cedet))
+    (message (propertize "CEDET must be loaded first"
+                         'face 'secondary-selection))
+    nil)
+   (t t)))
 
 (defun udev-ecb-setup-when-finished (log-buffer)
   (require 'cus-edit)
@@ -129,11 +143,25 @@
 To determine where to store the sources see `udev-ecb-dir'.
 For how to start ECB see `udev-ecb-load-ecb'."
   (interactive)
-  (udev-ecb-check-cedet)
-  (setq udev-ecb-update-buffer (get-buffer-create "*Update ECB*"))
-  (udev-call-first-step udev-ecb-update-buffer udev-ecb-steps
-                        "Starting updating ECB from development sources"
-                        'udev-ecb-setup-when-finished))
+  (when (udev-ecb-has-cedet)
+    (let* ((has-it (file-exists-p (udev-ecb-cvs-dir)))
+           (prompt (if has-it
+                       "Do you want to update ECB from devel sources? "
+                     "Do you want to install ECB from devel sources? ")))
+      (when (y-or-n-p prompt)
+        (setq udev-ecb-update-buffer (get-buffer-create "*Update ECB*"))
+        (udev-call-first-step udev-ecb-update-buffer udev-ecb-steps
+                              "Starting updating ECB from development sources"
+                              'udev-ecb-setup-when-finished)))))
+
+;;;###autoload
+(defun udev-ecb-customize-startup ()
+  "Customize ECB dev nXhtml startup group."
+  (interactive)
+  (if (file-exists-p (udev-ecb-cvs-dir))
+      (customize-group-other-window 'udev-ecb)
+    (message (propertize "You must fetch ECB from nXhtml first"
+                         'face 'secondary-selection))))
 
 (defun udev-ecb-fetch (log-buffer)
   "Fetch ECB sources (asynchronously)."
@@ -147,9 +175,30 @@ For how to start ECB see `udev-ecb-load-ecb'."
          'udev-ecb-buffer-name)
       (current-buffer))))
 
-(defun udev-ecb-cvs-dir ()
-  "Return cvs root directory."
-  (file-name-as-directory (expand-file-name "ecb" udev-ecb-dir)))
+;;(udev-ecb-fix-bad-files nil)
+(defun udev-ecb-fix-bad-files (log-buffer)
+  "Change files that can not be compiled."
+  (let* ((bad-file (expand-file-name "ecb/ecb-advice-test.el" udev-ecb-dir))
+         (bad-file-buffer (find-buffer-visiting bad-file))
+         (this-log-buf (get-buffer-create "*Fix bad ECB files*"))
+         (fixed-it nil))
+    (when (file-exists-p bad-file)
+      (with-current-buffer (find-file-noselect bad-file)
+        (save-restriction
+          (widen)
+          (goto-char (point-min))
+          (save-match-data
+            (while (re-search-forward "\r" nil t)
+              (setq fixed-it t)
+              (replace-match ""))))
+        (basic-save-buffer)
+        (with-current-buffer this-log-buf
+          (erase-buffer)
+          (if fixed-it
+              (insert "Fixed " bad-file "\n")
+            (insert "The file " bad-file " was already ok\n")))
+        (unless bad-file-buffer (kill-buffer (current-buffer)))))
+    this-log-buf))
 
 (defun udev-ecb-fetch-diff (log-buffer)
   "Fetch diff between local ECB sources and repository."
@@ -167,6 +216,13 @@ Note that they will not be installed in current Emacs session."
   (udev-batch-compile "-l ecb-batch-compile.el"
                       udev-this-dir
                       'udev-ecb-buffer-name))
+
+;;(udev-ecb-install-help (get-buffer-create "*temp online-help*"))
+(defun udev-ecb-install-help (log-buffer)
+  (let ((trc-buf (get-buffer-create "*temp online-help*")))
+    (with-current-buffer trc-buf
+      (setq default-directory (udev-ecb-cvs-dir))
+      (w32shell-with-shell "msys" (shell-command "make online-help&" trc-buf)))))
 
 (provide 'udev-ecb)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

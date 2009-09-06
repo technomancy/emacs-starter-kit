@@ -10,7 +10,7 @@
 ;; Modified: 2008-11-28 Fri
 ;; X-URL:   http://php-mode.sourceforge.net/
 
-(defconst php-mode-version-number "1.5.0-nxhtml"
+(defconst php-mode-version-number "1.5.0-nxhtml-1.88"
   "PHP Mode version number.")
 
 ;;; License
@@ -70,6 +70,19 @@
 
 ;;; Changelog:
 
+;; 1.5.0-nxhtml-1.88 (Lennart Borgman)
+;;   Don't indent heredoc end mark
+;; 1.5.0-nxhtml-1.61 (Lennart Borgman)
+;;   Added php-mode-to-use.
+;;   Made underscore be part of identifiers.
+;;   Remove php-mode-to.
+;;   Make the indentation check only on current line.
+;;   Warn only once per session about indentation.
+;;   Tell if can't complete in `php-complete-function'.
+;;   Move back point after checking indentation in
+;;   `php-check-html-for-indentation'.
+;;   Add `c-at-vsemi-p-fn' etc after advice from Alan Mackenzie.
+;;
 ;; 1.5
 ;;   Support function keywords like public, private and the ampersand
 ;;   character for function-based commands.  Support abstract, final,
@@ -83,29 +96,6 @@
 ;;   byte-compiler warnings.  Clean-up whitespace and audited style
 ;;   consistency of code.  Remove conditional bindings and XEmacs code
 ;;   that likely does nothing.
-;;
-;; 1.4.1d-nxhtml
-;;   Move back point after checking indentation in
-;;   `php-check-html-for-indentation'.
-;;
-;; 1.4.1c-nxhtml
-;;   Add `c-at-vsemi-p-fn' etc after advice from Alan Mackenzi.
-;;
-;; 1.4.1b-nxhtml
-;;   Remove php-mode-to.
-;;   Make the indentation check only on current line.
-;;   Warn only once per session about indentation.
-;;   Tell if can't complete in `php-complete-function'.
-;;
-;; 1.4.1a-nxhtml
-;;   Made underscore be part of identifiers.
-;;
-;; 1.4.1-nxhtml
-;;   Added php-mode-to-use.
-
-;; 1.4.1
-;;   Modified `php-check-html-for-indentation' to check for multiple
-;;   mode support libraries. (Lennart Borgman)
 ;;
 ;; 1.4
 ;;   Updated GNU GPL to version 3.  Ported to Emacs 22 (CC mode
@@ -124,6 +114,7 @@
 
 ;;; Code:
 
+(require 'add-log)
 (require 'speedbar)
 (require 'font-lock)
 (require 'cc-mode)
@@ -356,7 +347,15 @@ example `html-mode'.  Known such libraries are:\n\t"
 (defun php-cautious-indent-line ()
   (if (or php-warned-bad-indent
           (php-check-html-for-indentation))
-      (funcall 'c-indent-line)))
+      (let ((here (point))
+            doit)
+        (move-beginning-of-line nil)
+        ;; Don't indent heredoc end mark
+        (save-match-data
+          (unless (looking-at "[a-zA-Z0-9]+;\n")
+            (setq doit t)))
+        (when doit
+          (funcall 'c-indent-line)))))
 
 (defconst php-tags '("<?php" "?>" "<?" "<?="))
 (defconst php-tags-key (regexp-opt php-tags))

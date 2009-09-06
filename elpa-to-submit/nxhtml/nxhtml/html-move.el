@@ -55,7 +55,7 @@
 ;;; Code:
 
 (eval-when-compile (add-to-list 'load-path default-directory load-path))
-(require 'html-site)
+(eval-when-compile (require 'html-site))
 (require 'url-parse)
 
 (defun html-move-make-new-url (old-url from-dir to-dir)

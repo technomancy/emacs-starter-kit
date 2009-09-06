@@ -115,6 +115,7 @@ See `html-pagetoc-tocheads'."
           (setq header (cdr th))))
       header)))
 
+;;;###autoload
 (defun html-pagetoc-insert-toc (&optional min-level max-level)
   "Inserts a table of contents for the current html file.
 The html header tags h1-h6 found in the file are inserted into
@@ -285,6 +286,7 @@ the table of contents."
   (message "Please edit the style guide!")
   )
 
+;;;###autoload
 (defun html-pagetoc-rebuild-toc ()
   "Update the table of contents inserted by `html-pagetoc-insert-toc'."
   (interactive)
@@ -319,6 +321,7 @@ the table of contents."
 	      (delete-region start-toc end-toc)
 	      (html-pagetoc-insert-toc old-min old-max ))))))))
 
+;;;###autoload
 (defconst html-pagetoc-menu-map
   (let ((map (make-sparse-keymap)))
     (define-key map [html-pagetoc-rebuild-toc]

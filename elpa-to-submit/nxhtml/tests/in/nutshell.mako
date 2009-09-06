@@ -1,3 +1,4 @@
+    % for row in rows:
 <%inherit file="base.html"/>
 
 <%

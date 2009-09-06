@@ -138,6 +138,26 @@ active.)"
     org-demote-subtree))
 
 
+(defvar orgpan-panel-window nil
+  "The window showing `orgpan-panel-buffer'.")
+
+(defvar orgpan-panel-buffer nil
+  "The panel buffer.
+There can be only one such buffer at any time.")
+
+(defvar orgpan-org-window nil)
+;;(make-variable-buffer-local 'orgpan-org-window)
+
+;; Fix-me: used?
+(defvar orgpan-org-buffer nil)
+;;(make-variable-buffer-local 'orgpan-org-buffer)
+
+(defvar orgpan-last-org-buffer nil)
+;;(make-variable-buffer-local 'orgpan-last-org-buffer)
+
+(defvar orgpan-point nil)
+;;(make-variable-buffer-local 'orgpan-point)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Hook functions etc
 
@@ -308,17 +328,20 @@ This refers to the functions `orgpan-paste-subtree',
 
 (defun orgpan-check-panel-mode ()
   (unless (derived-mode-p 'orgpan-mode)
-    (error "Not orgpan-mode in buffer: " major-mode)))
+    (error "Not orgpan-mode in buffer: %s" major-mode)))
 
 (defun orgpan-display-bindings-help ()
-  (orgpan-check-panel-mode)
-  (setq orgpan-point (point))
-  (let* ((ovls (overlays-at (point)))
+  ;;(orgpan-check-panel-mode)
+  (setq orgpan-point (point-marker))
+  (let* ((ovls (overlays-at orgpan-point))
          (ovl (car ovls))
          (help (when ovl (overlay-get ovl 'orgpan-explain))))
     (dolist (o (overlays-in (point-min) (point-max)))
+      (unless ovl (setq ovl o))
       (overlay-put o 'face orgpan-field-face))
     (overlay-put ovl 'face orgpan-active-field-face)
+    (unless orgpan-ovl-help
+      (setq orgpan-ovl-help (make-overlay orgpan-point orgpan-point)))
     (overlay-put orgpan-ovl-help 'before-string help)))
 
 (defun orgpan-forward-field ()
@@ -352,7 +375,15 @@ This refers to the functions `orgpan-paste-subtree',
   "Start agenda"
   (interactive)
   (orgpan-delete-panel)
-  (org-agenda))
+  (call-interactively 'org-agenda))
+
+(defun orgpan-outline-up-heading (arg &optional invisible-ok)
+  (interactive "p")
+  (outline-back-to-heading invisible-ok)
+  (let ((start-level (funcall outline-level)))
+    (if (<= start-level 1)
+        (message "Already at top level of the outline")
+      (outline-up-heading arg invisible-ok))))
 
 (defconst orgpan-mode-map
   ;; Fix-me: clean up here!
@@ -382,7 +413,7 @@ This refers to the functions `orgpan-paste-subtree',
     (define-key map [(shift control ?p)] 'outline-backward-same-level)
     (define-key map [(shift control ?n)] 'outline-forward-same-level)
     ;; A mnemunic for up:
-    (define-key map [(control ?u)] 'outline-up-heading)
+    (define-key map [(control ?u)] 'orgpan-outline-up-heading)
     ;; Search sparse tree:
     (define-key map [?s] 'org-sparse-tree)
     ;;(define-key map [?s] 'orgpan-occur)
@@ -446,26 +477,6 @@ r      Show entries matching a regular expression"
       (call-interactively 'org-occur))
      (t (error "No such sparse tree command \"%c\"" ans)))))
 
-(defvar orgpan-panel-window nil
-  "The window showing `orgpan-panel-buffer'.")
-
-(defvar orgpan-panel-buffer nil
-  "The panel buffer.
-There can be only one such buffer at any time.")
-
-(defvar orgpan-org-window nil)
-;;(make-variable-buffer-local 'orgpan-org-window)
-
-;; Fix-me: used?
-(defvar orgpan-org-buffer nil)
-;;(make-variable-buffer-local 'orgpan-org-buffer)
-
-(defvar orgpan-last-org-buffer nil)
-;;(make-variable-buffer-local 'orgpan-last-org-buffer)
-
-(defvar orgpan-point nil)
-;;(make-variable-buffer-local 'orgpan-point)
-
 ;; (defun orgpan-avoid-viper-in-buffer ()
 ;;   ;; Fix-me: This is ugly. However see `this-major-mode-requires-vi-state':
 ;;   (set (make-local-variable 'viper-emacs-state-mode-list) '(orgpan-mode))
@@ -479,6 +490,7 @@ There can be only one such buffer at any time.")
     (add-hook 'pre-command-hook 'orgpan-mode-pre-command nil t)
     (add-hook 'post-command-hook 'orgpan-mode-post-command t))
   (set (make-local-variable 'cursor-type) nil)
+  (setq yas/dont-activate t)
   ;; Avoid emulation modes here (cua, viper):
   (set (make-local-variable 'emulation-mode-map-alists) nil))
 
@@ -516,7 +528,7 @@ There can be only one such buffer at any time.")
     ;;(define-key map [tab] 'org-cycle)
     ;;(define-key map [(shift tab)] 'org-global-cycle)
     ;; Navigate:
-    (define-key map [left] 'outline-up-heading)
+    (define-key map [left] 'orgpan-outline-up-heading)
     (define-key map [right] 'org-cycle)
     (define-key map [up] 'outline-previous-visible-heading)
     (define-key map [down] 'outline-next-visible-heading)
@@ -614,13 +626,14 @@ There can be only one such buffer at any time.")
       )
     (insert "   ? for help, q quit\n")
     (orgpan-display-bindings-help)
-    (setq orgpan-ovl-help (make-overlay (point) (point)))
+    (set-keymap-parent orgpan-mode-map orgpan-with-keymap)
     ))
 
 (defun orgpan-make-panel-buffer ()
   "Make the panel buffer."
   (let* ((buf-name "*Org Panel*"))
     (when orgpan-panel-buffer (kill-buffer orgpan-panel-buffer))
+    ;;(with-current-buffer orgpan-panel-buffer (orgpan-mode))
     (setq orgpan-panel-buffer (get-buffer-create buf-name))
     (if orgpan-panel-buttons
         (orgpan-make-panel-with-buttons orgpan-panel-buffer)
@@ -638,6 +651,12 @@ There can be only one such buffer at any time.")
   (set-keymap-parent orgpan-with-keymap org-mode-map)
   (set-keymap-parent orgpan-without-keymap org-mode-map)
   (message "Use 'l' to get back to last viewed org file"))
+
+(defcustom orgpan-panel-height 5
+  "Panel height"
+  :type '(choice (integer :tag "One line" 2)
+                 (integer :tag "All lines" 5))
+  :group 'orgpan)
 
 (defun orgpan-panel ()
   "Create a control panel for current `org-mode' buffer.
@@ -694,11 +713,12 @@ button changes the binding of the arrow keys."
     (orgpan-panel-minor-mode 1)
     (add-hook 'post-command-hook 'orgpan-minor-post-command t)))
 
-(defcustom orgpan-panel-height 5
-  "Panel height"
-  :type '(choice (integer :tag "One line" 2)
-                 (integer :tag "All lines" 5))
-  :group 'orgpan)
+(define-minor-mode orgpan-panel-minor-mode
+  "Minor mode used in `org-mode' buffer when showing panel."
+  :keymap orgpan-mode-map
+  :lighter " PANEL"
+  :group 'orgpan
+  )
 
 (defun orgpan-minor-post-command ()
   ;; Check org window and buffer
@@ -716,13 +736,6 @@ button changes the binding of the arrow keys."
            orgpan-panel-minor-mode)
       (setq cursor-type nil)
     (orgpan-delete-panel)))
-
-(define-minor-mode orgpan-panel-minor-mode
-  "Minor mode used in `org-mode' buffer when showing panel."
-  :keymap orgpan-mode-map
-  :lighter " PANEL"
-  :group 'orgpan
-  )
 
 
 (provide 'org-panel)

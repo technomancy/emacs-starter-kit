@@ -192,9 +192,11 @@
 ;;;;; Forward references (stuff which must come first)
 
 (eval-when-compile (require 'cl))
+(eval-when-compile (require 'ediff))
+(eval-when-compile (require 'mumamo nil t))
 (eval-when-compile
   (add-to-list 'load-path default-directory))
-(require 'html-site)
+(eval-when-compile (require 'html-site))
 (require 'easymenu) ;; This makes menus so much easier!
 (require 'compile)  ;; To make the error buffer more sexy
 (require 'cus-edit) ;; Just for face custom-button
@@ -1935,17 +1937,22 @@ POSITION are not used in this case. "
 )
 
 (defvar tidy-menu-symbol nil)
+;;(tidy-build-menu (&optional map)
+;;;###autoload
 (defun tidy-build-menu (&optional map)
   "Set up the tidy menu in MAP.
 Used to set up a Tidy menu in your favourite mode."
   (interactive) ;; for debugging
-  (unless tidy-config-file-parsed
-    (tidy-parse-config-file)
-    (setq tidy-config-file-parsed t))
-  ;;(or map (setq map (current-local-map)))
-  (easy-menu-remove tidy-menu)
-  (easy-menu-define tidy-menu-symbol map "Menu for Tidy" tidy-menu)
-  (easy-menu-add tidy-menu map))
+  (unless tidy-menu-symbol
+    (unless tidy-config-file-parsed
+      (tidy-parse-config-file)
+      (setq tidy-config-file-parsed t))
+    ;;(or map (setq map (current-local-map)))
+    (easy-menu-remove tidy-menu)
+    (easy-menu-define tidy-menu-symbol map "Menu for Tidy" tidy-menu)
+    (setq tidy-menu-symbol (delete "Tidy" tidy-menu-symbol))
+    (easy-menu-add tidy-menu map))
+  t)
 
 ;;;;; Option description support
 
@@ -2272,6 +2279,7 @@ of the buffer still a hopefully suitable header is added before
 calling tidy."
 ;; Fix-me: copy back parts outside visible region
   (interactive)
+  (message "starting tidy-buffer")
   (let* ((is-narrowed (buffer-narrowed-p))
          (validation-header (when (boundp 'rngalt-validation-header)
                               (let ((header (nth 2 rngalt-validation-header)))
@@ -2753,15 +2761,6 @@ called."
           (when win
             (set-window-point win (point-max))
             ))
-;;         (run-with-idle-timer 0.1 nil
-;;                              (lambda (procbuf start end)
-;;                                (with-current-buffer procbuf
-;;                                  (font-lock-fontify-region start end)
-;;                                  ))
-;;                              (current-buffer)
-;;                              start
-;;                              (point-max)
-;;                              )
         ))))
 
 ;;;}}} +

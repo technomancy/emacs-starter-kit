@@ -2,8 +2,8 @@
 ;;
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: 2008-08-26
-(defconst majmodpri:version "0.6") ;;Version:
-;; Last-Updated: 2008-08-26T19:21:00+0200 Tue
+(defconst majmodpri:version "0.62") ;;Version:
+;; Last-Updated: 2009-04-30 Thu
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -79,104 +79,9 @@
 
 (defun majmodpri-sort-lists-in-timer ()
   (condition-case err
-      (majmodpri-sort-lists)
+      (save-match-data ;; runs in timer
+        (majmodpri-sort-lists))
     (error (message "(majmodpri-sort-lists): %s" err))))
-
-;;;; Custom
-
-;;;###autoload
-(defgroup majmodpri nil
-  "Customization group for majmodpri.el"
-  :group 'nxhml
-  )
-
-(defcustom majmodpri-sort-after-load
-  nil
-  "Sort major mode lists after loading elisp libraries.
-Sorting is not done immediately.  Instead it runs in an idle
-timer.  This means that if several elisp libraries are loaded in
-a command then the sorting will only be done once, after the
-command has finished.
-
-See `majmodpri-sort-lists' for more information."
-  :type '(choice (const :tag "Never" nil)
-                 (const :tag "After loading any elisp library" t)
-                 (repeat :tag "After loading specified libraries" symbol))
-  :set (lambda (sym val)
-         (set-default sym val)
-         ;; Clean up `after-load-alist' first.
-         (setq after-load-alist
-               (delq nil
-                     (mapcar (lambda (rec)
-                               (unless (equal (cadr rec)
-                                              '(majmodpri-start-idle-sort))
-                                 rec))
-                             after-load-alist)))
-         (when val
-           (if (not (listp val))
-               (add-to-list 'after-load-alist
-                            '(".*" (majmodpri-start-idle-sort)))
-             (dolist (feat val)
-               (unless (featurep feat)
-                 (eval-after-load feat '(majmodpri-start-idle-sort)))))
-           (majmodpri-start-idle-sort)))
-  :group 'majmodpri)
-
-(defcustom majmodpri-lists-to-sort
-  '(magic-mode-alist auto-mode-alist magic-fallback-mode-alist)
-  ;;nil
-  "Which major mode lists to sort.
-See `majmodpri-sort-lists' for more information."
-  :type '(set (const magic-mode-alist)
-              (const auto-mode-alist)
-              (const magic-fallback-mode-alist))
-  :set (lambda (sym val)
-         (set-default sym val)
-         (when majmodpri-sort-after-load
-           (majmodpri-start-idle-sort)))
-  :group 'majmodpri)
-
-(defcustom majmodpri-mode-priorities
-  '(
-    cperl-mumamo-mode
-    csound-sgml-mumamo-mode
-    django-nxhtml-mumamo-mode
-    django-html-mumamo-mode
-    embperl-nxhtml-mumamo-mode
-    embperl-html-mumamo-mode
-    eruby-nxhtml-mumamo-mode
-    eruby-html-mumamo-mode
-    genshi-nxhtml-mumamo-mode
-    genshi-html-mumamo-mode
-    jsp-nxhtml-mumamo-mode
-    jsp-html-mumamo-mode
-    laszlo-nxml-mumamo-mode
-    metapost-mumamo-mode
-    mjt-nxhtml-mumamo-mode
-    mjt-html-mumamo-mode
-    noweb2-mumamo-mode
-    ;;org-mumamo-mode
-    perl-mumamo-mode
-    smarty-nxhtml-mumamo-mode
-    smarty-html-mumamo-mode
-    ;;tt-html-mumamo-mode
-
-    nxhtml-mumamo-mode
-    html-mumamo-mode
-    nxml-mumamo-mode
-    nxml-mode
-
-    rhtml-mode
-    )
-  "Priority list for major modes.
-Modes that comes first have higher priority.
-See `majmodpri-sort-lists' for more information."
-  :type '(repeat symbol)
-  :set (lambda (sym val)
-         (set-default sym val)
-         (when majmodpri-sort-after-load
-           (majmodpri-start-idle-sort)))
-  :group 'majmodpri)
 
 
 ;;;; Sorting
@@ -194,9 +99,27 @@ See `majmodpri-sort-lists' for more information."
   "Get original value of REC after sorting."
   (cadr rec))
 
+;; Fix-me: default for Emacs 22??
+(defcustom majmodpri-no-nxml (< emacs-major-version 23)
+  "Don't use multi major modes with nxml if non-nil.
+The default for Emacs prior to version 23 is to not use this
+multi major modes by default since there are some problems.
+
+This gives those multi major mode lower priority, but it does not
+prevent use of them."
+  :type 'boolean
+  :group 'majmodpri)
+
+;; (majmodpri-priority 'html-mumamo-mode)
+;; (majmodpri-priority 'nxhtml-mumamo-mode)
 (defsubst majmodpri-priority (mode)
   "Return major mode MODE priority."
-  (length (memq mode majmodpri-mode-priorities)))
+  (if (and majmodpri-no-nxml
+           (symbolp mode)
+           (save-match-data
+             (string-match "nxhtml-mumamo" (symbol-name mode))))
+      0
+    (length (memq mode majmodpri-mode-priorities))))
 
 (defun majmodpri-compare-auto-modes (rec1 rec2)
   "Compare record REC1 and record REC2.
@@ -286,8 +209,50 @@ See also `majmodpri-apply-priorities'."
   (when (memq 'auto-mode-alist majmodpri-lists-to-sort)
     (majmodpri-sort-auto-mode-alist))
   (when (memq 'magic-fallback-mode-alist majmodpri-lists-to-sort)
-    (majmodpri-sort-magic-list 'magic-fallback-mode-alist)))
+    (majmodpri-sort-magic-list 'magic-fallback-mode-alist))
+  (message "majmodpri-sort-lists running ... (done)"))
 
+
+;;;###autoload
+(defun majmodpri-apply ()
+  "Sort major mode lists and apply to existing buffers.
+Note: This function is suitable to add to
+`desktop-after-read-hook'. It will restore the multi major modes
+in buffers."
+  (majmodpri-apply-priorities t))
+
+(defun majmodpri-sort-apply-to-current ()
+  "Sort lists and apply to current buffer."
+  (majmodpri-sort-lists)
+  (add-hook 'find-file-hook 'normal-mode t t))
+
+(defun majmodpri-check-normal-mode ()
+  "Like `normal-mode', but keep major mode if same."
+  (let ((old-major-mode major-mode)
+        (old-mumamo-multi-major-mode (when (boundp 'mumamo-multi-major-mode)
+                                       mumamo-multi-major-mode)))
+    (report-errors "File mode specification error: %s"
+      (set-auto-mode t))
+    (unless (and (eq old-major-mode major-mode)
+                 (eq old-mumamo-multi-major-mode mumamo-multi-major-mode))
+      (report-errors "File local-variables error: %s"
+        (hack-local-variables))
+      ;; Turn font lock off and on, to make sure it takes account of
+      ;; whatever file local variables are relevant to it.
+      (when (and font-lock-mode
+                 ;; Font-lock-mode (now in font-core.el) can be ON when
+                 ;; font-lock.el still hasn't been loaded.
+                 (boundp 'font-lock-keywords)
+                 (eq (car font-lock-keywords) t))
+        (setq font-lock-keywords (cadr font-lock-keywords))
+        (font-lock-mode 1))
+      (message "majmodpri-apply-priorities: buffer=%s, %s,%s => %s,%s"
+               (current-buffer)
+               old-major-mode
+               old-mumamo-multi-major-mode
+               major-mode
+               (when (boundp 'mumamo-multi-major-mode)
+                 mumamo-multi-major-mode)))))
 
 ;;;###autoload
 (defun majmodpri-apply-priorities (change-modes)
@@ -296,6 +261,7 @@ First run `majmodpri-sort-lists' and then if CHANGE-MODES is
 non-nil apply to existing file buffers.  If interactive ask
 before applying."
   (interactive '(nil))
+  (message "majmodpri-apply-priorities running...")
   (majmodpri-sort-lists)
   (when (or change-modes
             (called-interactively-p))
@@ -309,13 +275,157 @@ before applying."
                 (setq file-buffers (cons buffer file-buffers))))))
       (if (not file-buffers)
           (when change-modes
-            (message "No file buffers to change modes in"))
+            (message "majmodpri-apply-priorities: No file buffers to change modes in"))
         (when (called-interactively-p)
           (setq change-modes
                 (y-or-n-p "Check major mode in all file visiting buffers? ")))
         (when change-modes
           (dolist (buffer file-buffers)
-            (with-current-buffer buffer (normal-mode))))))))
+            (with-current-buffer buffer
+              (let ((old-major major-mode))
+                (majmodpri-check-normal-mode)
+                )))))))
+  (message "majmodpri-apply-priorities running ... (done)"))
+
+
+;;;; Custom
+
+;;;###autoload
+(defgroup majmodpri nil
+  "Customization group for majmodpri.el"
+  :group 'nxhtml
+  )
+
+(defcustom majmodpri-mode-priorities
+  '(
+    cperl-mumamo-mode
+    csound-sgml-mumamo-mode
+    django-nxhtml-mumamo-mode
+    django-html-mumamo-mode
+    embperl-nxhtml-mumamo-mode
+    embperl-html-mumamo-mode
+    eruby-nxhtml-mumamo-mode
+    eruby-html-mumamo-mode
+    genshi-nxhtml-mumamo-mode
+    genshi-html-mumamo-mode
+    jsp-nxhtml-mumamo-mode
+    jsp-html-mumamo-mode
+    laszlo-nxml-mumamo-mode
+    metapost-mumamo-mode
+    mjt-nxhtml-mumamo-mode
+    mjt-html-mumamo-mode
+    noweb2-mumamo-mode
+    ;;org-mumamo-mode
+    perl-mumamo-mode
+    smarty-nxhtml-mumamo-mode
+    smarty-html-mumamo-mode
+    ;;tt-html-mumamo-mode
+
+    nxhtml-mumamo-mode
+    html-mumamo-mode
+    nxml-mumamo-mode
+    nxml-mode
+
+    javascript-mode
+    espresso-mode
+    rhtml-mode
+    )
+  "Priority list for major modes.
+Modes that comes first have higher priority.
+See `majmodpri-sort-lists' for more information."
+  :type '(repeat symbol)
+  :set (lambda (sym val)
+         (set-default sym val)
+         (when (and (boundp 'majmodpri-sort-after-load)
+                    majmodpri-sort-after-load)
+           (majmodpri-start-idle-sort)))
+  :group 'majmodpri)
+
+(defcustom majmodpri-lists-to-sort
+  '(magic-mode-alist auto-mode-alist magic-fallback-mode-alist)
+  ;;nil
+  "Which major mode lists to sort.
+See `majmodpri-sort-lists' for more information."
+  :type '(set (const magic-mode-alist)
+              (const auto-mode-alist)
+              (const magic-fallback-mode-alist))
+  :set (lambda (sym val)
+         (set-default sym val)
+         (when (and (boundp 'majmodpri-sort-after-load)
+                    majmodpri-sort-after-load)
+           (majmodpri-start-idle-sort)))
+  :group 'majmodpri)
+
+(defcustom majmodpri-sort-after-load
+  '(
+    chart
+    gpl
+    nxhtml-autoload
+    php-mode
+    rnc-mode
+    ruby-mode
+    )
+  "Sort major mode lists after loading elisp libraries if non-nil.
+This should not really be needed since just loading a library
+should not change how Emacs behaves.  There are however quite a
+few thirt party libraries that does change `auto-mode-alist'
+\(including some of my own) since that sometimes seems
+reasonable.  Some of them are in the default value of this
+variable.
+
+There are two possibilities for sorting here:
+
+- Value=list of features (default). Sort immediately after loading a
+  library in the list.  Apply to current buffer.
+
+- Value=t. Sort after loading any library. Sorting is then not
+  done immediately.  Instead it runs in an idle timer.  This
+  means that if several elisp libraries are loaded in a command
+  then the sorting will only be done once, after the command has
+  finished.  After sorting apply to all buffers.
+
+Note that the default does break Emacs rule that loading a
+library should not change how Emacs behave.  On the other hand
+the default tries to compensate for that the loaded libraries
+breaks this rule by changing `auto-mode-alist'.
+
+See `majmodpri-sort-lists' for more information."
+  :type '(choice (const :tag "Never" nil)
+                 (const :tag "After loading any elisp library" t)
+                 (repeat :tag "After loading specified features" symbol))
+  :set (lambda (sym val)
+         (set-default sym val)
+         ;; Clean up `after-load-alist' first.
+         (setq after-load-alist
+               (delq nil
+                     (mapcar (lambda (rec)
+                               (unless (member (cadr rec)
+                                               '((majmodpri-start-idle-sort)
+                                                 (majmodpri-sort-lists)))
+                                 rec))
+                             after-load-alist)))
+         (when val
+           ;;(message "majmodpri-sort-after-load: val=%s" val)
+           (let ((sort-and-apply nil))
+             (if (not (listp val))
+                 (add-to-list 'after-load-alist
+                              (if (eq val t)
+                                  '(".*" (majmodpri-start-idle-sort))
+                                '("." (majmodpri-sort-lists))))
+               (dolist (feat val)
+                 ;;(message "feat=%s" feat)
+                 (if (featurep feat)
+                     (setq sort-and-apply t)
+                   (if (eq val t)
+                       (eval-after-load feat '(majmodpri-start-idle-sort))
+                     (eval-after-load feat '(majmodpri-sort-apply-to-current))))))
+             (when sort-and-apply
+               ;;(message "majmodpri-sort-after-load: sort-and-apply")
+               (majmodpri-apply-priorities t))
+             (if (eq val t)
+                 (majmodpri-start-idle-sort)
+               (majmodpri-apply-priorities t)))))
+  :group 'majmodpri)
 
 
 (provide 'majmodpri)

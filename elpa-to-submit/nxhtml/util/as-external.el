@@ -3,14 +3,14 @@
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: Mon Jun 25 19:02:49 2007
 (defconst as-external:version "0.6") ;;Version:
-;; Last-Updated: 2008-09-30T11:44:43+0200 Tue
+;; Last-Updated: 2009-08-04 Tue
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `server'.
+;;   None
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -61,7 +61,16 @@
 ;;
 ;;; Code:
 
-(require 'server)
+(eval-when-compile (require 'cl))
+(eval-when-compile (require 'html-write))
+(eval-when-compile (require 'mumamo))
+(eval-when-compile (require 'ourcomments-util))
+(eval-when-compile
+  (when (featurep 'nxml-mode)
+    (require 'nxhtml)
+    (require 'nxhtml-mumamo)))
+(eval-when-compile (require 'wikipedia-mode))
+(eval-when-compile (require 'server))
 
 (defgroup as-external nil
   "Settings related to Emacs as external editor."
@@ -146,11 +155,13 @@ blog.  Therefore turn on these:
 Also bypass the question for line end conversion when using
 emacsw32-eol."
   (interactive)
-  (if (not (fboundp 'nxhtml-mumamo-mode))
+  ;;(if (not (fboundp 'nxhtml-mumamo-mode))
+  (if (not (fboundp 'nxhtml-mode))
       (as-external-fall-back "Can't find nXhtml")
-    (nxhtml-mumamo-mode)
+    ;;(nxhtml-mumamo-mode)
+    (nxhtml-mode)
     (nxhtml-validation-header-mode 1)
-    (mumamo-post-command)
+    ;;(mumamo-post-command)
     (set (make-local-variable 'wrap-to-fill-left-marg-modes)
          '(nxhtml-mode fundamental-mode))
     (wrap-to-fill-column-mode 1)
@@ -220,11 +231,14 @@ See also `as-external-mode'."
 
 ;;;###autoload
 (define-minor-mode as-external-mode
-  "If non-nil check for if Emacs is used as external editor.
-When Emacs is used as an external editor for example to edit text
-areas on a web page viewed with Firefox this library tries to
-help to setup the buffer in a useful way. It may for example set
-major and minor modes for the buffer.
+  "If non-nil check if Emacs is called as external editor.
+When Emacs is called as an external editor for example to edit
+text areas on a web page viewed with Firefox this library tries
+to help to setup the buffer in a useful way. It may for example
+set major and minor modes for the buffer.
+
+This can for example be useful when blogging or writing comments
+on blogs.
 
 See `as-external-alist' for more information."
   :global t
@@ -235,6 +249,7 @@ See `as-external-alist' for more information."
           as-external-its-all-text-regexp
           (cons as-external-its-all-text-coding
                 as-external-its-all-text-coding))))
+    ;;(message "as-external-mode=%s" as-external-mode)
     (if as-external-mode
         (progn
           (add-to-list 'file-coding-system-alist coding-entry)

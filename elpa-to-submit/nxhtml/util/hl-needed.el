@@ -176,7 +176,8 @@ otherwise."
   "Turn on with special error handling.
 Erros may go unnoticed in timers.  This should prevent it."
   (condition-case err
-      (hl-needed-show)
+      (save-match-data ;; runs in timer
+        (hl-needed-show))
     (error
      (lwarn 'hl-needed-show
             :error "%s" (error-message-string err)))))

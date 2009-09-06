@@ -44,6 +44,8 @@
 ;;
 ;;; Code:
 
+(eval-when-compile (require 'nxhtml-menu))
+
 (require 'sendmail)
 
 ;;(require 'emacsbug)

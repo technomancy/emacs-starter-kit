@@ -88,6 +88,7 @@ in the currently selected window."
   :type 'boolean
   :group 'vline)
 
+;;;###autoload
 (define-minor-mode vline-mode
   "Display vertical line mode."
   :global nil
@@ -98,6 +99,7 @@ in the currently selected window."
     (vline-clear)
     (remove-hook 'post-command-hook 'vline-post-command-hook t)))
 
+;;;###autoload
 (define-minor-mode vline-global-mode
   "Display vertical line mode as globally."
   :global t
