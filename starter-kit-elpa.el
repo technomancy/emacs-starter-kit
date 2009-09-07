@@ -7,8 +7,8 @@
                                    'inf-ruby
                                    'js2-mode
                                    'css-mode
-                                   ;; 'nxml
                                    'gist
+                                   'nxml-mode
                                    'paredit)
   "Libraries that should be installed by default.")
 
@@ -38,10 +38,7 @@ just have to assume it's online."
 ;; On your first run, this should pull in all the base packages.
 (when (esk-online?)
   (unless package-archive-contents (package-refresh-contents))
-  (starter-kit-elpa-install)
-  (unless (or (member 'nxml package-activated-list)
-              (member 'nxml-mode package-activated-list))
-    (package-install 'nxml)))
+  (starter-kit-elpa-install))
 
 ;; Workaround for an ELPA bug that people are reporting but I've been
 ;; unable to reproduce:
