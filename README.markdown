@@ -19,16 +19,19 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
 
 ## Installation
 
-1. Install Emacs (at least version 22)
+1. Install GNU Emacs (at least version 22, 23 is preferred)
    Use your package manager if you have one.
    Otherwise, Mac users should get it [from Apple](http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html).
    Windows users can get it [from GNU](http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip).
-2. Move the directory containing this file to ~/.emacs.d [1]
-   (If you already have a directory at ~/.emacs.d move it out of the way and put this there instead.)
+2. Move the directory containing this file to ~/.emacs.d
+   (If you already have a directory at ~/.emacs.d move it out of the
+   way and put this there instead.)
 3. Launch Emacs!
 
-If you are missing some autoloads after an update (should manifest
-itself as "void function: foobar" errors) try M-x regen-autoloads.
+If you find yourself missing some autoloads after an update (which
+should manifest itself as "void function: foobar" errors) try M-x
+regen-autoloads. After some updates an M-x recompile-init will be
+necessary; this should be noted in the commit messages.
 
 If you want to keep your regular ~/.emacs.d in place and just launch a
 single instance using the starter kit, try the following invocation:
@@ -85,6 +88,14 @@ to ELPA itself. This has occasionally caused problems with certain
 packages. If you run into problems with such a package, try removing
 everything from inside the elpa/ directory and invoking M-x
 starter-kit-elpa-install in a fresh instance.
+
+## Variants of Emacs
+
+The Starter Kit is designed to work with GNU Emacs version 22 or
+greater. Using it with forks or other variants is not supported. It
+probably won't work with XEmacs, though some have reported getting it
+to work with Aquamacs. However, since Aquamacs is not portable,
+it's difficult to test in it.
 
 ## Contributing
 

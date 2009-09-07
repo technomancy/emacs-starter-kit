@@ -2,11 +2,6 @@ TODO:
 
 Submit the packages in starter-kit-elpa.el to ELPA.
 
-Greg Newman is working on Python helpers.
-
-maybe include:
-* should yasnippet be included in rinari?
-
 to write/finish:
 * submit ruby fixes to flymake
 
@@ -14,3 +9,4 @@ which-func-mode in ruby?
 
 Bug fixes:
 get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
+same with rcirc.el
