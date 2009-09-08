@@ -4,3 +4,6 @@
 [submodule "src/org-babel"]
 	path = src/org-babel
 	url = git://github.com/eschulte/org-babel.git
+[submodule "src/magit"]
+	path = src/magit
+	url = git://gitorious.org/magit/mainline.git

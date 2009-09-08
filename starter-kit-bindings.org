@@ -160,3 +160,16 @@ globally for later insertion into an Org-mode buffer.  See
 #+begin_src emacs-lisp
 (define-key global-map "\C-cl" 'org-store-link)
 #+end_src
+** Magit
+It's to the point now where I almost can't use git without magit.
+- [[http://zagadka.vm.bytemark.co.uk/magit/][Homepage]]
+- [[http://zagadka.vm.bytemark.co.uk/magit/magit.html][Manual]]
+- [[http://groups.google.com/group/magit/][Mailing list]]
+#+begin_src emacs-lisp
+  (require 'magit)
+  (define-key global-map "\M-\C-g" 'magit-status)
+#+end_src
+
+#+resname:
+: magit-status
+
