@@ -111,7 +111,7 @@ a lambda doesn't already exist in the list.
 #+end_src
 
 #+srcname: starter-kit-add-hl-line-mode
-#+begin_src emacs-lisp :tangle off
+#+begin_src emacs-lisp :tangle no
 (add-hook 'coding-hook 'turn-on-hl-line-mode)
 #+end_src
 
