@@ -12,8 +12,8 @@
 (setq espresso-indent-level 2)
 
 (eval-after-load 'espresso
-  '(progn (define-key espresso-mode-map "{" 'paredit-open-brace)
-          (define-key espresso-mode-map "}" 'paredit-close-brace-and-newline)
+  '(progn (define-key espresso-mode-map "{" 'paredit-open-curly)
+          (define-key espresso-mode-map "}" 'paredit-close-curly-and-newline)
           ;; fixes problem with pretty function font-lock
           (define-key espresso-mode-map (kbd ",") 'self-insert-command)
           (font-lock-add-keywords 'espresso-mode
