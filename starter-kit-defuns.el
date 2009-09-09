@@ -202,9 +202,8 @@ Symbols matching the text at point are put first in the completion list."
 
 (defun esk-paredit-nonlisp ()
   "Turn on paredit mode for non-lisps."
-  (set (make-local-variable 'paredit-space-for-delimiter-predicate)
-       (lambda (endp delimiter)
-         (equal (char-syntax (char-before)) ?\")))
+  (set (make-local-variable 'paredit-space-delimiter-chars)
+       (list ?\"))
   (paredit-mode 1))
 
 (defun toggle-fullscreen ()
