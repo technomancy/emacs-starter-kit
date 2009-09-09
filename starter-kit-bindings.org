@@ -173,3 +173,11 @@ It's to the point now where I almost can't use git without magit.
 #+resname:
 : magit-status
 
+** Rgrep
+Rgrep is infinitely useful in multi-file projects.
+
+(see [[elisp:(describe-function 'rgrep)]])
+
+#+begin_src emacs-lisp
+  (define-key global-map "\C-x\C-r" 'rgrep)
+#+end_src
