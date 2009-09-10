@@ -102,6 +102,7 @@
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
 
 ;; Keep and trash selected buffers
 (midnight-delay-set 'midnight-delay 4400)
