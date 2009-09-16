@@ -342,13 +342,13 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
         (normal-top-level-add-subdirs-to-load-path)))
   (if (file-exists-p system-specific-config) (load system-specific-config))
   (if (file-exists-p system-specific-literate-config)
-      (org-babel-load system-specific-literate-config))
+      (org-babel-load-file system-specific-literate-config))
   (if (file-exists-p user-specific-config) (load user-specific-config))
   (if (file-exists-p user-specific-literate-config)
-      (org-babel-load user-specific-literate-config))
+      (org-babel-load-file user-specific-literate-config))
   (when (file-exists-p user-specific-dir)
     (mapc #'load (directory-files user-specific-dir nil ".*el$"))
-    (mapc #'org-babel-load (directory-files user-specific-dir nil ".*org$")))
+    (mapc #'org-babel-load-file (directory-files user-specific-dir nil ".*org$")))
 #+end_src
 
 
