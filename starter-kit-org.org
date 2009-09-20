@@ -20,13 +20,17 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 (if window-system (require 'org-mouse))
 #+end_src
 
+Lets see how we like org-indent
+#+begin_src emacs-lisp
+(require 'org-indent)
+#+end_src
+
 ** Org-Mode Hook
 The latest version of yasnippets doesn't play well with Org-mode, the
 following function allows these two to play nicely together
 #+begin_src emacs-lisp
   (defun yas/org-very-safe-expand ()
-    (setq yas/fallback-behavior 'return-nil)
-    (yas/expand))
+    (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -45,7 +49,8 @@ following function allows these two to play nicely together
               (make-variable-buffer-local 'yas/trigger-key)
               (setq yas/trigger-key [tab])
               (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-              (define-key yas/keymap [tab] 'yas/next-field)))
+              (define-key yas/keymap [tab] 'yas/next-field)
+              ))
 #+end_src
 
 ** Support for viewing images
