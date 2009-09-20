@@ -81,7 +81,10 @@ exec-to-string command, but it works and seems fast"
                  (when (and buffer-file-name
                             (file-writable-p
                              (file-name-directory buffer-file-name))
-                            (file-writable-p buffer-file-name))
+                            (file-writable-p buffer-file-name)
+                            (not (subsetp
+                                  (list (current-buffer))
+                                  (tramp-list-remote-buffers))))
                    (local-set-key (kbd "C-c d")
                                   'flymake-display-err-menu-for-current-line)
                    (flymake-mode t))))))
