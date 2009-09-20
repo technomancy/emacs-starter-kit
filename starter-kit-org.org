@@ -33,12 +33,10 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
               (local-set-key "\M-\C-l" 'org-table-sort-lines)
               ;; display images
               (local-set-key "\M-I" 'org-toggle-iimage-in-org)
-              ;; ;; Uncomment this section if you use yasnippet
-              ;; ;; yasnippet (using the new org-cycle hooks)
-              ;; (make-variable-buffer-local 'yas/trigger-key)
-              ;; (setq yas/trigger-key [tab])
-              ;; (define-key yas/keymap [tab] 'yas/next-field-group)
-              ))
+              ;; yasnippet (using the new org-cycle hooks)
+              (make-variable-buffer-local 'yas/trigger-key)
+              (setq yas/trigger-key [tab])
+              (define-key yas/keymap [tab] 'yas/next-field-group)))
 #+end_src
 
 ** Support for viewing images

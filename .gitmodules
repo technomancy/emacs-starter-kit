@@ -4,3 +4,6 @@
 [submodule "src/magit"]
 	path = src/magit
 	url = git://gitorious.org/magit/mainline.git
+[submodule "snippets/text-mode/org-mode"]
+	path = snippets/text-mode/org-mode
+	url = git://github.com/RickMoynihan/yasnippet-org-mode.git
