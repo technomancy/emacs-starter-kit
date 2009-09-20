@@ -21,6 +21,14 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 #+end_src
 
 ** Org-Mode Hook
+The latest version of yasnippets doesn't play well with Org-mode, the
+following function allows these two to play nicely together
+#+begin_src emacs-lisp
+  (defun yas/org-very-safe-expand ()
+    (setq yas/fallback-behavior 'return-nil)
+    (yas/expand))
+#+end_src
+
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook
             (lambda ()
@@ -36,7 +44,8 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
               ;; yasnippet (using the new org-cycle hooks)
               (make-variable-buffer-local 'yas/trigger-key)
               (setq yas/trigger-key [tab])
-              (define-key yas/keymap [tab] 'yas/next-field-group)))
+              (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+              (define-key yas/keymap [tab] 'yas/next-field)))
 #+end_src
 
 ** Support for viewing images
