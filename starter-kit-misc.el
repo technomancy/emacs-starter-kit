@@ -23,6 +23,7 @@
       delete-by-moving-to-trash t
       shift-select-mode nil
       truncate-partial-width-windows nil
+      delete-by-moving-to-trash nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
