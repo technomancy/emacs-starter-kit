@@ -44,6 +44,7 @@
                  "Project root: "
                  (locate-dominating-file default-directory "src"))))
   (require 'swank-clojure)
+  (require 'slime)
   (when (get-buffer "*inferior-lisp*")
     (kill-buffer "*inferior-lisp*"))
   (add-to-list 'swank-clojure-extra-vm-args
@@ -61,6 +62,7 @@
         (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
               (remove-if #'(lambda (x) (eq (car x) 'clojure))
                          slime-lisp-implementations)))
+  (message "Deprecated: use swank-clojure-project from swank-clojure.")
   (save-window-excursion
     (slime)))
 
