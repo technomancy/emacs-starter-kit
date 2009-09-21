@@ -20,11 +20,6 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 (if window-system (require 'org-mouse))
 #+end_src
 
-Lets see how we like org-indent
-#+begin_src emacs-lisp
-(require 'org-indent)
-#+end_src
-
 ** Org-Mode Hook
 The latest version of yasnippets doesn't play well with Org-mode, the
 following function allows these two to play nicely together
