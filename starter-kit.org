@@ -332,6 +332,13 @@ Located in [[file:starter-kit-lisp.org][starter-kit-lisp]]
 (starter-kit-load "starter-kit-lisp.org")
 #+end_src
 
+*** Starter kit Haskell
+Located in [[file:starter-kit-haskell.org][starter-kit-haskell]]
+
+#+begin_src emacs-lisp
+(starter-kit-load "starter-kit-haskell.org")
+#+end_src
+
 *** Starter kit ruby
 Located in [[file:starter-kit-ruby.org][starter-kit-ruby]]
 

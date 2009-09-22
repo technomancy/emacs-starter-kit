@@ -1,0 +1,26 @@
+#+TITLE: Starter Kit Haskell
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Starter Kit Haskell
+  :PROPERTIES:
+  :results:  silent
+  :END:
+Support for editing Haskell
+
+pretty lambdas in Haskell code
+#+begin_src emacs-lisp
+  (defun pretty-lambdas-haskell ()
+    (font-lock-add-keywords
+     nil `((,(concat "(?\\(" (regexp-quote "\\") "\\)")
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      ,(make-char 'greek-iso8859-7 107))
+                      nil))))))
+#+end_src
+
+Haskell mode hook
+#+begin_src emacs-lisp
+  (add-hook 'haskell-mode-hook 'run-coding-hook)
+  (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell)
+#+end_src
