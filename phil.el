@@ -36,9 +36,9 @@
      (require 'dbus)
 
      (dbus-register-signal :system "org.freedesktop.NetworkManager"
-                      "/org/freedesktop/NetworkManager" "org.freedesktop.NetworkManager"
-                      "StateChanged"
-                      'handle-network-state-change)
+                           "/org/freedesktop/NetworkManager" "org.freedesktop.NetworkManager"
+                           "StateChanged"
+                           'handle-network-state-change)
 
      (setq rcirc-authinfo '(("freenode" nickserv "technomancy" "technomancy"))
            rcirc-default-nick "technomancy"
@@ -92,6 +92,7 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/phil/src/conkeror/contrib/run-conkeror")
 
+(require 'clojure-mode)
 (clojure-slime-config)
 
 ;; (eval-after-load 'swank-clojure
@@ -136,12 +137,6 @@
 (set-register ?n '(file . "~/documents/notes.org"))
 (set-register ?p '(file . "~/.emacs.d/phil.el"))
 
-;; processing
-(add-to-list 'load-path "/home/phil/src/processing-emacs/")
-(autoload 'processing-mode "processing-mode" "Processing mode" t)
-(add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
-(setq processing-location "/home/phil/src/processing-1.0.6/")
-
 ;; Java crap
 
 (defun insert-property ()
@@ -152,3 +147,33 @@
     (insert (format
              "<property>\n  <name>%s</name>\n  <value>%s</value>\n</property>\n"
              name value))))
+
+;; Pairing magic!
+
+(load-file "~/src/rudel/rudel-loaddefs.el")
+
+(setq rudel-configured-sessions
+      `((:name "sonian" :backend obby
+               :host "sobby" :username ,user-login-name :color "light steel blue"
+               :encryption t :port 6522)
+        (:name "localhost" :backend obby
+               :host "localhost" :username ,user-login-name :color "light steel blue"
+               :encryption t :port 6522
+               :global-password "" :user-password "")
+        (:name "puyo" :backend obby
+               :host "puyo.local" :username ,user-login-name :color "light steel blue"
+               :encryption t :port 6522
+               :global-password "" :user-password "")))
+
+;; (add-hook 'rudel-document-attach-hook 'rudel-activate-major-mode)
+(add-hook 'rudel-document-attach-hook
+          (lambda (doc buffer) (rudel-mode-line-publish-state-minor-mode t)))
+
+(setq rudel-overlay-author-display nil)
+(setq debug-on-error t)
+
+;; fun!
+
+(require 'pulse)
+(require 'pulse-advice nil t)
+(setq pulse-iterations 5)
