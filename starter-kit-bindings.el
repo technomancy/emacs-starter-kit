@@ -68,6 +68,9 @@
 ;; Should be able to eval-and-replace anywhere.
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 
+;; For debugging Emacs modes
+(global-set-key (kbd "C-c p") 'message-point)
+
 ;; Applications
 
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))

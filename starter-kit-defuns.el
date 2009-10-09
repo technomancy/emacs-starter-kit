@@ -206,6 +206,10 @@ Symbols matching the text at point are put first in the completion list."
        (list ?\"))
   (paredit-mode 1))
 
+(defun message-point ()
+  (interactive)
+  (message "%s" (point)))
+
 (defun toggle-fullscreen ()
   (interactive)
   ;; TODO: this only works for X. patches welcome for other OSes.
