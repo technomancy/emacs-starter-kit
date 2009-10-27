@@ -69,6 +69,7 @@ This allows for the viewing of images in-line in Org-mode documents.
 ** Links to git files
 this is using Reimar Finken's [[http://github.com/ReimarFinken/org-git-link][org-git-link]]
 #+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name "org-git-link" elisp-source-dir))
   (require 'org-git-link)
 #+end_src
 
