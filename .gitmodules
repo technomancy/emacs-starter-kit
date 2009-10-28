@@ -7,6 +7,3 @@
 [submodule "snippets/text-mode/org-mode"]
 	path = snippets/text-mode/org-mode
 	url = git://github.com/eschulte/yasnippet-org-mode.git
-[submodule "src/org-git-link"]
-	path = src/org-git-link
-	url = git://github.com/ReimarFinken/org-git-link.git
