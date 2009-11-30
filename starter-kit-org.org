@@ -17,7 +17,7 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 ** Helpful Packages
 #+begin_src emacs-lisp
 (require 'org-install)
-;; (if window-system (require 'org-mouse))
+(if window-system (require 'org-mouse))
 #+end_src
 
 ** Org-Mode Hook
