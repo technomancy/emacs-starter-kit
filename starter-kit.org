@@ -382,8 +382,9 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
   (if (file-exists-p user-specific-literate-config)
       (org-babel-load-file user-specific-literate-config))
   (when (file-exists-p user-specific-dir)
-    (mapc #'load (directory-files user-specific-dir nil ".*el$"))
-    (mapc #'org-babel-load-file (directory-files user-specific-dir nil ".*org$")))
+    (let ((default-directory user-specific-dir))
+      (mapc #'load (directory-files user-specific-dir nil ".*el$"))
+      (mapc #'org-babel-load-file (directory-files user-specific-dir nil ".*org$"))))
 #+end_src
 
 
