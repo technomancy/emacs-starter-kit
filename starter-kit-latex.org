@@ -1,0 +1,74 @@
+#+TITLE: Starter Kit LaTeX
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Starter Kit LaTeX
+  Support for editing LaTeX.
+
+** Load Packages
+*** Load AucTeX
+#+begin_src emacs-lisp 
+    (load "auctex.el" nil t t)
+#+end_src
+
+*** Load Preview LaTeX
+#+begin_src emacs-lisp 
+;; (load "preview-latex.el" nil t t)
+#+end_src
+
+*** Load RefTeX
+#+srcname: reftex-support
+#+begin_src emacs-lisp 
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+#+end_src
+
+** Configure AucTeX 
+*** Use pdfLaTeX
+    - Take this out to compile to DVI, instead.
+#+srcname: pdf-mode
+#+begin_src emacs-lisp 
+      (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
+#+end_src
+
+*** Set a Path to Executables (optional)
+    - The location of the LaTeX excecutables is system
+      dependent. AUCTeX calls everything through a shell, so you may
+      or may not need this.  This source-code block is turned off by
+      default as it should be added to the user's personal
+      configuration as needed.
+#+srcname: set-exec-path
+#+begin_src emacs-lisp :tangle no
+      (setenv "PATH" (concat "/usr/texbin:" (getenv "PATH")))
+#+end_src
+
+** Configure RefTeX
+*** Default Bibliography
+    - This is important when editing source code in Org-babel, since
+      the LaTeX source code block being edited probably doesn't
+      include the \bibliography{} command that RefTeX uses to find
+      bibliographic database(s).  Make certain also that RefTeX has a
+      path to the bibliographic databases.  This source-code block is
+      turned off be default as it should be configured by the user in
+      a personal file/directory.
+#+srcname: default-bibliography
+#+begin_src emacs-lisp :tangle no
+  (setq reftex-default-bibliography
+        (quote
+         ("user.bib" "local.bib")))
+#+end_src
+
+** Configure Org-babel
+   - Add LaTeX to the list of languages Org-babel will recognize.
+#+srcname: add-latex
+#+begin_src emacs-lisp 
+     (org-babel-add-interpreter "latex")
+     (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
+     ; (require 'org-babel-latex)
+#+end_src
+   - Add LaTeX to a list of languages that raise noweb-type errors.
+#+srcname: noweb-error
+#+begin_src emacs-lisp 
+  (add-to-list 'org-babel-noweb-error-langs "latex")
+#+end_src
+

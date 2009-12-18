@@ -360,6 +360,13 @@ Located in [[file:starter-kit-perl.org][starter-kit-perl]]
 (starter-kit-load "starter-kit-perl.org")
 #+end_src
 
+*** Starter Kit Latex
+Located in [[file:starter-kit-latex.org][starter-kit-latex]]
+
+#+begin_src emacs-lisp
+(starter-kit-load "starter-kit-latex.org")
+#+end_src
+
 ** Load User/System Specific Files
 
 After we've loaded all the Starter Kit defaults, lets load the User's stuff.
