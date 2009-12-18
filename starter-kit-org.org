@@ -17,7 +17,7 @@ which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 ** Helpful Packages
 #+begin_src emacs-lisp
 (require 'org-install)
-;; (if window-system (require 'org-mouse))
+(if window-system (require 'org-mouse))
 #+end_src
 
 ** Org-Mode Hook
@@ -52,18 +52,17 @@ following function allows these two to play nicely together
 This allows for the viewing of images in-line in Org-mode documents.
 
 #+begin_src emacs-lisp
-(require 'iimage)
-(setq iimage-mode-image-search-path (expand-file-name "~/"))
-;;Match org file: links
-(add-to-list 'iimage-mode-image-regex-alist
-	     (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
-			   "\\)\\]")  1))
-(defun org-toggle-iimage-in-org ()
-  (interactive)
-  (if (face-underline-p 'org-link)
-      (set-face-underline-p 'org-link nil)
-      (set-face-underline-p 'org-link t))
-  (iimage-mode))
+  (require 'iimage)
+  (setq iimage-mode-image-search-path (expand-file-name "~/"))
+  ;; Match org file: links
+  (add-to-list 'iimage-mode-image-regex-alist
+               (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
+                             "\\)\\]")  1))
+  (defun org-toggle-iimage-in-org ()
+    (interactive)
+    (let ((turning-on (not iimage-mode)))
+      (set-face-underline-p 'org-link (not turning-on))
+      (iimage-mode (or turning-on 0))))
 #+end_src
 
 ** Starter Kit Documentation
