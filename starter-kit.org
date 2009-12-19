@@ -8,10 +8,13 @@ Emacs outshines all other editing software in approximately the same
 way that the noonday sun does the stars. It is not just bigger and
 brighter; it simply makes everything else vanish.
 
--Neal Stephenson, "In the Beginning was the Command Line"
+-- Neal Stephenson, "In the Beginning was the Command Line"
 #+end_quote
 
 * Introduction
+  :PROPERTIES:
+  :CUSTOM_ID: introduction
+  :END:
 
 This should provide a saner set of defaults than you get normally with
 Emacs. It's intended for beginners, but provides a good elisp
@@ -27,6 +30,9 @@ The main advantage of this Emacs Starter Kit are
 The latest version is at http://github.com/eschulte/emacs-starter-kit/
 
 ** Learning
+   :PROPERTIES:
+   :CUSTOM_ID: learning
+   :END:
 
 This won't teach you Emacs, but it'll make it easier to get
 comfortable. To access the tutorial, press control-h followed by t.
@@ -34,13 +40,19 @@ comfortable. To access the tutorial, press control-h followed by t.
 The [[http://emacswiki.org][Emacs Wiki]] is also very handy.
 
 ** Installation
+   :PROPERTIES:
+   :CUSTOM_ID: installation
+   :END:
 
 1. Install Emacs (at least version 22) Use your package manager if you
    have one.  Otherwise, Mac users should get it [[http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html][from Apple]], or
    install it directly from [[http://savannah.gnu.org/projects/emacs/][from source]] following the instructions in
    =nextstep/INSTALL=.  Windows users can get it [[http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip][from GNU]].
 2. Move the directory containing this file to =~/.emacs.d= [1]
-3. Install the Org-mode and Org-babel [[http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#submodules][submodules]] with the following
+3. Install the Org-mode [[http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#submodules][submodules]] with the following -- if you're new
+   to git checkout this [[http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html][git-tutorial]], also we'd highly recommend that
+   you try out [[http://zagadka.vm.bytemark.co.uk/magit/magit.html][magit]] the Emacs mode for git interaction which comes
+   bundled in the starter kit.
    #+begin_src sh
    git submodule init
    git submodule update
@@ -67,6 +79,9 @@ loading, so if you've having trouble loading it, make sure that file
 is not present.
 
 ** Structure
+   :PROPERTIES:
+   :CUSTOM_ID: structure
+   :END:
 
 The init.el file is where everything begins. It's the first file to
 get loaded. Additional customization embedded in this file provides
@@ -94,6 +109,9 @@ code that you don't think would be useful to everyone. That will allow
 you to merge with newer versions of the starter-kit without conflicts.
 
 ** Emacs Lisp Package Archive
+   :PROPERTIES:
+   :CUSTOM_ID: elpa
+   :END:
 
 Libraries from [[http://tromey.com/elpa][ELPA]] are preferred when available since dependencies
 are handled automatically, and the burden to update them is removed
@@ -118,6 +136,9 @@ everything from inside the elpa/ directory and invoking M-x
 starter-kit-elpa-install in a fresh instance.
 
 ** Contributing
+   :PROPERTIES:
+   :CUSTOM_ID: contributing
+   :END:
 
 If you know your way around Emacs, please try out the starter kit as a
 replacement for your regular dotfiles for a while. If there's anything
@@ -144,6 +165,9 @@ Settings/%your user name%/Application Data=
 
 
 * Implementation
+  :PROPERTIES:
+  :CUSTOM_ID: implementation
+  :END:
 This section contains all code implementing the Emacs Starter Kit.
 
 ** Starter kit basics
@@ -389,27 +413,25 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 
 
 * Development
+  :PROPERTIES:
+  :CUSTOM_ID: development
+  :END:
 
 ** Tasks [1/10]
 
 *** TODO setup electric for ruby
 *** TODO set up ri for ruby
 *** TODO Submit the packages in starter-kit-elpa.el to ELPA.
-
 *** STARTED Greg Newman is working on Python helpers.
-
 *** STARTED submit ruby fixes to flymake
-
 *** PROPOSED which-func-mode in ruby?
 *** TODO all bindings to kbd invocations
-
 *** DEFERRED should yasnippet be included in rinari?
 No, rinari has no dependency on yasnippet, and yasnippet has many
 applications outside of rinari.
 
 *** TODO flymake for perl
 *** TODO electric bugaloo for perl
-
 
 ** Bugs [0/1]
 *** TODO get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
