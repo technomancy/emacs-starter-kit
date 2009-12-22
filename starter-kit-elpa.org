@@ -14,7 +14,7 @@ The following packages should all ways be installed
                                      'inf-ruby
                                      'js2-mode
                                      'css-mode
-                                     ;; 'nxml
+                                     'yasnippet-bundle
                                      'gist
                                      'paredit)
     "Libraries that should be installed by default.")

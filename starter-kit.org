@@ -64,6 +64,10 @@ The [[http://emacswiki.org][Emacs Wiki]] is also very handy.
    #+end_src
 5. Launch Emacs!
 
+After setup you may need to restart Emacs a couple of times while it
+downloads packages from [[* Emacs Lisp Package Archive][ELPA]] -- errors parsing html from
+=*tromey.com:80*= can generally be safely ignored.
+
 If you are missing some autoloads after an update (should manifest
 itself as "void function: foobar" errors) try M-x regen-autoloads.
 
@@ -388,7 +392,7 @@ Located in [[file:starter-kit-perl.org][starter-kit-perl]]
 Located in [[file:starter-kit-latex.org][starter-kit-latex]]
 
 #+begin_src emacs-lisp
-(starter-kit-load "starter-kit-latex.org")
+;; (starter-kit-load "starter-kit-latex.org")
 #+end_src
 
 ** Load User/System Specific Files
