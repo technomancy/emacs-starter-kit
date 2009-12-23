@@ -7,3 +7,6 @@
 [submodule "snippets/text-mode/org-mode"]
 	path = snippets/text-mode/org-mode
 	url = git://github.com/eschulte/yasnippet-org-mode.git
+[submodule "src/auctex"]
+	path = src/auctex
+	url = git://github.com/eschulte/auctex.git
