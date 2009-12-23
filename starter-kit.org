@@ -62,7 +62,13 @@ The [[http://emacswiki.org][Emacs Wiki]] is also very handy.
    cd src/org/
    make
    #+end_src
-5. Launch Emacs!
+5. build [[http://www.gnu.org/software/auctex/][auctex]] -- for instilllation help see the [[http://www.gnu.org/software/auctex/manual/auctex/Installation.html#Installation][auctex instillation
+   instructions]], auctex requires a working TeX installation
+   #+begin_src sh
+   cd src/auctex
+   ./configure && make
+   #+end_src
+6. Launch Emacs!
 
 After setup you may need to restart Emacs a couple of times while it
 downloads packages from [[* Emacs Lisp Package Archive][ELPA]] -- errors parsing html from
