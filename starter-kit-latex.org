@@ -8,13 +8,13 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 ** Load Packages
 *** Load AucTeX
-#+begin_src emacs-lisp 
-    (load "auctex.el" nil t t)
+#+begin_src emacs-lisp
+  (load "auctex.el" nil t t)
 #+end_src
 
 *** Load Preview LaTeX
-#+begin_src emacs-lisp 
-;; (load "preview-latex.el" nil t t)
+#+begin_src emacs-lisp
+  (load "preview-latex.el" nil t t)
 #+end_src
 
 *** Load RefTeX
