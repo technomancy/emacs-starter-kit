@@ -40,6 +40,13 @@ Things that don't fit anywhere else.
       save-place-file (concat dotfiles-dir "places"))
 #+end_src
 
+** Nxhtml -- utilities for we development
+[[http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html][Nxhtml]] is a large package of utilities for web development and for
+embedding multiple major modes in a single buffer.
+
+Nxhtml is not installed in this version of the starter-kit by default,
+for information on installing nxhtml see [[http://www.emacswiki.org/emacs/NxhtmlMode][EmacsWiki-Nxhtml]].
+
 ** Set browser
 Set this to whatever browser you use e.g...
 : ;; (setq browse-url-browser-function 'browse-url-firefox)
@@ -128,7 +135,7 @@ ido-mode is like magic pixie dust!
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+;; (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 #+end_src
 
 ** Default to unified diffs
