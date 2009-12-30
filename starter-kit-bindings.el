@@ -60,7 +60,7 @@
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 
 ;; Fetch the contents at a URL, display it raw.
-(global-set-key (kbd "C-x h") 'view-url)
+(global-set-key (kbd "C-x C-h") 'view-url)
 
 ;; Help should search more than just commands
 (global-set-key (kbd "C-h a") 'apropos)
