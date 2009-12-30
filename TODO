@@ -1,12 +1,8 @@
 TODO:
 
-Submit the packages in starter-kit-elpa.el to ELPA.
+Submit the packages in elpa-to-submit to ELPA.
 
 to write/finish:
 * submit ruby fixes to flymake
 
 which-func-mode in ruby?
-
-Bug fixes:
-get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
-same with rcirc.el
