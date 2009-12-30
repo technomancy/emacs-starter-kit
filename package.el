@@ -243,6 +243,15 @@ but have an extra entry which is 'tar for tar packages and
   "Split a package string into a version list."
   (mapcar 'string-to-int (split-string string "[.]")))
 
+(defun package-version (package-name)
+  "Return the version number of the given package."
+  (let ((package (if (stringp package-name)
+                     (intern package-name)
+                   package-name)))
+    (when (assq package package-alist)
+      (package-version-join (package-desc-vers
+                             (cdr (assq package package-alist)))))))
+
 (defconst package--builtins-base
   ;; We use package-version split here to make sure to pick up the
   ;; minor version.
