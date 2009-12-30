@@ -20,10 +20,10 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global t
-      delete-by-moving-to-trash t
       shift-select-mode nil
+      mouse-yank-at-point t
+      require-final-newline t
       truncate-partial-width-windows nil
-      delete-by-moving-to-trash nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
