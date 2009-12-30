@@ -26,5 +26,16 @@
                   '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))
      (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)))
 
+(defun eshell/cds ()
+  "Change directory to the project's root."
+  (eshell/cd (locate-dominating-file default-directory "src")))
+
+;; Port features from
+;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
+;; * cloning git repos, github repos
+;; * downloading http urls
+;; * extracting archives
+;; * changing to directories
+
 (provide 'starter-kit-eshell)
 ;;; starter-kit-eshell.el ends here
