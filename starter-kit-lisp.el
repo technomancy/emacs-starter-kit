@@ -70,7 +70,7 @@
 
 (eval-after-load 'paredit-mode
   ;; need a binding that works over SSH
-  (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp))
+  '(define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp))
 
 (dolist (x '(scheme emacs-lisp lisp clojure))
   (font-lock-add-keywords
