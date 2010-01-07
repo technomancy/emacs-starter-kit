@@ -129,5 +129,11 @@
 ;; make emacs use the clipboard
 (setq x-select-enable-clipboard t)
 
+;; Get around the emacswiki spam protection
+(add-hook 'oddmuse-mode-hook
+          (lambda ()
+            (unless (string-match "question" oddmuse-post)
+              (setq oddmuse-post (concat "uihnscuskc=1;" oddmuse-post)))))
+
 (provide 'starter-kit-misc)
 ;;; starter-kit-misc.el ends here
