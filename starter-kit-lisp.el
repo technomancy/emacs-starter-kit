@@ -68,8 +68,9 @@
 
 ;;; Enhance Lisp Modes
 
-(eval-after-load 'paredit
-  '(define-key paredit-mode-map (kbd ";") 'self-insert-command))
+(eval-after-load 'paredit-mode
+  ;; need a binding that works over SSH
+  (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp))
 
 (dolist (x '(scheme emacs-lisp lisp clojure))
   (font-lock-add-keywords
