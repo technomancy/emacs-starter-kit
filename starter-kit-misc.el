@@ -100,6 +100,9 @@
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.html$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.html.rb$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$" . html-mode))
 
 ;; Default to unified diffs
 (setq diff-switches "-u")
