@@ -23,6 +23,14 @@
 ;; We never want to edit Rubinius bytecode
 (add-to-list 'completion-ignored-extensions ".rbc")
 
+;;; ruby-mode 1.0 relic
+
+(defun ruby-insert-end ()
+  (interactive)
+  (insert "end")
+  (ruby-indent-line t)
+  (end-of-line))
+
 ;;; Rake
 
 (defun pcomplete/rake ()
