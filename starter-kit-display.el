@@ -20,8 +20,9 @@
 (set-frame-width (selected-frame) 161)
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
 
-;; Vertical fringes of 1 pixel for each window
-(set-fringe-mode (quote (nil . (nil . nil))))
+(if (not (eq window-system nil))
+    ;; Vertical fringes of 1 pixel for each window
+    (set-fringe-mode (quote (nil . (nil . nil)))))
 
 ;; Show buffer boundaries on the left-hande side of the fringe
 (setq-default indicate-buffer-boundaries 'left)
