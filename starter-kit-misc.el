@@ -68,6 +68,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
 
+(setq smex-prompt-string "smex ")
 (setq smex-save-file (concat dotfiles-dir "smex.save"))
 
 ;; YASnippet

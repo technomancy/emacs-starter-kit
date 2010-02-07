@@ -9,15 +9,15 @@
 ;;
 ;; Bind the following commands:
 ;; smex, smex-major-mode-commands, smex-update-and-run
-;; 
+;;
 ;; For a detailed introduction see:
 ;; http://github.com/nonsequitur/smex/blob/master/README.markdown
-                     
+
 (require 'ido)
 ;; Needed for `union'.
 (require 'cl)
 
-(defcustom smex-save-file "~/smex.save"
+(defcustom smex-save-file "~/.smex-items"
   "File in which the smex state is saved between Emacs sessions.
 Variables stored are: `smex-data', `smex-history'.
 Must be set before initializing Smex."
@@ -31,7 +31,7 @@ Must be set before initializing Smex."
   :type 'integer
   :group 'smex)
 
-(defcustom smex-prompt-string "smex "
+(defcustom smex-prompt-string "M-x "
   "String to display in the Smex prompt."
   :type 'string
   :group 'smex)
@@ -40,6 +40,7 @@ Must be set before initializing Smex."
 (defvar smex-ido-cache)
 (defvar smex-data)
 (defvar smex-history)
+(defvar smex-custom-action nil)
 
 ;;--------------------------------------------------------------------------------
 ;; Smex Interface
@@ -47,11 +48,20 @@ Must be set before initializing Smex."
 (defun smex (&optional commands)
   (interactive)
   (unless commands (setq commands smex-ido-cache))
-  (let ((chosen (intern (smex-completing-read commands))))
-    (unwind-protect
-        (call-interactively chosen)
-      (smex-rank chosen)
-      (smex-show-key-advice chosen))))
+  (let ((chosen-item (intern (smex-completing-read commands))))
+    (if smex-custom-action
+        (unwind-protect
+            (funcall smex-custom-action chosen-item)
+          (setq smex-custom-action nil))
+      (unwind-protect
+          (progn (setq prefix-arg current-prefix-arg)
+                 (command-execute chosen-item 'record))
+        (smex-rank chosen-item)
+        (smex-show-key-advice chosen-item)
+        ;; Todo: Is there a better way to manipulate 'last-repeatable-command'
+        ;; from the inside of an interactively called function?
+        (run-at-time 0.01 nil (lambda (cmd) (setq last-repeatable-command cmd))
+                     chosen-item)))))
 
 (defun smex-major-mode-commands ()
   "Like `smex', but limited to commands that are relevant to the active major mode."
@@ -72,6 +82,7 @@ Must be set before initializing Smex."
 
 (defun smex-prepare-ido-bindings ()
   (define-key ido-completion-map (kbd "C-h f") 'smex-describe-function)
+  (define-key ido-completion-map (kbd "M-.") 'smex-find-function)
   (define-key ido-completion-map (kbd "C-a") 'move-beginning-of-line))
 
 ;;--------------------------------------------------------------------------------
@@ -130,19 +141,30 @@ Must be set before initializing Smex."
   (unless idle-time (setq idle-time 60))
   (run-with-idle-timer idle-time t 'smex-update))
 
+(defun smex-detect-legacy-save-file ()
+  "The default value of `smex-save-file' was changed in between releases.
+This function provides temporary means to aid the transition."
+  (unless (file-readable-p smex-save-file)
+    (let ((legacy-save-file "~/smex.save"))
+      (when (file-readable-p legacy-save-file)
+        (message (format "%s not found. Falling back to %s"
+                         smex-save-file legacy-save-file))
+        (setq smex-save-file legacy-save-file)))))
+
 ;;;###autoload
 (defun smex-initialize ()
   (interactive)
   (unless ido-mode (smex-initialize-ido))
+  (smex-detect-legacy-save-file)
   (let ((save-file (expand-file-name smex-save-file)))
     (if (file-readable-p save-file)
-      (with-temp-buffer
-        (insert-file-contents save-file)
-        (setq smex-history (read (current-buffer))
-              smex-data (read (current-buffer))))
+        (with-temp-buffer
+          (insert-file-contents save-file)
+          (setq smex-history (read (current-buffer))
+                smex-data (read (current-buffer))))
       (setq smex-history nil smex-data nil))
-  (smex-rebuild-cache)
-  (add-hook 'kill-emacs-hook 'smex-save-to-file)))
+    (smex-rebuild-cache)
+    (add-hook 'kill-emacs-hook 'smex-save-to-file)))
 
 (defun smex-initialize-ido ()
   "Sets up a minimal Ido environment for `ido-completing-read'."
@@ -183,9 +205,10 @@ Must be set before initializing Smex."
                       (string< name other-name))))))) ; 3. Alphabetical order
 
 (defun smex-rank (command)
-  (let ((command-item (assq command smex-cache)))
-    ;; TODO: Should we first update the cache and
-    ;; then try again if command-item is nil?
+  (let ((command-item (or (assq command smex-cache)
+                          ;; Update caches and try again if not found.
+                          (progn (smex-update)
+                                 (assq command smex-cache)))))
     (when command-item
       (smex-update-count command-item)
 
@@ -227,7 +250,7 @@ Must be set before initializing Smex."
          (command-item (car command-cell))
          (command-count (cdr command-item)))
     (let ((insert-at (smex-detect-position command-cell (lambda (cell)
-                                                          (smex-sorting-rules command-item (car cell))))))
+                       (smex-sorting-rules command-item (car cell))))))
       ;; TODO: Should we handle the case of 'insert-at' being nil?
       ;; This will never happen in practice.
       (when (> insert-at 1)
@@ -270,10 +293,19 @@ Returns nil when reaching the end of the list."
 ;;--------------------------------------------------------------------------------
 ;; Help and Reference
 
+(defun smex-do-with-selected-item (fn)
+  (setq smex-custom-action fn)
+  (ido-exit-minibuffer))
+
 (defun smex-describe-function ()
   (interactive)
-  (describe-function (intern (car ido-matches)))
-  (pop-to-buffer "*Help*"))
+  (smex-do-with-selected-item (lambda (chosen)
+                           (describe-function chosen)
+                           (pop-to-buffer "*Help*"))))
+
+(defun smex-find-function ()
+  (interactive)
+  (smex-do-with-selected-item 'find-function))
 
 (defvar smex-old-message nil
   "A temporary storage used by `smex-show-key-advice'")
