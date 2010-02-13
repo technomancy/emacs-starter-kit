@@ -48,17 +48,15 @@ The [[http://emacswiki.org][Emacs Wiki]] is also very handy.
    have one.  Otherwise, Mac users should get it [[http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html][from Apple]], or
    install it directly from [[http://savannah.gnu.org/projects/emacs/][from source]] following the instructions in
    =nextstep/INSTALL=.  Windows users can get it [[http://ftp.gnu.org/gnu/emacs/windows/emacs-22.3-bin-i386.zip][from GNU]].
-2. If you don't already have one, checkout a version of the starter
-   kit using git (If you don't have git installed see
-   http://git-scm.com/ for information on installing and using git).
+2. Checkout a version of the starter kit using git -- if you're new to
+   git checkout this [[http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html][git-tutorial]], also we'd highly recommend that you
+   try out [[http://zagadka.vm.bytemark.co.uk/magit/magit.html][magit]] the Emacs mode for git interaction which comes
+   bundled in the starter kit.
    #+begin_src sh
      git clone http://github.com/eschulte/emacs-starter-kit.git
    #+end_src
 3. Move the resulting directory to =~/.emacs.d= [1]
-4. Install the Org-mode [[http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#submodules][submodules]] with the following -- if you're new
-   to git checkout this [[http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html][git-tutorial]], also we'd highly recommend that
-   you try out [[http://zagadka.vm.bytemark.co.uk/magit/magit.html][magit]] the Emacs mode for git interaction which comes
-   bundled in the starter kit.
+4. Install the Org-mode [[http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#submodules][submodules]] with the following
    #+begin_src sh
    cd ~/.emacs.d/
    git submodule init
