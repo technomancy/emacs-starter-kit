@@ -79,6 +79,13 @@
 (if (file-exists-p user-specific-dir)
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 
+;; Redeclare specific settings that are (for unknown reasons) not
+;; registered during initialization when in daemon mode
+(if (daemonp)
+    (progn
+      (scroll-bar-mode -1)
+      (global-set-key (kbd "C-w") 'backward-kill-word)))
+
 (eval-after-load "init.el" (smex-initialize))
 
 ;;; init.el ends here
