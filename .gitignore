@@ -29,3 +29,6 @@ eshell/history
 
 ## ignore packages held in the src directory
 src
+
+## org stuff
+.org-id-locations
