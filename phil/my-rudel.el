@@ -1,11 +1,7 @@
 ;; Pairing magic!
 
 (ignore-errors
-  (if (= emacs-major-version 23)
-      (load-file "~/src/rudel/rudel-loaddefs.el")
-    (add-to-list 'load-path "~/src/cedet/eieio/")
-    (add-to-list 'load-path "~/src/cedet/common/")
-    (load-file "~/src/cedet/eieio/eieio-loaddefs.el")
+  (when (= emacs-major-version 23)
     (load-file "~/src/rudel/rudel-loaddefs.el")))
 
 (setq rudel-configured-sessions

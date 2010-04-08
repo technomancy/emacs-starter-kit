@@ -16,7 +16,12 @@
 (set-default 'c-basic-offset 2)
 
 (add-hook 'xml-mode-hook 'run-coding-hook)
+(add-hook 'java-mode-hook 'run-coding-hook)
 
-(eval-after-load 'cc-mode
+(eval-after-load 'java-mode
   '(progn
-     (define-key cc-mode-map (kbd "C-M-h") 'backward-kill-word)))
+     (define-key java-mode-map (kbd "C-M-h") 'backward-kill-word)))
+
+(add-to-list 'auto-mode-alist '("\\.duby$" . ruby-mode))
+
+(setq slime-net-coding-system 'utf-8-unix)

@@ -5,5 +5,7 @@
 (setq tramp-mode nil
       tramp-unload-hook nil
       ido-enable-tramp-completion nil)
-(fmakunbound 'eshell/sudo)
-(fmakunbound 'eshell/su)
+
+(add-hook 'eshell-mode-hook
+          '(lambda () (fmakunbound 'eshell/sudo)
+             (fmakunbound 'eshell/su)))

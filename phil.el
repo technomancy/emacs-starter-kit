@@ -6,6 +6,9 @@
 (add-to-list 'load-path "/home/phil/src/relax.el")
 (add-to-list 'load-path "/home/phil/src/elim/elisp")
 
+(add-to-list 'package-archives
+             '("technomancy" . "http://repo.technomancy.us/emacs/") t)
+
 (autoload 'w3m "w3m" "w3m browser" t)
 (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t)
 (autoload 'garak "garak" "Start Garak IM session." t)
@@ -20,6 +23,8 @@
 (setq whitespace-line-column 80)
 
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program
-      "/home/phil/src/conkeror/contrib/run-conkeror")
+      browse-url-generic-program "/home/phil/src/conkeror/contrib/run-conkeror")
 
+(org-remember-insinuate)
+
+(global-set-key (kbd "C-c r") 'remember)
