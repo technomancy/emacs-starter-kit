@@ -47,8 +47,6 @@
 (package-initialize)
 (require 'starter-kit-elpa)
 
-(load "elpa-to-submit/nxhtml/autostart")
-
 ;; Load up starter kit customizations
 
 (require 'starter-kit-defuns)
