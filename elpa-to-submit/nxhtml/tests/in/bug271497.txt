@@ -1,7 +1,0 @@
-This is supposed to be ada code
-
-JAVA_ON
-and this is supposed to be java code
-JAVA_OFF
-
-This is also supposed to be ada code
