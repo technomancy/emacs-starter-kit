@@ -20,7 +20,14 @@
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 
+;; Load up ELPA, the package manager
+
 (add-to-list 'load-path dotfiles-dir)
+
+(require 'package)
+(package-initialize)
+(require 'starter-kit-elpa)
+
 (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
 
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
@@ -39,12 +46,6 @@
 
 ;; backport some functionality to Emacs 22 if needed
 (require 'dominating-file)
-
-;; Load up ELPA, the package manager
-
-(require 'package)
-(package-initialize)
-(require 'starter-kit-elpa)
 
 ;; Load up starter kit customizations
 

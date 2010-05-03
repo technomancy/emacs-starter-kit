@@ -2,6 +2,8 @@
 ;;
 ;; Part of the Emacs Starter Kit
 
+(require 'cl)
+
 (defvar starter-kit-packages (list 'idle-highlight
                                    'ruby-mode
                                    'inf-ruby
