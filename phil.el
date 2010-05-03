@@ -4,7 +4,9 @@
 
 (add-to-list 'load-path "/home/phil/src/emacs-w3m")
 (add-to-list 'load-path "/home/phil/src/relax.el")
-(add-to-list 'load-path "/home/phil/src/elim/elisp")
+(add-to-list 'load-path "/home/phil/src/magit")
+
+(autoload 'magit-status "magit" "magit" t)
 
 (add-to-list 'package-archives
              '("technomancy" . "http://repo.technomancy.us/emacs/") t)
@@ -13,9 +15,9 @@
 (autoload 'relax "relax" "Connect to the CouchDB database at db-url." t)
 (autoload 'garak "garak" "Start Garak IM session." t)
 
-(load "../../paredit/paredit-beta")
-(load "../../paredit/paredit-delimiter-space")
-(load "../../paredit/paredit-semicolon")
+(ignore-errors (load "../../paredit/paredit-beta")
+               (load "../../paredit/paredit-delimiter-space")
+               (load "../../paredit/paredit-semicolon"))
 
 ;; Random stuff
 
@@ -27,4 +29,9 @@
 
 (org-remember-insinuate)
 
-(global-set-key (kbd "C-c r") 'remember)
+(global-set-key (kbd "C-c C-r") 'remember)
+
+(when nil ; use trunk slime?
+  (add-to-list 'load-path "/home/phil/src/slime")
+  (add-to-list 'load-path "/home/phil/src/slime/contrib")
+  (require 'slime))

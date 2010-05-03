@@ -9,3 +9,11 @@
 (add-hook 'eshell-mode-hook
           '(lambda () (fmakunbound 'eshell/sudo)
              (fmakunbound 'eshell/su)))
+
+;; plz not to refresh log buffer when I cherry-pick, mkay?
+(eval-after-load 'magit
+  '(define-key magit-log-mode-map (kbd "A")
+     (lambda ()
+       (interactive)
+       (flet ((magit-need-refresh (f)))
+         (magit-cherry-pick-item)))))

@@ -1,15 +1,14 @@
 (eval-after-load 'erc
   '(progn
      (setq erc-prompt ">"
-           erc-fill-column 70
+           erc-fill-column 80
            erc-hide-list '("JOIN" "PART" "QUIT" "NICK")
            erc-track-exclude-types (append '("324" "329" "332" "333" "353" "477")
                                            erc-hide-list)
            erc-nick "technomancy"
            erc-autojoin-timing :ident
            erc-autojoin-channels-alist
-           '(("freenode.net" "#emacs" "#clojure" "#seattle.rb"
-              "#leiningen" "#jclouds"))
+           '(("freenode.net" "#emacs" "#clojure" "#seattle.rb" "#leiningen"))
            erc-prompt-for-nickserv-password nil)
      (require 'erc-services)
      (require 'erc-spelling)
@@ -17,20 +16,25 @@
      (add-to-list 'erc-modules 'highlight-nicknames 'spelling)
      (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules)))
      (set-face-foreground 'erc-input-face "dim gray")
-     (set-face-foreground 'erc-my-nick-face "blue")
-     (server-start)))
+     (set-face-foreground 'erc-my-nick-face "blue")))
 
 (setq pcomplete-cycle-completions nil)
 
-(defun erc-connect ()
+(defun bitlbee ()
   (interactive)
   (require 'erc)
-  (erc :server "home.hagelb.org" :password dirc-password))
+  (erc :server "muc.im.sa2s.us" :nick "phil" :password sonian-password))
 
-(load (expand-file-name "~/.passwords.el"))
+(defun irc ()
+  (interactive)
+  (require 'erc)
+  (erc :server "chat.freenode.net" :nick "technomancy"))
 
-(setq erc-nickserv-passwords
-      `((freenode     (("technomancy" . ,freenode-password)))))
+(ignore-errors
+  (load (expand-file-name "~/.passwords.el"))
+
+  (setq erc-nickserv-passwords
+        `((freenode     (("technomancy" . ,freenode-password))))))
 
 (defun clean-message (s)
   (setq s (replace-regexp-in-string "'" "&apos;" 

@@ -7,7 +7,7 @@
                                    'inf-ruby
                                    'css-mode
                                    'yaml-mode
-                                   'magit
+                                   ;'magit
                                    'gist)
   "Libraries that should be installed by default.")
 
