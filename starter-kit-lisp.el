@@ -52,11 +52,9 @@
      (intern (concat (symbol-name x) "-mode"))
      '(("(\\|)" . 'esk-paren-face))))
   (add-hook
-   (intern (concat (symbol-name x) "-mode-hook"))
-   (lambda ()
-     (paredit-mode +1)
-     (idle-highlight +1)
-     (run-coding-hook))))
+   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit)
+  (add-hook
+   (intern (concat (symbol-name x) "-mode-hook")) 'run-coding-hook))
 
 (provide 'starter-kit-lisp)
 ;; starter-kit-lisp.el ends here

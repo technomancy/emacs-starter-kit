@@ -57,7 +57,6 @@ exec-to-string command, but it works and seems fast"
      (ad-activate 'ruby-do-run-w/compilation)))
 
 (add-hook 'ruby-mode-hook 'run-coding-hook)
-(add-hook 'ruby-mode-hook 'idle-highlight)
 
 ;;; Flymake
 
