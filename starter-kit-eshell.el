@@ -30,6 +30,9 @@
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
+(defun eshell/find (dir &rest opts)
+  (find-dired dir (mapconcat 'identity opts " ")))
+
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
 ;; * cloning git repos, github repos

@@ -13,6 +13,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+(ansi-color-for-comint-mode-on)
 
 (setq visible-bell t
       echo-keystrokes 0.1
@@ -101,10 +102,18 @@
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 
+(eval-after-load 'grep
+  '(progn
+    (add-to-list 'grep-find-ignored-files "target")
+    (add-to-list 'grep-find-ignored-files "*.class")))
+
 ;; Default to unified diffs
 (setq diff-switches "-u")
 
 ;; Cosmetics
+
+(set-face-background 'vertical-border "white")
+(set-face-foreground 'vertical-border "white")
 
 (eval-after-load 'diff-mode
   '(progn
