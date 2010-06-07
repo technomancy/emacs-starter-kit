@@ -1,3 +1,11 @@
+;;; gary/misc.el --- Things that don't fit anywhere else
+
+;; Additional autoloads
+(add-to-list 'auto-mode-alist '("\\.applescript$" . applescript-mode))
+(add-to-list 'auto-mode-alist '("\\.scpt$"        . applescript-mode))
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
+
 (ansi-color-for-comint-mode-on)
 
 ;; Enable select, disabled features
@@ -30,14 +38,18 @@
         ido-default-buffer-method 'other-window
         ido-use-filename-at-point t))
 
-(setq smex-prompt-string "smex ")
-(setq smex-save-file (concat dotfiles-dir "smex.save"))
+;; ack
+(setq ack-prompt-for-directory t)
+
+;; smex
+(setq smex-prompt-string "smex "
+      smex-save-file (concat dotfiles-dir "smex.save"))
 
 ;; YASnippet
 (yas/initialize)
 (yas/load-directory (concat dotfiles-dir "snippets"))
 
-;; Yeah, Hippie expand
+;; Yeah, the Hippies
 (add-to-list 'hippie-expand-try-functions-list 'yas/hippie-try-expand)
 
 ;; More precise temporary file management
@@ -46,11 +58,6 @@
       kept-old-versions 2
       delete-old-versions t
       backup-by-copying-when-linked t)
-
-(add-to-list 'auto-mode-alist '("\\.applescript$" . applescript-mode))
-(add-to-list 'auto-mode-alist '("\\.scpt$"        . applescript-mode))
-(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
 
 ;; Keep and trash selected buffers
 (midnight-delay-set 'midnight-delay 4400)
@@ -66,3 +73,6 @@
                                               "*markdown-output*"))
 (add-to-list 'clean-buffer-list-kill-regexps "\\.rb$")
 (add-to-list 'clean-buffer-list-kill-regexps "\\.el$")
+
+(provide 'misc)
+;;; gary/misc.el ends here
