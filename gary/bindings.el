@@ -93,3 +93,5 @@
                       (browse-url-at-point (thing-at-point-url-at-point))
                     (view-url))))
 
+;; RTFEM
+(global-set-key  (kbd "C-h r") 'info-emacs-manual)
