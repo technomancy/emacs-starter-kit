@@ -29,55 +29,39 @@
               (if (file-exists-p (concat buffer-file-name "c"))
                   (delete-file (concat buffer-file-name "c"))))))
 
+(define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
+
 ;;; Clojure
 
 (eval-after-load 'find-file-in-project
   '(add-to-list 'ffip-patterns "*.clj"))
 
-(defun clojure-project (path)
-  "Setup classpaths for a clojure project and starts a new SLIME session.
-  Kills existing SLIME session, if any."
-  (interactive (list
-                (ido-read-directory-name
-                 "Project root: "
-                 (locate-dominating-file default-directory "pom.xml"))))
-  (when (get-buffer "*inferior-lisp*")
-    (kill-buffer "*inferior-lisp*"))
-  (defvar swank-clojure-extra-vm-args nil)
-  (defvar slime-lisp-implementations nil)
-  (add-to-list 'swank-clojure-extra-vm-args
-               (format "-Dclojure.compile.path=%s"
-                       (expand-file-name "target/classes/" path)))
-  (setq swank-clojure-binary nil
-        swank-clojure-jar-path (expand-file-name "target/dependency/" path)
-        swank-clojure-extra-classpaths
-        (append (mapcar (lambda (d) (expand-file-name d path))
-                        '("src/" "target/classes/" "test/"))
-                (let ((lib (expand-file-name "lib" path)))
-                  (if (file-exists-p lib)
-                      (directory-files lib t ".jar$"))))
-        slime-lisp-implementations
-        (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
-              (remove-if #'(lambda (x) (eq (car x) 'clojure))
-                         slime-lisp-implementations)))
-  (save-window-excursion
-    (slime)))
+(defun clojure-project ()
+  (interactive)
+  (message "Deprecated in favour of M-x swank-clojure-project. Install swank-clojure from ELPA."))
 
 ;;; Enhance Lisp Modes
 
 (eval-after-load 'paredit
-  '(define-key paredit-mode-map (kbd ";") 'self-insert-command))
+  ;; need a binding that works in the terminal
+  '(define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp))
 
 (dolist (x '(scheme emacs-lisp lisp clojure))
-  (font-lock-add-keywords
-   (intern (concat (symbol-name x) "-mode"))
-   '(("(\\|)" . 'esk-paren-face)))
+  (when window-system
+    (font-lock-add-keywords
+     (intern (concat (symbol-name x) "-mode"))
+     '(("(\\|)" . 'esk-paren-face))))
   (add-hook
-   (intern (concat (symbol-name x) "-mode-hook"))
-   (lambda ()
-     (paredit-mode +1)
-     (idle-highlight +1)
-     (run-coding-hook))))
+   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit)
+  (add-hook
+   (intern (concat (symbol-name x) "-mode-hook")) 'run-coding-hook))
+
+(eval-after-load 'clojure-mode
+  '(font-lock-add-keywords
+    'clojure-mode `(("(\\(fn\\>\\)"
+                     (0 (progn (compose-region (match-beginning 1)
+                                               (match-end 1) "ƒ")
+                               nil))))))
 
 (provide 'starter-kit-lisp)
 ;; starter-kit-lisp.el ends here
