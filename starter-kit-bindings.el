@@ -2,114 +2,47 @@
 ;;
 ;; Part of the Emacs Starter Kit.
 
-;; Override OS X's behavior when in Emacs
-(if (eq system-type 'darwin)
-    (setq mac-command-modifier 'meta
-          mac-option-modifier 'alt))
-
-(global-set-key (kbd "M-x") 'ispell-word)
-
-;; Why can't open-line just indent according to mode?
-(global-set-key (kbd "C-o") 'vi-open-next-line)
-
-;; More precise character zapping
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-M-z") 'zap-to-char)
-
-;; Mark and Region usage overrides
-(global-set-key (kbd "<C-return>") 'set-mark-command)
-(global-set-key (kbd "C-x C-k") 'kill-region)
-
 ;; You know, like Readline.
-(global-set-key (kbd "C-w") 'backward-kill-word)
-
-;; Visualize the kill ring
-(global-set-key (kbd "M-y") 'yank-pop-forward)
-(global-set-key (kbd "C-M-y") 'yank-pop-backward)
+(global-set-key (kbd "C-M-h") 'backward-kill-word)
 
 ;; Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
 
-;; Insert skeleton pairs by default
-;; TODO: refine per-mode
-(global-set-key (kbd "C-c d") 'delete-pair)
-(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "'") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
-
 ;; Completion that uses many different methods to find options.
-(global-set-key (kbd "<C-SPC>") 'hippie-expand)
+(global-set-key (kbd "M-/") 'hippie-expand)
 
 ;; Perform general cleanup.
 (global-set-key (kbd "C-c n") 'cleanup-buffer)
 
+;; Turn on the menu bar for exploring new modes
+(global-set-key (kbd "C-<f10>") 'menu-bar-mode)
+
 ;; Font size
-(define-key global-map (kbd "C-=") 'text-scale-increase)
+(define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
-
-;; Frame opacity
-(global-set-key (kbd "C-8") '(lambda () ; decrease
-                               (interactive)
-                               (opacity-modify t)))
-(global-set-key (kbd "C-9") '(lambda () ; increase
-                               (interactive)
-                               (opacity-modify)))
-(global-set-key (kbd "C-0") '(lambda ()
-                               (interactive)
-                               (modify-frame-parameters nil `((alpha . 100)))))
-
-;; Gracefully redo undone changes
-(global-set-key (kbd "M-/") 'redo)
-
-;; Revert the current buffer
-(global-set-key (kbd "<f6>") 'refresh-buffer)
-
-;; Prefer ack over grep
-(global-set-key (kbd "C-c C-k C-a") 'ack)
 
 ;; Use regex searches by default.
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-
-;; Escape all recursive edits
-(global-set-key (kbd "C-c ^") 'top-level)
+(global-set-key (kbd "\C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
 
 ;; Jump to a definition in the current file. (This is awesome.)
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
-
-;; Gisting
-(global-set-key (kbd "C-c C-g g") (lambda (arg)
-                                    (interactive "P")
-                                    (if (null arg)
-                                        (gist-region-or-buffer)
-                                      (gist-region-or-buffer-private))))
-(global-set-key (kbd "C-c C-g f") 'gist-fetch)
 
 ;; File finding
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
-(global-set-key (kbd "<C-tab>") 'bury-buffer)
+(global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-;; Time tracking
-(global-set-key (kbd "C-c C-k i") 'timeclock-in)
-(global-set-key (kbd "C-c C-k o") 'timeclock-out)
-(global-set-key (kbd "C-c C-k c") 'timeclock-change)
-(global-set-key (kbd "C-c C-k v") 'timeclock-visit-timelog)
-
-;; Window manipulation
+;; Window switching. (C-x o goes to the next window)
 (windmove-default-keybindings) ;; Shift+direction
-(global-set-key [S-f12] 'swap-windows)
-(global-set-key [C-f12] 'swap-split)    ; FIXME
-
-;; Indentation help
-(global-set-key (kbd "C-x ^") 'join-line)
-(global-set-key (kbd "C-c <tab>") 'indent-relative)
+(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
+(global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
 
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
@@ -120,17 +53,11 @@
 ;; Start a regular shell if you prefer that.
 (global-set-key (kbd "C-x M-m") 'shell)
 
-;; Smex, bringing ido to execute-extended-command
-(global-set-key (kbd "C-x C-m") 'smex)
-(global-set-key (kbd "C-c C-m") 'smex-major-mode-commands)
+;; If you want to be able to M-x without meta (phones, etc)
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
 
 ;; Fetch the contents at a URL, display it raw.
-(global-set-key (kbd "C-c C-u")
-                (lambda (arg)
-                  (interactive "P")
-                  (if (null arg)
-                      (browse-url-at-point (thing-at-point-url-at-point))
-                    (view-url))))
+(global-set-key (kbd "C-x C-h") 'view-url)
 
 ;; Help should search more than just commands
 (global-set-key (kbd "C-h a") 'apropos)
@@ -138,7 +65,10 @@
 ;; Should be able to eval-and-replace anywhere.
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 
-;; Applications
+;; For debugging Emacs modes
+(global-set-key (kbd "C-c p") 'message-point)
+
+;; So good!
 (global-set-key (kbd "C-x g") 'magit-status)
 
 ;; This is a little hacky since VC doesn't support git add internally
@@ -154,6 +84,10 @@
   (lambda () (interactive)
     (let ((case-fold-search isearch-case-fold-search))
       (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+
+;; Org
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
 
 (provide 'starter-kit-bindings)
 ;;; starter-kit-bindings.el ends here
