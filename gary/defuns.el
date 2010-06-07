@@ -1,3 +1,5 @@
+;;; gary/defuns.el --- Tweaking the look and feel of Emacs
+
 ;; Daemonization
 
 (if (daemonp)
@@ -67,7 +69,7 @@ for when attached via a CLI client"
           (set-window-start w1 s2)
           (set-window-start w2 s1)))))
 
-(defun swap-split () ; TODO: broken; rewrite
+(defun swap-split () ; TODO: broken as of 23; rewrite
   "Swaps the orientation of two split windows."
   (interactive)
   (save-excursion
@@ -105,3 +107,16 @@ Goes backward if ARG is negative; error if CHAR not found."
                  (progn (goto-char
                          (if (> arg 0) (1- (point)) (1+ (point))))
                         (point)))))
+
+;; Courtesy of http://emacs-fu.blogspot.com/2009/02/transparent-emacs.html
+(defun opacity-modify (&optional dec)
+  "Modify the transparency of the emacs frame; if DEC is t,
+    decrease the transparency, otherwise increase it in 10%-steps"
+  (let* ((alpha-or-nil (frame-parameter nil 'alpha)) ; nil before setting
+         (oldalpha (if alpha-or-nil alpha-or-nil 100))
+         (newalpha (if dec (- oldalpha 10) (+ oldalpha 10))))
+    (when (and (>= newalpha frame-alpha-lower-limit) (<= newalpha 100))
+      (modify-frame-parameters nil (list (cons 'alpha newalpha))))))
+
+(provide 'defuns)
+;;; gary/defuns.el ends here
