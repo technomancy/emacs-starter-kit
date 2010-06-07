@@ -1,40 +1,8 @@
 TODO:
 
-Submit the packages in starter-kit-elpa.el to ELPA.
-
-Greg Newman is working on Python helpers.
-
-maybe include:
-* should yasnippet be included in rinari?
+Submit the packages in elpa-to-submit to ELPA.
 
 to write/finish:
 * submit ruby fixes to flymake
 
 which-func-mode in ruby?
-
-Bug fixes:
-get jabber.el to automatically disconnect when suspending/hibernating
-(via dbus)
-
-overhaul starter-kit-* core and restructure as init/*.el
-
-BAD OVERRIDES:
-M-$: new ispell-{word,region} - must rebind for osx
-[new] file-cache-minibuffer-complete
-
-PACKAGES (and equivalents, if possible):
-browse-kill-ring : +kill-ring-search!
-install-elisp
-ruby-hacks ?
-ruby-style ?
-shell-command (+shell-current-directory?)
-yasnippet
-yank-pop-summary
-
-NOTES:
-M-$ : spellchecking for region if mark is active, word otherwise
-TAB now indents region
-
-FIX
-exec-path not setting to my PATH
-magit's git-executable-path
