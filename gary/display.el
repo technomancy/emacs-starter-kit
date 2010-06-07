@@ -1,11 +1,7 @@
-;;; starter-kit-display.el --- Tweaking the look and feel of Emacs
+;;; gary/display.el --- Perfecting Emacs's (lack of) veneer
 
 ;; Spartan appearance
 (when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (turn-off-tool-bar)
-  (tooltip-mode -1)
-  (scroll-bar-mode -1)
   (if (eq window-system 'ns)
       ;; Use the Inconsolata font if running OS X
       (progn (setq ns-antialias-text t
@@ -15,10 +11,8 @@
              (ns-respond-to-change-font))))
 
 (blink-cursor-mode 1)
-(menu-bar-mode -1)
 
 (set-frame-width (selected-frame) 161)
-(add-hook 'before-make-frame-hook 'turn-off-tool-bar)
 
 (if (not (eq window-system nil))
     ;; Vertical fringes of 1 pixel for each window
@@ -27,40 +21,28 @@
 ;; Show buffer boundaries on the left-hande side of the fringe
 (setq-default indicate-buffer-boundaries 'left)
 
-(setq inhibit-startup-message t
-      visible-bell nil
-      color-theme-is-global t
+(setq visible-bell nil
       display-time-24hr-format t
-      font-lock-maximum-decoration t
       whitespace-style '(trailing
                          lines
                          indentation
                          tabs
                          space-before-tab
                          space-after-tab)
-      whitespace-line-column 80)
+      whitespace-line-column 79)
 
 ;; Modeline preferences
+(display-time-mode)
 (timeclock-modeline-display)
 (size-indication-mode 1)
-(column-number-mode 1)
-(display-time-mode 1)
 
 (set-default 'truncate-lines t)
-(set-default 'indent-tabs-mode nil)
-(set-default 'indicate-empty-lines t)
-
-;; Enable syntax highlighting for older Emacsen that have it off
-(global-font-lock-mode t)
 
 ;; Make unkept whitespace painfully annoying
 (global-whitespace-mode t)
 
 ;; Highlight other instances of the symbol at point
 (global-hi-lock-mode t)
-
-;; Highlight matching parentheses when the point is on them.
-(show-paren-mode t)
 
 ;; Courtesy of http://emacs-fu.blogspot.com/2009/02/transparent-emacs.html
 (defun opacity-modify (&optional dec)
@@ -72,5 +54,5 @@
     (when (and (>= newalpha frame-alpha-lower-limit) (<= newalpha 100))
       (modify-frame-parameters nil (list (cons 'alpha newalpha))))))
 
-(provide 'starter-kit-display)
-;;; starter-kit-display.el ends here
+(provide 'display)
+;;; display.el ends here
