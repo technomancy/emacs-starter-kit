@@ -291,6 +291,10 @@ project is not in elpa.
 (add-to-list 'load-path elisp-source-dir)
 #+end_src
 
+*** Starter kit and Gnus
+If you would like help setting up the gnus email client, checkout
+[[file:starter-kit-gnus.org][Starter Kit Gnus]], a starter kit file that is not loaded by default.
+
 ** Load the rest of the starter kit core
 The following files contain the remainder of the core of the Emacs
 Starter Kit.  All of the code in this section should be loaded by

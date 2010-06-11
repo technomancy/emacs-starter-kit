@@ -78,7 +78,7 @@ the documentation for the Starter Kit to html.
                    :base-directory ,this-dir
                    :base-extension "org"
                    :style "<link rel=\"stylesheet\" href=\"emacs.css\" type=\"text/css\"/>"
-                   :publishing-directory ,(expand-file-name "doc" this-dir)
+                   :publishing-directory ,this-dir
                    :index-filename "starter-kit.org"
                    :auto-postamble nil)))
 #+end_src
