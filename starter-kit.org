@@ -431,31 +431,6 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 #+end_src
 
 
-* Development
-  :PROPERTIES:
-  :CUSTOM_ID: development
-  :END:
-
-** Tasks [1/10]
-
-*** TODO setup electric for ruby
-*** TODO set up ri for ruby
-*** TODO Submit the packages in starter-kit-elpa.el to ELPA.
-*** STARTED Greg Newman is working on Python helpers.
-*** STARTED submit ruby fixes to flymake
-*** PROPOSED which-func-mode in ruby?
-*** TODO all bindings to kbd invocations
-*** DEFERRED should yasnippet be included in rinari?
-No, rinari has no dependency on yasnippet, and yasnippet has many
-applications outside of rinari.
-
-*** TODO flymake for perl
-*** TODO electric bugaloo for perl
-
-** Bugs [0/1]
-*** TODO get jabber.el to automatically disconnect when suspending/hibernating (via dbus)
-
-
 * Footnotes
 
 [1] If you already have a directory at ~/.emacs.d move it out of
