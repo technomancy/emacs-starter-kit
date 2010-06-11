@@ -1,0 +1,189 @@
+#+TITLE: Starter Kit Gnus
+#+OPTIONS: toc:nil num:nil ^:nil
+
+#+begin_center:
+This file is currently *experimental* in that it has not been tested.
+
+If you need to configure gnus as an email client, then please give
+this a spin and share your experiences.
+#+end_center:
+
+This is part of the [[file:starter-kit.gnus][Emacs Starter Kit]].
+
+* Starter Kit Gnus
+  :PROPERTIES:
+  :tangle:   yes
+  :END:
+Unlike other =starter-kit-*.org= files, this file will never be loaded
+by default.  To activate it, please copy it into your user-specific
+directory, and then follow the instructions below.
+
+=Starter Kit Gnus= provides configuration for the notoriously
+difficult to set up [[http://www.gnus.org/][Gnus]] email client
+
+This file can be used to jump start a working Gnus instillation.  The
+following steps will result in a working vanilla Gnus instillation
+against either a Gmail email account (through pop3) or an IMAP server.
+1) install the [[required-packages]]
+2) follow the [[gmail]] specific instructions or the [[imap]] specific
+   instructions, or [[both]] if you would like Gnus to collect email from
+   multiple remote servers
+3) tangle this file with `org-babel-tangle' (with C-c M-b t) creating
+   the =starter-kit-gnus.el= file which can be loaded by Emacs
+
+(if you run into any problems -- the [[http://www.gnus.org/manual.html][gnus manual]] is very thorough)
+
+** Basic configuration
+First off, load up =gnus=
+#+begin_src emacs-lisp
+  (require 'gnus)
+#+end_src
+
+Tell gnus that your mainly going to be using it for email not as a
+news reader -- after all it's not longer the late 80s.
+#+begin_src emacs-lisp
+  (setq gnus-select-method '(nnml ""))
+#+end_src
+
+** Required packages
+   :PROPERTIES:
+   :CUSTOM_ID: required-packages
+   :END:
+A [[http://en.wikipedia.org/wiki/STARTTLS][starttls]] client allows encrypted communication with remote pop3 and
+IMAP email clients.
+
+[[http://www.openssl.org/][openssl]] implements the Secure Socket Layer (SSL) secure communication
+protocol.
+
+On Debian systems (including Ubuntu) instillation of =starttls= and
+=openssl= client is as simple as
+: sudo apt-get install starttls openssl
+
+** Gmail Setup
+   :PROPERTIES:
+   :CUSTOM_ID: gmail
+   :END:
+For more information on configuring Gnus with Gmail see [[http://www.emacswiki.org/emacs/GnusGmail][GnusGmail]] on
+the Emacs Wiki.
+
+For a simple pop3 setup, simply replace =your-gmail-email-address= and
+=your-gmail-password= with your gmail account information in the
+following tables.
+
+#+results: gmail-configuration
+| email    | your-gmail-email-address |
+| password | your-gmail-password      |
+
+#+begin_src emacs-lisp :var config=gmail-configuration
+  (let ((email (second (first config)))
+        (passwd (second (second config))))
+    ;; The following adds Gmail as a source of mail for Gnus
+    (add-to-list 'mail-sources
+                 `(pop :server "pop.gmail.com"
+                       :port 995
+                       :user ,email
+                       :password ,passwd
+                       :stream ssl))
+    ;; The following is used for sending email through gmail using SMTP.
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 25 nil nil))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 25
+          user-mail-address email
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+          smtpmail-auth-credentials `(("smtp.gmail.com" 587 ,email ,passwd))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 587))
+#+end_src
+
+** IMAP Setup
+   :PROPERTIES:
+   :CUSTOM_ID: imap
+   :END:
+The following can be used to connect to a remote IMAP server.  Fill in
+the second column of the following table with the appropriate
+information, and it will be used to generate your Gnus configuration
+file.
+
+#+results: imap-configuration
+| server   | your-imap-server-address |
+| username | your-imap-username       |
+| email    | your-imap-email-address  |
+| password | your-imap-password       |
+| mailbox  | inbox                    |
+
+#+begin_src emacs-lisp :var config=imap-configuration
+  (let ((server (second (first config)))
+        (user (second (second config)))
+        (email (second (third config)))
+        (passwd (second (fourth config)))
+        (mailbox (second (fifth config))))
+    ;; The following adds your IMAP server as a source of mail for Gnus
+    (add-to-list 'mail-sources
+                 `(imap :server ,server
+                       :port 993
+                       :user ,user
+                       :password ,passwd
+                       :stream ssl
+                       :mailbox ,mailbox))
+    ;; The following is used for sending email using SMTP.
+    (setq 
+     user-mail-address email
+     smtpmail-starttls-credentials
+     `((,server 25 nil nil))
+     smtpmail-auth-credentials
+     `((,server 25 ,user ,passwd))
+     smtpmail-default-smtp-server server
+     smtpmail-smtp-server server
+     smtpmail-smtp-service 25
+     smtpmail-debug-info t))
+#+end_src
+
+** BBDB
+[[http://bbdb.sourceforge.net/][BBDB]] -- _The Insidious Big Brother Database_ is Emacs' contact manager
+which is very useful for keeping all of your contacts organized for
+use with gnus.
+
+#+begin_src emacs-lisp
+  ;;; bbdb
+  (require 'bbdb)
+  (require 'bbdb-autoloads)
+  (setq
+   bbdb-file "~/.bbdb"
+   bbdb-offer-save 'auto
+   bbdb-notice-auto-save-file t
+   bbdb-expand-mail-aliases t
+   bbdb-canonicalize-redundant-nets-p t
+   bbdb-always-add-addresses t
+   bbdb-complete-name-allow-cycling t
+   )
+#+end_src
+
+** More attractive Summary View
+Thanks to Dan Davison.
+
+#+begin_src emacs-lisp
+  ;; http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
+  (when window-system
+    (setq gnus-sum-thread-tree-indent "  ")
+    (setq gnus-sum-thread-tree-root "") ;; "● ")
+    (setq gnus-sum-thread-tree-false-root "") ;; "◯ ")
+    (setq gnus-sum-thread-tree-single-indent "") ;; "◎ ")
+    (setq gnus-sum-thread-tree-vertical        "│")
+    (setq gnus-sum-thread-tree-leaf-with-other "├─► ")
+    (setq gnus-sum-thread-tree-single-leaf     "╰─► "))
+  (setq gnus-summary-line-format
+        (concat
+         "%0{%U%R%z%}"
+         "%3{│%}" "%1{%d%}" "%3{│%}" ;; date
+         "  "
+         "%4{%-20,20f%}"               ;; name
+         "  "
+         "%3{│%}"
+         " "
+         "%1{%B%}"
+         "%s\n"))
+  (setq gnus-summary-display-arrow t)
+#+end_src
