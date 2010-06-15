@@ -6,6 +6,28 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 * Starter Kit Misc
 Things that don't fit anywhere else.
 
+** Color Theme
+The [[http://www.nongnu.org/color-theme/][Color Theme]] package supplies support for saving sharing and
+changing the coloring of your Emacs buffers.  To view available color
+themes on your system run =M-x color-theme-select=.  See the color
+theme website and EmacsWiki pages for more information.
+- http://www.nongnu.org/color-theme/
+- http://www.emacswiki.org/emacs/ColorTheme
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path
+               (expand-file-name "color-theme"
+                                 (expand-file-name "src" dotfiles-dir)))
+  (require 'color-theme)
+  (eval-after-load "color-theme"
+    '(progn
+       (color-theme-initialize)))
+#+end_src
+
+to permanently change to a new color theme
+(e.g. color-theme-railscast), just call that theme's function from
+your initialization (e.g. add =(color-theme-railscast)=).
+
 ** Window system stuff
 
 #+srcname: starter-kit-window-view-stuff
