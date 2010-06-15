@@ -6,14 +6,15 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 * Starter Kit Misc
 Things that don't fit anywhere else.
 
-** Color Theme
-The [[http://www.nongnu.org/color-theme/][Color Theme]] package supplies support for saving sharing and
-changing the coloring of your Emacs buffers.  To view available color
-themes on your system run =M-x color-theme-select=.  See the color
-theme website and EmacsWiki pages for more information.
+** Color Themes
+The [[http://www.nongnu.org/color-theme/][Color Themes]] package provides support for changing, saving,
+sharing Emacs color themes.  To view and apply color themes available
+on your system run =M-x color-theme-select=.  See the color theme
+website and EmacsWiki pages for more information.
 - http://www.nongnu.org/color-theme/
 - http://www.emacswiki.org/emacs/ColorTheme
 
+This following loads color-theme so that it is available by default.
 #+begin_src emacs-lisp
   (add-to-list 'load-path
                (expand-file-name "color-theme"
@@ -24,9 +25,12 @@ theme website and EmacsWiki pages for more information.
        (color-theme-initialize)))
 #+end_src
 
-to permanently change to a new color theme
-(e.g. color-theme-railscast), just call that theme's function from
-your initialization (e.g. add =(color-theme-railscast)=).
+Once you've selected a preferred color theme it can be installed by
+adding its function to your initialization.  For example
+#+begin_src emacs-lisp :tangle no
+  (color-theme-railscasts)
+#+end_src
+will load the =railscasts= color theme when Emacs starts.
 
 ** Window system stuff
 
@@ -135,6 +139,31 @@ ido-mode is like magic pixie dust!
   
   (defalias 'yes-or-no-p 'y-or-n-p)
   (random t) ;; Seed the random-number generator
+#+end_src
+
+*** possible issues/resolutions with flyspell
+Most of the solution came from [[http://www.emacswiki.org/emacs/FlySpell][EmacsWiki-FlySpell]].  Here is one
+possible fix.
+
+**** Emacs set path to aspell
+it's possible aspell isn't in your path
+#+begin_src emacs-lisp :tangle no
+   (setq exec-path (append exec-path '("/opt/local/bin")))
+#+end_src
+
+**** Emacs specify spelling program
+- This didn't work at first, possibly because cocoAspell was
+  building its dictionary.  Now it seems to work fine.
+#+begin_src emacs-lisp :tangle no
+  (setq ispell-program-name "aspell"
+        ispell-dictionary "english"
+        ispell-dictionary-alist
+        (let ((default '("[A-Za-z]" "[^A-Za-z]" "[']" nil
+                         ("-B" "-d" "english" "--dict-dir"
+                          "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
+                         nil iso-8859-1)))
+          `((nil ,@default)
+            ("english" ,@default))))
 #+end_src
 
 ** Hippie expand: at times perhaps too hip
