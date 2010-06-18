@@ -163,13 +163,28 @@ general starter-kit updates without conflict.
        echo $HOST
      #+end_src
 
-Some additional miscellaneous configuration suggestions
+- Installing more elisp libraries :: While the starter kit include
+     many useful Emacs lisp libraries, you are bound to find more that
+     you will want to install.  The easiest way to install new
+     libraries is through the Emacs Lisp Package Archive (see [[* elpa][ELPA]]).
+     When a library is not available through ELPA you can grab it's
+     source and place it directly in the =src= directory.  Any
+     packages found there will automatically be added to your
+     load-path when Emacs starts up, and are guaranteed not to
+     conflict with future starter-kit updates.
+     
+Some additional miscellaneous configuration and getting started
+suggestions
+- First off see the [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Customization.html#Customization][Customization]] node in the Emacs manual.  Available
+  online or through the =info= command (run with =C-h i=).
 - =grep='ing through the =starter-kit-*= files in this directory can
   provide useful examples for how to do things like install major
   modes, define keybindings, etc..
 - read the following [[http://www.gnu.org/software/emacs/elisp/html_node/Key-Binding-Conventions.html][Key-Binding-Conventions]] before defining too many
   personal key bindings
-- more suggestions?
+- The starter-kit comes pre-bundled with a variety of color themes.
+  See [[file:starter-kit-misc.org::*Color%20Themes][Color Themes]] for instructions on how to change the colors used
+  by Emacs.
 
 ** Emacs Lisp Package Archive
    :PROPERTIES:
