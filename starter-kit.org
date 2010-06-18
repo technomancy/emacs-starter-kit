@@ -113,15 +113,58 @@ Additionally any emacs-lisp packages located under the [[file:src/][src/]] direc
 will be added to the load-path.
 
 There are also a few files that are meant for code that doesn't belong
-in the Starter Kit. First, the user-specific-config file is the file
-named after your user with the extensions =.el= or =.org= [2]. In
-addition, if a directory named after your user exists, it will be
-added to the load-path, and any elisp or org-mode w/embedded elisp
-files in it will be loaded. Finally, the Starter Kit will look for a
-file named after the current hostname ending in =.el= or =.org= which
-will allow host-specific configuration. This is where you should put
-code that you don't think would be useful to everyone. That will allow
-you to merge with newer versions of the starter-kit without conflicts.
+in the Starter Kit, they are described below in [[* customization][Customization]].
+
+** Customization
+   :PROPERTIES:
+   :CUSTOM_ID: customization
+   :END:
+
+The many defaults built into the starter kit are only the beginning of
+most users customization of Emacs to suite their needs.  The starter
+kit provides a number of places for additional user and system
+specific customization.  These are designed in such a way that it will
+be easy for you to continue tracking your own personal customization
+inside the starter-kit while retaining your ability to pull down
+general starter-kit updates without conflict.
+
+- =git branch= :: The first step to user-specific customization is (like
+     in any git project) to MAKE A BRANCH FOR YOUR LOCAL CHANGES.
+     Save the master branch for pulling down new versions of the
+     starter kit, and save all of your personal information in a
+     personal branch.  That way you never have to worry about
+     accidentally =git push='ing up a patch with all of your gnus
+     email passwords.
+
+- User specific config :: Your personal configuration information can
+     be stored in a user-specific-config file.  This is the file named
+     after your user with the extensions =.el= or =.org= [2].  If
+     you're unsure of your user name evaluate the following code block
+     to find out.
+     #+begin_src sh
+       echo $USER
+     #+end_src
+       
+     If your configuration starts to feel cramped in a single file
+     (although with the nested headlines of an Org-mode file, that
+     could take a while) and you want to stretch your config's legs,
+     you can also create a directory named after your system user
+     name.  If a such a directory exists, it will be added to the
+     load-path, and any elisp or org-mode w/embedded elisp files in it
+     will be loaded.
+
+- System specific config :: Finally, you may want to configure
+     different settings for different machines.  The Starter Kit will
+     look for a file named after the current hostname ending in =.el=
+     or =.org= which will allow host-specific configuration.
+
+Some miscellaneous configuration suggestions
+- =grep='ing through these starter-kit-* files can provide useful
+  examples for how to do things like install major modes, define
+  keybindings, etc..
+- read the following [[http://www.gnu.org/software/emacs/elisp/html_node/Key-Binding-Conventions.html][Key-Binding-Conventions]] before defining too many
+  personal key bindings
+- more suggestions?
 
 ** Emacs Lisp Package Archive
    :PROPERTIES:
