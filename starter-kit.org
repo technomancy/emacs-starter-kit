@@ -160,7 +160,7 @@ general starter-kit updates without conflict.
      you're unsure of your hostname the following can be executed to
      find out.
      #+begin_src sh
-       echo $HOST
+       hostname
      #+end_src
 
 - Installing more elisp libraries :: While the starter kit include
