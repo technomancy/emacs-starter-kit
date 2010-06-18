@@ -156,12 +156,17 @@ general starter-kit updates without conflict.
 - System specific config :: Finally, you may want to configure
      different settings for different machines.  The Starter Kit will
      look for a file named after the current hostname ending in =.el=
-     or =.org= which will allow host-specific configuration.
+     or =.org= which will allow host-specific configuration.  If
+     you're unsure of your hostname the following can be executed to
+     find out.
+     #+begin_src sh
+       echo $HOST
+     #+end_src
 
-Some miscellaneous configuration suggestions
-- =grep='ing through these starter-kit-* files can provide useful
-  examples for how to do things like install major modes, define
-  keybindings, etc..
+Some additional miscellaneous configuration suggestions
+- =grep='ing through the =starter-kit-*= files in this directory can
+  provide useful examples for how to do things like install major
+  modes, define keybindings, etc..
 - read the following [[http://www.gnu.org/software/emacs/elisp/html_node/Key-Binding-Conventions.html][Key-Binding-Conventions]] before defining too many
   personal key bindings
 - more suggestions?
@@ -479,6 +484,6 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 [1] If you already have a directory at ~/.emacs.d move it out of
 the way and put this there instead.
 
-[2] The emacs starter kit uses [[http://github.com/eschulte/org-babel/tree/master][org-babel]] to load embedded elisp code
+[2] The emacs starter kit uses [[http://orgmode.org/worg/org-contrib/babel/][org-babel]] to load embedded elisp code
 directly from [[http://orgmode.org/][Org Mode]] documents.
 
