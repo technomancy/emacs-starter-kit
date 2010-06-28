@@ -14,12 +14,6 @@ GTD system or tool for reproducible research and literate programming.
 For more information on org-mode check out [[http://orgmode.org/worg/][worg]], a large Org-mode wiki
 which is also *implemented using* Org-mode and [[http://git-scm.com/][git]].
 
-** Helpful Packages
-#+begin_src emacs-lisp
-(require 'org-install)
-;; (if window-system (require 'org-mouse))
-#+end_src
-
 ** Org-Mode Hook
 The latest version of yasnippets doesn't play well with Org-mode, the
 following function allows these two to play nicely together
@@ -48,21 +42,22 @@ following function allows these two to play nicely together
               ))
 #+end_src
 
-** Support for viewing images
-This allows for the viewing of images in-line in Org-mode documents.
-
+** Load up the Library of Babel
+The library of babel contains makes many useful functions available
+for use by code blocks in *any* emacs file.  See the actual
+[[file:src/org/contrib/babel/library-of-babel.org][library-of-babel.org]] file for information on the functions, and see
+[[http://orgmode.org/worg/org-contrib/babel/intro.php#library-of-babel][worg:library-of-babel]] for more usage information.
 #+begin_src emacs-lisp
-  (require 'iimage)
-  (setq iimage-mode-image-search-path (expand-file-name "~/"))
-  ;; Match org file: links
-  (add-to-list 'iimage-mode-image-regex-alist
-               (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
-                             "\\)\\]")  1))
-  (defun org-toggle-iimage-in-org ()
-    (interactive)
-    (let ((turning-on (not iimage-mode)))
-      (set-face-underline-p 'org-link (not turning-on))
-      (iimage-mode (or turning-on 0))))
+  (org-babel-lob-ingest
+   (expand-file-name
+    "library-of-babel.org"
+    (expand-file-name
+     "babel"
+     (expand-file-name
+      "contrib"
+      (expand-file-name
+       "org"
+       (expand-file-name "src" dotfiles-dir))))))
 #+end_src
 
 ** Starter Kit Documentation
