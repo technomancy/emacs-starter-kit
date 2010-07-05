@@ -62,9 +62,9 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
    - Add LaTeX to the list of languages Org-babel will recognize.
 #+srcname: add-latex
 #+begin_src emacs-lisp 
-     (org-babel-add-interpreter "latex")
-     (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
-     ; (require 'org-babel-latex)
+  ;; (org-babel-add-interpreter "latex")
+  ;; (add-to-list 'org-babel-tangle-langs '("latex" "tex"))
+  ;; ; (require 'org-babel-latex)
 #+end_src
    - Add LaTeX to a list of languages that raise noweb-type errors.
 #+srcname: noweb-error
