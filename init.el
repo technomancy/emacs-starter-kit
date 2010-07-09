@@ -5,7 +5,7 @@
 ;; This is the first thing to get loaded.
 ;;
 
-(setq dotfiles-dir (file-name-directory (or (buffer-file-name) load-file-name)))
+(setq dotfiles-dir (file-name-directory (or load-file-name (buffer-file-name))))
 
 (add-to-list 'load-path (expand-file-name
                          "lisp" (expand-file-name

@@ -255,7 +255,7 @@ This section contains all code implementing the Emacs Starter Kit.
 #+srcname: starter-kit-load-paths
 #+begin_src emacs-lisp 
   (setq dotfiles-dir (file-name-directory
-                      (or (buffer-file-name) load-file-name)))
+                      (or load-file-name (buffer-file-name))))
   
   (add-to-list 'load-path dotfiles-dir)
   (add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
