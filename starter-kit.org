@@ -494,6 +494,18 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 #+end_src
 
 
+* FAQ
+  :PROPERTIES:
+  :tangle:   no
+  :END:
+Frequently asked questions.
+
+Please share anything that you have come across which you think could
+be helpful, either in the form of a pull request, a patch, or just an
+email to me http://github.com/eschulte.
+
+
+
 * Footnotes
 
 [1] If you already have a directory at ~/.emacs.d move it out of
