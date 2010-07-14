@@ -60,6 +60,22 @@ for use by code blocks in *any* emacs file.  See the actual
        (expand-file-name "src" dotfiles-dir))))))
 #+end_src
 
+** Ensure the Latest Org-mode manual is in the info directory
+By placing the =doc/= directory in Org-mode at the front of the
+=Info-directory-list= we can be sure that the latest version of the
+Org-mode manual is available to the =info= command (bound to =C-h i=).
+#+begin_src emacs-lisp
+  (unless (boundp 'Info-directory-list)
+    (setq Info-directory-list nil))
+  (setq Info-directory-list
+        (cons (expand-file-name
+               "doc"
+               (expand-file-name
+                "org"
+                (expand-file-name "src" dotfiles-dir)))
+              Info-directory-list))
+#+end_src
+
 ** Starter Kit Documentation
 This code defines the =starter-kit-project= which is used to publish
 the documentation for the Starter Kit to html.
