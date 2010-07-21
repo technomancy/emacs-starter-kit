@@ -21,7 +21,7 @@ elpa-to-submit/nxhtml/etc/schema/xhtml-loader.rnc~
 tramp
 
 ## exported files
-starter-kit*el
+*el
 starter-kit*html
 doc
 eshell/lastdir
