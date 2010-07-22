@@ -1,4 +1,4 @@
-;;; init.el --- Where all the magic begins
+;;; starter-kit.el --- Where all the magic begins
 ;;
 ;; Part of the Emacs Starter Kit
 ;;
@@ -15,37 +15,14 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; Load path etc.
-
-(setq dotfiles-dir (file-name-directory
-                    (or (buffer-file-name) load-file-name)))
-
-;; Load up ELPA, the package manager
-
-(add-to-list 'load-path dotfiles-dir)
-
-(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
-
-(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-(setq package-user-dir (concat dotfiles-dir "elpa"))
-(setq custom-file (concat dotfiles-dir "custom.el"))
-
-(require 'package)
-(package-initialize)
-(require 'starter-kit-elpa)
-
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session
 
-(require 'cl)
 (require 'saveplace)
 (require 'ffap)
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
-
-;; backport some functionality to Emacs 22 if needed
-(require 'dominating-file)
 
 ;; Load up starter kit customizations
 
@@ -63,9 +40,9 @@
 (load custom-file 'noerror)
 
 ;; You can keep system- or user-specific customizations here
-(setq system-specific-config (concat dotfiles-dir system-name ".el")
-      user-specific-config (concat dotfiles-dir user-login-name ".el")
-      user-specific-dir (concat dotfiles-dir user-login-name))
+(setq system-specific-config (concat esk-dotfiles-dir system-name ".el")
+      user-specific-config (concat esk-dotfiles-dir user-login-name ".el")
+      user-specific-dir (concat esk-dotfiles-dir user-login-name))
 (add-to-list 'load-path user-specific-dir)
 
 (if (file-exists-p system-specific-config) (load system-specific-config))
@@ -73,4 +50,4 @@
 (if (file-exists-p user-specific-dir)
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 
-;;; init.el ends here
+;;; starter-kit.el ends here
