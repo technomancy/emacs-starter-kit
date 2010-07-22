@@ -8,7 +8,8 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
-(add-hook 'before-make-frame-hook 'turn-off-tool-bar)
+;; can't do it at launch or emacsclient won't always honor it
+(add-hook 'before-make-frame-hook 'esk-turn-off-tool-bar)
 
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -23,16 +24,16 @@
       color-theme-is-global t
       shift-select-mode nil
       mouse-yank-at-point t
-      require-final-newline t
+      require-final-newline t ; crontabs break without this
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 100
       ediff-window-setup-function 'ediff-setup-windows-plain
-      oddmuse-directory (concat dotfiles-dir "oddmuse")
+      oddmuse-directory "~/.emacs.d/oddmuse"
       xterm-mouse-mode t
-      save-place-file (concat dotfiles-dir "places"))
+      save-place-file "~/.emacs.d/places")
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -60,7 +61,7 @@
 (show-paren-mode 1)
 
 ;; ido-mode is like magic pixie dust!
-(when (> emacs-major-version 21)
+(when (functionp 'ido-mode)
   (ido-mode t)
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
@@ -75,32 +76,30 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 
-(defvar coding-hook nil
+(defvar esk-coding-hook nil
   "Hook that gets run on activation of any programming mode.")
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
 
 ;; Hippie expand: at times perhaps too hip
-(delete 'try-expand-line hippie-expand-try-functions-list)
-(delete 'try-expand-list hippie-expand-try-functions-list)
+(setq hippie-expand-try-functions-list
+      (remove 'try-expand-line
+              (remove 'try-expand-list
+                      (remove 'try-complete-file-name-partially
+                              hippie-expand-try-functions-list))))
+
+;; Add this back in at the end of the list.
+(add-to-list 'hippie-expand-try-functions-list 'try-complete-file-name-partially t)
 
 ;; Don't clutter up directories with files~
-(setq backup-directory-alist `(("." . ,(expand-file-name
-                                        (concat dotfiles-dir "backups")))))
-
-;; nxhtml stuff
-(setq mumamo-chunk-coloring 'submode-colored
-      nxhtml-skip-welcome t
-      indent-region-mode t
-      rng-nxml-auto-validate-flag nil)
+(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
 
 ;; Associate modes with file extensions
 
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
@@ -115,9 +114,6 @@
 
 ;; Cosmetics
 
-(set-face-background 'vertical-border "white")
-(set-face-foreground 'vertical-border "white")
-
 (eval-after-load 'diff-mode
   '(progn
      (set-face-foreground 'diff-added "green4")
@@ -127,11 +123,6 @@
   '(progn
      (set-face-foreground 'magit-diff-add "green3")
      (set-face-foreground 'magit-diff-del "red3")))
-
-(eval-after-load 'mumamo
-  '(eval-after-load 'zenburn
-     '(ignore-errors (set-face-background
-                      'mumamo-background-chunk-submode "gray22"))))
 
 ;; Platform-specific stuff
 (when (eq system-type 'darwin)
