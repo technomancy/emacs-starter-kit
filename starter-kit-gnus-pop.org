@@ -1,0 +1,77 @@
+#+TITLE: Starter Kit Gnus POP
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This file can be used to jump start a working Gnus instillation.  The
+following steps will result in a working vanilla Gnus POP
+instillation.
+1) install the [[required-packages]]
+2) follow the [[gmail]] specific instructions
+3) tangle this file with `org-babel-tangle' (with C-c M-b t) creating
+   the =starter-kit-gnus-pop.el= file which can be loaded by Emacs
+
+(if you run into any problems -- the [[http://www.gnus.org/manual.html][gnus manual]] is very thorough)
+
+* Basic configuration
+First off, load up =gnus=
+#+begin_src emacs-lisp
+  (require 'gnus)
+#+end_src
+
+Tell gnus that your mainly going to be using it for email not as a
+news reader -- after all it's not longer the late 80s.
+#+begin_src emacs-lisp
+  (setq gnus-select-method '(nnml ""))
+#+end_src
+
+* Required packages
+   :PROPERTIES:
+   :CUSTOM_ID: required-packages
+   :END:
+A [[http://en.wikipedia.org/wiki/STARTTLS][starttls]] client allows encrypted communication with remote pop3 and
+IMAP email clients.
+
+[[http://www.openssl.org/][openssl]] implements the Secure Socket Layer (SSL) secure communication
+protocol.
+
+On Debian systems (including Ubuntu) instillation of =starttls= and
+=openssl= client is as simple as
+: sudo apt-get install starttls openssl
+
+* Gmail Setup
+   :PROPERTIES:
+   :CUSTOM_ID: gmail
+   :END:
+For more information on configuring Gnus with Gmail see [[http://www.emacswiki.org/emacs/GnusGmail][GnusGmail]] on
+the Emacs Wiki.
+
+For a simple pop3 setup, simply replace =your-gmail-email-address= and
+=your-gmail-password= with your gmail account information in the
+following tables.
+
+#+results: gmail-configuration
+| email    | your-gmail-email-address |
+| password | your-gmail-password      |
+
+#+begin_src emacs-lisp :var config=gmail-configuration
+  (let ((email (second (first config)))
+        (passwd (second (second config))))
+    ;; The following adds Gmail as a source of mail for Gnus
+    (add-to-list 'mail-sources
+                 `(pop :server "pop.gmail.com"
+                       :port 995
+                       :user ,email
+                       :password ,passwd
+                       :stream ssl))
+    ;; The following is used for sending email through gmail using SMTP.
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 25 nil nil))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 25
+          user-mail-address email
+          smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+          smtpmail-auth-credentials `(("smtp.gmail.com" 587 ,email ,passwd))
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 587))
+#+end_src
