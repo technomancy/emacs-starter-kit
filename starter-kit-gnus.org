@@ -17,6 +17,9 @@ configuration into your user-specific directory, and then follow the
 instructions therein.
 
 * Customizations
+  :PROPERTIES:
+  :CUSTOM_ID: customization
+  :END:
 Once gnus is installed and working, here are some recommended Gnus
 customizations.
 
