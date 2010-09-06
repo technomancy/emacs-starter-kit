@@ -155,13 +155,12 @@ Kills existing SLIME session, if any."
 
 pretty \lambda's in clojure
 #+begin_src emacs-lisp
-  (defun pretty-lambdas-clojure ()
-    (font-lock-add-keywords
-     nil `(("(?\\((fn\\>\\)"
-            (0 (progn (compose-region (+ (match-beginning 1) 1) (match-end 1)
-                                      ,(make-char 'greek-iso8859-7 107))
-                      nil))))))
-  (add-hook 'clojure-mode-hook 'pretty-lambdas-clojure)
+  (eval-after-load 'clojure-mode
+    '(font-lock-add-keywords
+      'clojure-mode `(("(\\(fn\\>\\)"
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) "ƒ")
+                                 nil))))))
 #+end_src
 
 ** Scheme
