@@ -42,6 +42,21 @@ following function allows these two to play nicely together
               ))
 #+end_src
 
+** Speed keys
+Speed commands enable single-letter commands in Org-mode files when
+the point is at the beginning of a headline, or at the beginning of a
+code block.
+
+See the `=org-speed-commands-default=' variable for a list of the keys
+and commands enabled at the beginning of headlines.  All code blocks
+are available at the beginning of a code block, the following key
+sequence =C-c C-v h= (bound to `=org-babel-describe-bindings=') will
+display a list of the code blocks commands and their related keys.
+
+#+begin_src emacs-lisp
+  (setq org-use-speed-commands t)
+#+end_src
+
 ** Code blocks
 This activates a number of widely used languages, you are encouraged
 to activate more languages using the customize interface for the
