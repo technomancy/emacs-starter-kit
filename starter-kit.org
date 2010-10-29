@@ -309,15 +309,6 @@ Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
   (starter-kit-load "starter-kit-elpa.org")
 #+end_src
 
-*** Starter Kit Customizations
-
-Load up starter kit customizations
-
-#+srcname: starter-kit-customizations
-#+begin_src emacs-lisp 
-  (load custom-file 'noerror)
-#+end_src
-
 *** Work around OS X bug
 
 Work around a bug on OS X where system-name is FQDN
@@ -474,7 +465,13 @@ Located in [[file:starter-kit-latex.org][starter-kit-latex]]
 #+end_src
 
 ** Load User/System Specific Files
+*** Settings from M-x customize
+#+srcname: m-x-customize-customizations
+#+begin_src emacs-lisp 
+  (load custom-file 'noerror)
+#+end_src
 
+*** E-lisp customization
 After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 #+srcname: starter-kit-load-files
 #+begin_src emacs-lisp
