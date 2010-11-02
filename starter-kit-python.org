@@ -16,19 +16,13 @@ supplied by the Python distribution itself.
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 #+end_src
 
-** Facilitate the use of IPython
+** Use IPython if =ipython= command is present
+If an =ipython= executable is on the path, then assume that IPython is
+the preferred method python evaluation.
 #+begin_src emacs-lisp
-(defun python-use-ipython (cmd args)
-  (setq ipython-command cmd)
-  (setq py-python-command-args args)
-  (require 'ipython)
-  (setq ipython-completion-command-string
-        "print(';'.join(__IP.Completer.all_completions('%s')))\n"))
-#+end_src
-
-In your personal configuration, add something like this to use IPython:
-#+begin_src emacs-lisp :tangle no
-(python-use-ipython "/usr/local/bin/ipython" '("-colors" "LightBG" "-nobanner"))
+  (when (executable-find "ipython")
+    (require 'ipython)
+    (setq org-babel-python-mode 'python-mode))
 #+end_src
 
 ** Use Cython mode
