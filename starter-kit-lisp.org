@@ -69,14 +69,16 @@ back, =C-M-u= up, =C-M-d= down)
 
 #+begin_src emacs-lisp
   (require 'clojure-mode)
-
+  
   (add-hook 'clojure-mode-hook 'run-coding-hook)
   
   (font-lock-add-keywords 'clojure-mode
                           '(("(\\|)" . 'esk-paren-face)))
   
-  (define-key clojure-mode-map (kbd "C-c v") 'slime-eval-buffer)
-  (define-key clojure-mode-map (kbd "C-c C-v") 'slime-eval-buffer)
+  ;; (eval-after-load 'clojure-mode
+  ;;   (progn
+  ;;     (define-key clojure-mode-map (kbd "C-c v") 'slime-eval-buffer)
+  ;;     (define-key clojure-mode-map (kbd "C-c C-v") 'slime-eval-buffer)))
   
   (defface esk-clojure-trace-face
      '((((class color) (background dark))
