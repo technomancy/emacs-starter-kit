@@ -59,4 +59,6 @@
      ;; two org-mode faces
      (org-document-info-keyword ((t (:foreground "#BC9458" :bold t))))
      (org-document-title ((t (:foreground "#BC9458" :bold t))))
+     ;; better eshell prompt-face
+     (eshell-prompt ((t (:foreground "turquoise1"))))
      )))
