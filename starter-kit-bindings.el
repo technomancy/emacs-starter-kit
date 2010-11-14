@@ -71,6 +71,8 @@
 ;; So good!
 (global-set-key (kbd "C-x g") 'magit-status)
 
+(global-set-key (kbd "C-c q") 'join-line)
+
 ;; This is a little hacky since VC doesn't support git add internally
 (eval-after-load 'vc
   (define-key vc-prefix-map "i" '(lambda () (interactive)
