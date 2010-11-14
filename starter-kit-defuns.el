@@ -78,7 +78,7 @@ Symbols matching the text at point are put first in the completion list."
   (auto-fill-mode t))
 
 (defun turn-on-hl-line-mode ()
-  (if window-system (hl-line-mode t)))
+  (when (> (display-color-cells) 8) (hl-line-mode t)))
 
 (defun turn-on-save-place-mode ()
   (setq save-place t))
