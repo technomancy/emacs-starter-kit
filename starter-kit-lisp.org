@@ -18,19 +18,19 @@ Support for editing list dialects including [[* Emacs Lisp][Emacs Lisp]], [[* Sc
 #+end_src
 
 ** Paredit
-[[http://www.emacswiki.org/emacs/ParEdit][Paredit]] might seem weird at first, but it really makes writing lisp a
-much more comfortable experience.  This is especially useful in
-combination with the sexp movement functions (=C-M-f= forward, =C-M-b=
-back, =C-M-u= up, =C-M-d= down)
+   [[http://www.emacswiki.org/emacs/ParEdit][Paredit]] might seem weird at first, but it really makes writing lisp a
+   much more comfortable experience.  This is especially useful in
+   combination with the sexp movement functions (=C-M-f= forward, =C-M-b=
+   back, =C-M-u= up, =C-M-d= down)
 
 #+begin_src emacs-lisp
 (defun turn-on-paredit ()
   (paredit-mode +1))
 #+end_src
 
-: ;; (eval-after-load 'paredit
-: ;;      ;; Not sure why paredit behaves this way with comments; it's annoying
-: ;;   '(define-key paredit-mode-map (kbd ";")   'self-insert-command))
+  : ;; (eval-after-load 'paredit
+  : ;;      ;; Not sure why paredit behaves this way with comments; it's annoying
+  : ;;   '(define-key paredit-mode-map (kbd ";")   'self-insert-command))
 
 ** Non-obtrusive parenthesis faces
 #+begin_src emacs-lisp
@@ -153,14 +153,24 @@ Kills existing SLIME session, if any."
     (slime)))
 #+end_src
 
-pretty \lambda's in clojure
+Prettier function names in clojure -- Thanks to Paul Hobbs for the
+idea to extend this feature beyond simply the =fn= function.
 #+begin_src emacs-lisp
+  ;; symbols for some overlong function names
   (eval-after-load 'clojure-mode
     '(font-lock-add-keywords
-      'clojure-mode `(("(\\(fn\\>\\)"
-                       (0 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "ƒ")
-                                 nil))))))
+      'clojure-mode
+      (mapcar
+       (lambda (pair)
+         `(,(car pair)
+           (0 (progn (compose-region
+                      (match-beginning 0) (match-end 0)
+                      ,(cadr pair))
+                     nil))))
+       `(("\\<fn\\>" ,(make-char 'greek-iso8859-7 107))
+         ("\\<comp\\>" ?∘)
+         ("\\<partial\\>" ?þ)
+         ("\\<complement\\>" ?¬)))))
 #+end_src
 
 ** Scheme
