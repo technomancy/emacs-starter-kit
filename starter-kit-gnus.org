@@ -69,3 +69,59 @@ Thanks to Dan Davison.
          "%s\n"))
   (setq gnus-summary-display-arrow t)
 #+end_src
+
+** Org-mode code block fontification
+Correctly fontify Org-mode attachments
+#+begin_src emacs-lisp
+    (add-to-list 'mailcap-mime-extensions '(".org" . "text/org"))
+    (add-to-list 'mm-automatic-display "text/org")
+    
+    (add-to-list 'mm-inline-media-tests
+                 '("text/org" my-display-org-inline
+                   (lambda (el) t)))
+    
+    (defun my-display-org-inline (handle)
+      (condition-case nil
+          (mm-display-inline-fontify handle 'org-mode)
+        (error
+         (insert (with-temp-buffer (mm-insert-part handle) (buffer-string))
+                 "\n"))))
+#+end_src
+
+Update =org-src-lang-modes= to provide some leeway for posters
+#+begin_src emacs-lisp
+  (add-to-list 'org-src-lang-modes
+               '("elisp" . emacs-lisp))
+  (add-to-list 'org-src-lang-modes
+               '("emacs_lisp" . emacs-lisp))
+#+end_src
+
+Fontify code blocks in the text of messages
+#+begin_src emacs-lisp
+  (defun my-mm-org-babel-src-extract ()
+    (mm-make-handle (mm-uu-copy-to-buffer start-point end-point) '("text/org")))
+  
+  (add-to-list 'mm-uu-type-alist
+               '(org-src-block
+                 "^[ \t]*#\\+begin_"
+                 "^[ \t]*#\\+end_"
+                 my-mm-org-babel-src-extract
+                 nil))
+  
+  (mm-uu-configure)
+#+end_src
+
+*** for debugging
+    :PROPERTIES:
+    :tangle:   no
+    :END:
+#+begin_src emacs-lisp
+  (add-to-list 'mm-uu-configure-list '(org-src-block . disabled))
+  (mm-uu-configure)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq mm-uu-configure-list
+        (remove '(org-src-block . disabled) mm-uu-configure-list))
+  (mm-uu-configure)
+#+end_src
