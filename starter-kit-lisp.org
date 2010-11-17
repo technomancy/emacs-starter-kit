@@ -167,7 +167,7 @@ idea to extend this feature beyond simply the =fn= function.
                       (match-beginning 0) (match-end 0)
                       ,(cadr pair))
                      nil))))
-       `(("\\<fn\\>" ,(make-char 'greek-iso8859-7 107))
+       '(("\\<fn\\>" ?ƒ)
          ("\\<comp\\>" ?∘)
          ("\\<partial\\>" ?þ)
          ("\\<complement\\>" ?¬)))))
