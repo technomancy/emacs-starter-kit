@@ -289,13 +289,40 @@ backport some functionality to Emacs 22 if needed
   (require 'dominating-file)
 #+end_src
 
-*** Function for loading starter-kit-*
+*** Function for loading/compiling starter-kit-*
 #+srcname: starter-kit-load
 #+begin_src emacs-lisp 
   (defun starter-kit-load (file)
     "This function is to be used to load starter-kit-*.org files."
     (org-babel-load-file (expand-file-name file
                                            dotfiles-dir)))
+#+end_src
+
+#+source: starter-kit-compile
+#+begin_src emacs-lisp
+  (defun starter-kit-compile (&optional arg)
+    "Tangle and Byte compile all starter-kit files."
+    (interactive "P")
+    (flet ((age (file)
+                (float-time
+                 (time-subtract (current-time)
+                                (nth 5 (or (file-attributes (file-truename file))
+                                           (file-attributes file)))))))
+      (mapc
+       (lambda (file)
+         (when (string= "org" (file-name-extension file))
+           (let ((el-file (concat (file-name-sans-extension file) ".el")))
+             (when (or arg
+                       (not (and (file-exists-p el-file)
+                                 (> (age file) (age el-file)))))
+               (org-babel-tangle-file file el-file "emacs-lisp")
+               (byte-compile-file el-file)))))
+       (apply #'append
+              (mapcar
+               (lambda (d)
+                 (when (and (file-exists-p d) (file-directory-p d))
+                   (mapcar (lambda (f) (expand-file-name f d)) (directory-files d))))
+               (list (concat dotfiles-dir user-login-name) dotfiles-dir))))))
 #+end_src
 
 *** ELPA (Emacs Lisp Package Manager)
