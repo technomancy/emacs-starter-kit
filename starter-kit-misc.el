@@ -22,7 +22,6 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global t
-      color-theme-is-cumulative nil
       shift-select-mode nil
       mouse-yank-at-point t
       require-final-newline t
