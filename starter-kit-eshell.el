@@ -35,6 +35,13 @@
 (defun eshell/find (dir &rest opts)
   (find-dired dir (mapconcat 'identity opts " ")))
 
+;; (defun eshell/scp (&rest args)
+;;   "scp: now without colon-omitting annoyance!"
+;;   (when (null (remove-if-not (lambda (arg) (string-match ":" arg))
+;;                              args))
+;;     (error "Surely you meant to add a colon in there somewhere?"))
+;;   (shell-command (mapconcat 'identity (cons "scp" args) " ")))
+
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
 ;; * cloning git repos, github repos
