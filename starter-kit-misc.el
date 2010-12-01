@@ -16,16 +16,19 @@
 (ansi-color-for-comint-mode-on)
 
 (setq visible-bell t
+      fringe-mode (cons 4 0)
       echo-keystrokes 0.1
       font-lock-maximum-decoration t
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global t
+      color-theme-is-cumulative nil
       shift-select-mode nil
       mouse-yank-at-point t
       require-final-newline t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
+      ffap-machine-p-known 'reject
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 100
@@ -81,9 +84,13 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (random t) ;; Seed the random-number generator
 
+(defalias 'auto-revert-tail-mode 'tail-mode)
+
 ;; Hippie expand: at times perhaps too hip
 (delete 'try-expand-line hippie-expand-try-functions-list)
 (delete 'try-expand-list hippie-expand-try-functions-list)
+(delete 'try-complete-file-name-partially hippie-expand-try-functions-list)
+(delete 'try-complete-file-name hippie-expand-try-functions-list)
 
 ;; Don't clutter up directories with files~
 (setq backup-directory-alist `(("." . ,(expand-file-name
