@@ -225,6 +225,10 @@ Symbols matching the text at point are put first in the completion list."
   (interactive)
   (message "%s" (point)))
 
+(defun esk-disapproval ()
+  (interactive)
+  (insert "ಠ_ಠ"))
+
 (defun toggle-fullscreen ()
   (interactive)
   ;; TODO: this only works for X. patches welcome for other OSes.
