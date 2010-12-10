@@ -81,6 +81,7 @@ Symbols matching the text at point are put first in the completion list."
   (if window-system (hl-line-mode t)))
 
 (defun esk-turn-on-save-place-mode ()
+  (require 'saveplace)
   (setq save-place t))
 
 (defun esk-turn-on-whitespace ()

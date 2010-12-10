@@ -40,43 +40,30 @@
 
 ;; Turn off mouse interface early in startup to avoid momentary display
 ;; You really don't need these; trust me.
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+  (if (fboundp mode) (funcall mode -1)))
 
-;; These should be loaded on startup rather than autoloaded on demand
-;; since they are likely to be used in every session
-
-(require 'saveplace)
-(require 'ffap)
-(require 'uniquify)
-(require 'ansi-color)
-(require 'recentf)
-
-;; Load up starter kit customizations
-
-(require 'starter-kit-defuns)
-(require 'starter-kit-bindings)
-(require 'starter-kit-misc)
-(require 'starter-kit-registers)
-(require 'starter-kit-eshell)
-(require 'starter-kit-lisp)
-(require 'starter-kit-perl)
-(require 'starter-kit-ruby)
-(require 'starter-kit-js)
-
-(regen-autoloads)
-(load custom-file 'noerror)
+(dolist (l '(uniquify starter-kit-defuns starter-kit-bindings
+                      starter-kit-misc starter-kit-eshell))
+  (require l))
 
 ;; You can keep system- or user-specific customizations here
-(setq system-specific-config (concat esk-dotfiles-dir system-name ".el")
-      user-specific-config (concat esk-dotfiles-dir user-login-name ".el")
-      user-specific-dir (concat esk-dotfiles-dir user-login-name))
-(add-to-list 'load-path user-specific-dir)
+(setq esk-dotfiles-dir (file-name-directory
+                        (or (buffer-file-name) load-file-name))
+      esk-system-specific-config (concat esk-dotfiles-dir system-name ".el")
+      esk-user-specific-config (concat esk-dotfiles-dir user-login-name ".el")
+      esk-user-specific-dir (concat esk-dotfiles-dir user-login-name))
 
-(if (file-exists-p system-specific-config) (load system-specific-config))
-(if (file-exists-p user-specific-config) (load user-specific-config))
-(if (file-exists-p user-specific-dir)
-  (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+(add-to-list 'load-path esk-user-specific-dir)
 
+(if (file-exists-p esk-system-specific-config)
+    (load esk-system-specific-config))
+
+(if (file-exists-p esk-user-specific-config)
+    (load esk-user-specific-config))
+
+(if (file-exists-p esk-user-specific-dir)
+  (mapc #'load (directory-files esk-user-specific-dir nil ".*el$")))
+
+(provide 'starter-kit)
 ;;; starter-kit.el ends here
