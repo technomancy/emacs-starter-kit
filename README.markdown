@@ -22,6 +22,7 @@ You'll need Emacs 24, which comes with package.el.
 
 Add the "technomancy" archive source:
 
+    (require 'package)
     (add-to-list 'package-archives
                  '("technomancy" . "http://repo.technomancy.us/emacs/") t)
 

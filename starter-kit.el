@@ -38,32 +38,27 @@
 
 ;;; Code:
 
-;; Turn off mouse interface early in startup to avoid momentary display
-;; You really don't need these; trust me.
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-  (if (fboundp mode) (funcall mode -1)))
+;;;###autoload
+(progn
+  ;; Turn off mouse interface early in startup to avoid momentary display
+  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+    (when (fboundp mode) (funcall mode -1)))
 
-(dolist (l '(uniquify starter-kit-defuns starter-kit-bindings
-                      starter-kit-misc starter-kit-eshell))
-  (require l))
+  (dolist (l '(uniquify starter-kit-defuns starter-kit-bindings
+                        starter-kit-misc starter-kit-eshell))
+    (require l))
 
-;; You can keep system- or user-specific customizations here
-(setq esk-dotfiles-dir (file-name-directory
-                        (or (buffer-file-name) load-file-name))
-      esk-system-specific-config (concat esk-dotfiles-dir system-name ".el")
-      esk-user-specific-config (concat esk-dotfiles-dir user-login-name ".el")
-      esk-user-specific-dir (concat esk-dotfiles-dir user-login-name))
+  ;; You can keep system- or user-specific customizations here
+  (setq esk-system-config (concat user-emacs-directory system-name ".el")
+        esk-user-config (concat user-emacs-directory user-login-name ".el")
+        esk-user-dir (concat user-emacs-directory user-login-name))
 
-(add-to-list 'load-path esk-user-specific-dir)
+  (add-to-list 'load-path esk-user-dir)
 
-(if (file-exists-p esk-system-specific-config)
-    (load esk-system-specific-config))
-
-(if (file-exists-p esk-user-specific-config)
-    (load esk-user-specific-config))
-
-(if (file-exists-p esk-user-specific-dir)
-  (mapc #'load (directory-files esk-user-specific-dir nil ".*el$")))
+  (when (file-exists-p esk-system-config) (load esk-system-config))
+  (when (file-exists-p esk-user-config) (load esk-user-config))
+  (when (file-exists-p esk-user-dir)
+    (mapc 'load (directory-files esk-user-dir nil ".*el$"))))
 
 (provide 'starter-kit)
 ;;; starter-kit.el ends here
