@@ -19,104 +19,29 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
 
 ## Installation
 
-1. Install GNU Emacs (at least version 22, 23 is preferred)
-   Use your package manager if you have one.
-   Otherwise Mac users may get [some prebuilt binaries](http://emacsformacosx.com/), and
-   Windows users can get them [from GNU](http://ftp.gnu.org/pub/gnu/emacs/windows/emacs-23.1-bin-i386.zip).
-2. Move the directory containing this file to ~/.emacs.d
-   (If you already have a directory at ~/.emacs.d move it out of the
-   way and put this there instead.)
-3. Launch Emacs!
+You'll need Emacs 24, which comes with package.el.
 
-If you find yourself missing some autoloads after an update (which
-should manifest itself as "void function: foobar" errors) try M-x
-regen-autoloads. After some updates an M-x recompile-init will be
-necessary; this should be noted in the commit messages.
+Add the "technomancy" archive source:
 
-If you want to keep your regular ~/.emacs.d in place and just launch a
-single instance using the starter kit, try the following invocation:
+    (add-to-list 'package-archives
+                 '("technomancy" . "http://repo.technomancy.us/emacs/") t)
 
-  $ emacs -q -l ~/src/emacs-starter-kit/init.el
+Then you can install it:
 
-Note that having a ~/.emacs file might override the starter kit
-loading, so if you've having trouble loading it, make sure that file
-is not present.
+    M-x package-install RET starter-kit RET
 
-## Structure
+## Upgrading
 
-The init.el file is where everything begins. It's the first file to
-get loaded. The starter-kit-* files provide what I consider to be
-better defaults, both for different programming languages and for
-built-in Emacs features like bindings or registers.
+Users of the old version of the Starter Kit should be able to upgrade
+with little fuss; the main difference is that the new one doesn't pull
+in a bunch of other package.el dependencies; users may pick and choose
+which they want. It's also more modular, so language-specific starter
+kit modules must be installed separately. User-specific and
+host-specific files are still honored.
 
-Files that are pending submission to ELPA are bundled with the starter
-kit under the directory elpa-to-submit/. The understanding is that
-these are bundled just because nobody's gotten around to turning them
-into packages, and the bundling of them is temporary. For these
-libraries, autoloads will be generated and kept in the loaddefs.el
-file. This allows them to be loaded on demand rather than at startup.
+## Copyright
 
-There are also a few files that are meant for code that doesn't belong
-in the Starter Kit. First, the user-specific-config file is the file
-named after your user with the extension ".el". In addition, if a
-directory named after your user exists, it will be added to the
-load-path, and any elisp files in it will be loaded. Finally, the
-Starter Kit will look for a file named after the current hostname
-ending in ".el" which will allow host-specific configuration. This is
-where you should put code that you don't think would be useful to
-everyone. That will allow you to merge with newer versions of the
-starter-kit without conflicts.
-
-## Emacs Lisp Package Archive
-
-Libraries from [ELPA](http://tromey.com/elpa) are preferred when
-available since dependencies are handled automatically, and the burden
-to update them is removed from the user. In the long term, ideally
-everything would be installed via ELPA, and only package.el would need
-to be distributed with the starter kit. (Or better yet, package.el
-would come with Emacs...) See starter-kit-elpa.el for a list of
-libraries that are pending submission to ELPA. Packages get installed
-in the elpa/ directory.
-
-There's no vendor/ directory in the starter kit because if an external
-library is useful enough to be bundled with the starter kit, it should
-be useful enough to submit to ELPA so that everyone can use it, not
-just users of the starter kit.
-
-Sometimes packages are removed from the Starter Kit as they get added
-to ELPA itself. This has occasionally caused problems with certain
-packages. If you run into problems with such a package, try removing
-everything from inside the elpa/ directory and invoking M-x
-starter-kit-elpa-install in a fresh instance.
-
-## Variants of Emacs
-
-The Starter Kit is designed to work with GNU Emacs version 22 or
-greater. Using it with forks or other variants is not supported. It
-probably won't work with XEmacs, though some have reported getting it
-to work with Aquamacs. However, since Aquamacs is not portable,
-it's difficult to test in it, and breakage is common.
-
-## Contributing
-
-If you know your way around Emacs, please try out the starter kit as a
-replacement for your regular dotfiles for a while. If there's anything
-you just can't live without, add it or let me know so I can add
-it. Take a look at what happens in init.el to get started.
-
-Also: see the file TODO. Helping submit new libraries to ELPA is the
-easiest way to help out. There are two ways you can do this: either
-take new libraries and make them ready for ELPA, dropping them in the
-elpa-to-submit directory or take files that are already in
-elpa-to-submit, ensuring all their dependencies are correctly loaded
-into ELPA, and sending them to the ELPA maintainer. There are details
-at http://tromey.com/elpa/upload.html for how ELPA submission
-works. Grep the project for TODO for other things.
+Copyright (C) 2008-2010 Phil Hagelberg and contributors
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
-
-The latest version is at http://github.com/technomancy/emacs-starter-kit/
-
-On Unix, /home/$USER/.emacs.d, on windows Documents and Settings/%your
-user name%/Application Data
