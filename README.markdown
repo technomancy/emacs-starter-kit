@@ -3,10 +3,9 @@
 The Starter Kit should provide a saner set of defaults than you get
 normally with Emacs. It was originally intended for beginners, but it
 should provide a reasonable working environment for anyone using Emacs
-for dynamic languages. It also bundles a number of useful libraries
-that are not distributed with Emacs for various reasons.
+for dynamic languages.
 
-The latest version is at http://github.com/technomancy/emacs-starter-kit/
+The latest version is at http://github.com/technomancy/emacs-starter-kit
 
 ## Learning
 
@@ -29,6 +28,13 @@ Add the "technomancy" archive source:
 Then you can install it:
 
     M-x package-install RET starter-kit RET
+
+Improved support for various languages are packaged separately.
+
+* Javascript
+* Ruby
+* Perl
+* Lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
 
 ## Upgrading
 

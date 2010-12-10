@@ -1,22 +1,43 @@
-;;; starter-kit-lisp.el --- Some helpful Lisp code
+;;; starter-kit-lisp.el --- Saner defaults and goodies for lisp languages
 ;;
-;; Part of the Emacs Starter Kit
+;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;;
+;; Author: Phil Hagelberg <technomancy@gmail.com>
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
+;; Version: 2.0
+;; Keywords: convenience
 
-(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
-(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
-(define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
+;; This file is not part of GNU Emacs.
 
-(defface esk-paren-face
-   '((((class color) (background dark))
-      (:foreground "grey50"))
-     (((class color) (background light))
-      (:foreground "grey55")))
-   "Face used to dim parentheses."
-   :group 'starter-kit-faces)
+;;; Commentary:
 
-;;; Emacs Lisp
+;; "Emacs outshines all other editing software in approximately the
+;; same way that the noonday sun does the stars. It is not just bigger
+;; and brighter; it simply makes everything else vanish."
+;; -Neal Stephenson, "In the Beginning was the Command Line"
+
+;; This file contains tweaks specific to Lisp languages.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 3
+;; of the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Code:
+
+;; Emacs Lisp
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
@@ -30,31 +51,32 @@
                   (delete-file (concat buffer-file-name "c"))))))
 
 (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
-
-;;; Clojure
-
-(eval-after-load 'find-file-in-project
-  '(add-to-list 'ffip-patterns "*.clj"))
-
-(defun clojure-project ()
-  (interactive)
-  (message "Deprecated in favour of M-x swank-clojure-project. Install swank-clojure from ELPA."))
+(define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
 
 ;;; Enhance Lisp Modes
+
+(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+(defface esk-paren-face
+   '((((class color) (background dark))
+      (:foreground "grey50"))
+     (((class color) (background light))
+      (:foreground "grey55")))
+   "Face used to dim parentheses."
+   :group 'starter-kit-faces)
 
 (eval-after-load 'paredit
   ;; need a binding that works in the terminal
   '(define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp))
 
-(dolist (x '(scheme emacs-lisp lisp clojure))
-  (when window-system
-    (font-lock-add-keywords
-     (intern (concat (symbol-name x) "-mode"))
-     '(("(\\|)" . 'esk-paren-face))))
-  (add-hook
-   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit)
-  (add-hook
-   (intern (concat (symbol-name x) "-mode-hook")) 'run-coding-hook))
+(dolist (mode '(scheme emacs-lisp lisp clojure))
+  (when (> (display-color-cells) 8)
+    (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
+                            '(("(\\|)" . 'esk-paren-face))))
+  (add-hook (intern (concat (symbol-name mode) "-mode-hook")) 'run-coding-hook)
+  (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+            'esk-turn-on-paredit))
 
 (eval-after-load 'clojure-mode
   '(font-lock-add-keywords
