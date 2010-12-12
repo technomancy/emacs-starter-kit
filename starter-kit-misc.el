@@ -145,7 +145,7 @@
 ;; Platform-specific stuff
 (when (eq system-type 'darwin)
   ;; Work around a bug on OS X where system-name is FQDN
-  (setq esk-system-name (car (split-string esk-system-name "\\."))))
+  (setq esk-system-name (car (split-string system-name "\\."))))
 
 ;; Get around the emacswiki spam protection
 (add-hook 'oddmuse-mode-hook
