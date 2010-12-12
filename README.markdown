@@ -28,7 +28,11 @@ Add the "technomancy" archive source:
 
 Then you can install it:
 
-    M-x package-install RET starter-kit RET
+    M-x package-list-packages
+
+Move to the "starter-kit" line and press "i" to mark it for
+installation along with any other packages you desire. Press "x" to
+perform the installation.
 
 Improved support for various languages are packaged separately.
 
