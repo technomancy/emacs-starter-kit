@@ -40,9 +40,6 @@
 ;; You know, like Readline.
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
 
-;; Align your code in a pretty way.
-(global-set-key (kbd "C-x \\") 'align-regexp)
-
 ;; Completion that uses many different methods to find options.
 (global-set-key (kbd "M-/") 'hippie-expand)
 
@@ -88,9 +85,6 @@
 ;; If you want to be able to M-x without meta (phones, etc)
 (global-set-key (kbd "C-c C-x") 'execute-extended-command)
 
-;; Fetch the contents at a URL, display it raw.
-(global-set-key (kbd "C-x C-h") 'esk-view-url)
-
 ;; Help should search more than just commands
 (global-set-key (kbd "C-h a") 'apropos)
 
@@ -100,8 +94,11 @@
 ;; For debugging Emacs modes
 (global-set-key (kbd "C-c p") 'esk-message-point)
 
+;; M-S-6 is awkward
+(global-set-key (kbd "C-c q") 'join-line)
+
 ;; So good!
-(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c g") 'magit-status)
 
 ;; This is a little hacky since VC doesn't support git add internally
 (eval-after-load 'vc

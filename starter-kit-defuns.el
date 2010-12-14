@@ -40,18 +40,6 @@
 (require 'thingatpt)
 (require 'imenu)
 
-;; Network
-
-(defun esk-view-url ()
-  "Open a new buffer containing the contents of URL."
-  (interactive)
-  (let* ((default (thing-at-point-url-at-point))
-         (url (read-from-minibuffer "URL: " default)))
-    (switch-to-buffer (url-retrieve-synchronously url))
-    (rename-buffer url t)
-    (cond ((search-forward "<?xml" nil t) (xml-mode))
-          ((search-forward "<html" nil t) (html-mode)))))
-
 ;; Buffer-related
 
 (defun esk-flatten-assoc-tree (tree pred)
