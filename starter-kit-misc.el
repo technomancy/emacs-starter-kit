@@ -59,7 +59,7 @@
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
-      whitespace-line-column 100
+      whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory "~/.emacs.d/oddmuse"
       save-place-file "~/.emacs.d/places")
