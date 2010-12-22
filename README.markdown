@@ -41,6 +41,39 @@ Improved support for various languages are packaged separately.
 * Perl
 * Lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
 
+The Starter Kit used to be a git repository that you checked out and
+used as your own personal .emacs.d directory, but it's been
+restructured so that it can be treated like any other package, freeing
+you up to structure your .emacs.d directory as you wish.
+
+## FAQ
+
+**Q:** When I try to create a new file or buffer, the autocompletion is eager and tries to use the name of an existing file or buffer.  
+**A:** That's called +ido-mode+, and it's awesome! But sometimes it
+  gets in the way. To temporarily disable it, press C-f while the
+  prompt is open.
+
+**Q:** When I'm writing Javascript, all my functions show up as ƒ. Am I going insane?  
+**A:** That's actually a render-time hack. The file on disk shows as
+  "function", but it's just rendered using the script F in order to
+  tone down the verbosity inherent in the language a bit.
+
+**Q:** I can't delete parentheses in Lisp!  
+**A:** To be specific, you can't delete parenthesis if deleting the
+  parentheses would result in invalid structure. That's called
+  Paredit, and once you get used to it, you'll wonder how you ever did
+  anything without it. But it can be disorienting at first. When
+  paredit tries to stop you from deleting something, you're probably
+  trying to delete something you shouldn't. Use C-k to kill whole
+  expressions. Two things to remember: you can always use C-w to kill
+  a region regardless of Paredit's rules, and you can always insert a
+  single character like a close-paren by prefixing it with C-q. You
+  may find [the Paredit cheat 
+  sheet](http://www.emacswiki.org/emacs/PareditCheatsheet) helpful.
+
+**Q:** How awesome is Emacs?  
+**A:** So awesome.
+
 ## Upgrading
 
 Users of the old version of the Starter Kit should be able to upgrade
@@ -52,7 +85,7 @@ host-specific files are still honored.
 
 ## Copyright
 
-Copyright (C) 2008-2010 Phil Hagelberg and contributors
+Copyright (C) 2008-2011 Phil Hagelberg and contributors
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
