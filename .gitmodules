@@ -1,12 +1,12 @@
 [submodule "src/org"]
 	path = src/org
-	url = http://repo.or.cz/r/org-mode.git
+	url = git://repo.or.cz/r/org-mode.git
 [submodule "src/magit"]
 	path = src/magit
-	url = http://git.gitorious.org/magit/mainline.git
+	url = git://github.com/philjackson/magit.git
 [submodule "snippets/text-mode/org-mode"]
 	path = snippets/text-mode/org-mode
-	url = http://github.com/eschulte/yasnippet-org-mode.git
+	url = git://github.com/eschulte/yasnippet-org-mode.git
 [submodule "src/auctex"]
 	path = src/auctex
-	url = http://github.com/eschulte/auctex.git
+	url = git://github.com/eschulte/auctex.git
