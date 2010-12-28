@@ -57,8 +57,7 @@
       require-final-newline t ; crontabs break without this
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
-      whitespace-style '(trailing lines space-before-tab
-                                  indentation space-after-tab)
+      whitespace-style '(face trailing lines-tail tabs)
       whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory "~/.emacs.d/oddmuse"
