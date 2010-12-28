@@ -180,8 +180,8 @@ imenu index, then jumps to that symbol's location."
 
 (defun esk-paredit-nonlisp ()
   "Turn on paredit mode for non-lisps."
-  (set (make-local-variable 'paredit-space-delimiter-chars)
-       (list ?\"))
+  (set (make-local-variable 'paredit-space-for-delimiter-predicates)
+       '((lambda (endp delimiter) nil)))
   (paredit-mode 1))
 
 ;; A monkeypatch to cause annotate to ignore whitespace
