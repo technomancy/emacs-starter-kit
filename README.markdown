@@ -51,7 +51,8 @@ you up to structure your .emacs.d directory as you wish.
 **Q:** When I try to create a new file or buffer, the autocompletion is eager and tries to use the name of an existing file or buffer.  
 **A:** That's called +ido-mode+, and it's awesome! But sometimes it
   gets in the way. To temporarily disable it, press C-f while the
-  prompt is open.
+  prompt is open. You can also press C-j while it's still enabled to
+  force the creation of the name.
 
 **Q:** When I'm writing Javascript, all my functions show up as ƒ. Am I going insane?  
 **A:** That's actually a render-time hack. The file on disk shows as
