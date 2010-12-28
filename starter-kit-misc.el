@@ -29,7 +29,7 @@
       uniquify-buffer-name-style 'forward
       ffap-machine-p-known 'reject
       whitespace-style '(trailing lines space-before-tab
-                                  indentation space-after-tab)
+                                  face indentation space-after-tab)
       whitespace-line-column 100
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory (concat dotfiles-dir "oddmuse")
