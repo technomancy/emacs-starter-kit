@@ -1,28 +1,59 @@
-;;; starter-kit-js.el --- Some helpful Javascript helpers
+;;; starter-kit-js.el --- Saner defaults and goodies for Javascript
 ;;
-;; Part of the Emacs Starter Kit
+;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;;
+;; Author: Phil Hagelberg <technomancy@gmail.com>
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
+;; Version: 2.0
+;; Keywords: convenience
 
-(autoload 'espresso-mode "espresso" "Start espresso-mode" t)
-(add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
-(add-hook 'espresso-mode-hook 'moz-minor-mode)
-(add-hook 'espresso-mode-hook 'esk-paredit-nonlisp)
-(add-hook 'espresso-mode-hook 'run-coding-hook)
-(setq espresso-indent-level 2)
+;; This file is not part of GNU Emacs.
 
-;; If you prefer js2-mode, use this instead:
-;; (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
+;;; Commentary:
 
-(eval-after-load 'espresso
-  '(progn (define-key espresso-mode-map "{" 'paredit-open-curly)
-          (define-key espresso-mode-map "}" 'paredit-close-curly-and-newline)
+;; "Emacs outshines all other editing software in approximately the
+;; same way that the noonday sun does the stars. It is not just bigger
+;; and brighter; it simply makes everything else vanish."
+;; -Neal Stephenson, "In the Beginning was the Command Line"
+
+;; This file contains tweaks specific to Javascript.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 3
+;; of the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Code:
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+
+;;;###autoload
+(eval-after-load 'js
+  '(progn (define-key js-mode-map "{" 'paredit-open-curly)
+          (define-key js-mode-map "}" 'paredit-close-curly-and-newline)
+          (add-hook 'js-mode-hook 'esk-paredit-nonlisp)
+          (add-hook 'js-mode-hook 'run-coding-hook)
+          (setq js-indent-level 2)
           ;; fixes problem with pretty function font-lock
-          (define-key espresso-mode-map (kbd ",") 'self-insert-command)
+          (define-key js-mode-map (kbd ",") 'self-insert-command)
           (font-lock-add-keywords
-           'espresso-mode `(("\\(function *\\)("
-                             (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "ƒ")
-                                       nil)))))))
+           'js-mode `(("\\(function *\\)("
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) "ƒ")
+                                 nil)))))))
 
 (provide 'starter-kit-js)
 ;;; starter-kit-js.el ends here
