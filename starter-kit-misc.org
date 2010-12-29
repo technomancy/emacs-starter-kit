@@ -27,8 +27,8 @@ This following loads color-theme so that it is available by default.
 
 Once you've selected a preferred color theme it can be installed by
 adding its function to your initialization.  For example
-#+begin_src emacs-lisp :tangle no
-  (color-theme-railscasts)
+#+begin_src emacs-lisp
+  (color-theme-zenburn)
 #+end_src
 will load the =railscasts= color theme when Emacs starts.
 
@@ -154,7 +154,7 @@ it's possible aspell isn't in your path
 **** Emacs specify spelling program
 - This didn't work at first, possibly because cocoAspell was
   building its dictionary.  Now it seems to work fine.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (setq ispell-program-name "aspell"
         ispell-dictionary "english"
         ispell-dictionary-alist
