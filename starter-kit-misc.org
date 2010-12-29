@@ -141,6 +141,23 @@ ido-mode is like magic pixie dust!
   (random t) ;; Seed the random-number generator
 #+end_src
 
+*** cycle ispell dictionaries
+function that switches the active ispell language. From
+[[http://www.emacswiki.org/emacs/FlySpell#toc5][EmacsWiki-FlySpell]].
+    #+begin_src emacs-lisp
+      (let ((langs '("english" "spanish")))
+        (setq lang-ring (make-ring (length langs)))
+        (dolist (elem langs) (ring-insert lang-ring elem)))
+      
+      (defun cycle-ispell-languages ()
+        (interactive)
+        (let ((lang (ring-ref lang-ring -1)))
+          (ring-insert lang-ring lang)
+          (ispell-change-dictionary lang)))
+      
+      (global-set-key [f6] 'cycle-ispell-languages)
+    #+end_src
+
 *** possible issues/resolutions with flyspell
 Most of the solution came from [[http://www.emacswiki.org/emacs/FlySpell][EmacsWiki-FlySpell]].  Here is one
 possible fix.
