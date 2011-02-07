@@ -32,8 +32,8 @@
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
-(defun eshell/find (dir &rest opts)
-  (find-dired dir (mapconcat 'identity opts " ")))
+;; (defun eshell/find (dir &rest opts)
+;;   (find-dired dir (mapconcat 'identity opts " ")))
 
 ;; (defun eshell/scp (&rest args)
 ;;   "scp: now without colon-omitting annoyance!"
