@@ -3,7 +3,24 @@
     (setq mac-command-modifier 'meta
           mac-option-modifier 'alt))
 
+(global-set-key (kbd "M-x") 'ispell-word)
+
+;; Why can't open-line just indent according to mode?
+(global-set-key (kbd "C-o") 'vi-open-next-line)
+
+;; More precise character zapping
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-M-z") 'zap-to-char)
+
+;; Mark and Region usage overrides
+(global-set-key (kbd "<C-return>") 'set-mark-command)
+(global-set-key (kbd "C-x C-k") 'kill-region)
+
 (global-set-key (kbd "C-w") 'backward-kill-word)
+
+;; Visualize the kill ring
+(global-set-key (kbd "M-y") 'yank-pop-forward)
+(global-set-key (kbd "C-M-y") 'yank-pop-backward)
 
 ;; Insert skeleton pairs by default
 ;; TODO: refine per-mode
@@ -37,8 +54,6 @@
 
 ;; Prefer ack over grep
 (global-set-key (kbd "C-c C-k C-a") 'ack)
-
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; Escape all recursive edits
 (global-set-key (kbd "C-c ^") 'top-level)
