@@ -1024,6 +1024,8 @@ This is an exact copy of line-number-at-pos for use in emacs21."
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
 
 (provide 'markdown-mode)
 

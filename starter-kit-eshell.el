@@ -13,6 +13,8 @@
      (require 'em-cmpl)
      (setenv "PAGER" "cat")
      (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
+     (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
+               '(lambda () (eshell/export "TERM" "dumb")))
      (when (< emacs-major-version 23)
        (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
                  '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-bol)))
@@ -30,8 +32,15 @@
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
-(defun eshell/find (dir &rest opts)
-  (find-dired dir (mapconcat 'identity opts " ")))
+;; (defun eshell/find (dir &rest opts)
+;;   (find-dired dir (mapconcat 'identity opts " ")))
+
+;; (defun eshell/scp (&rest args)
+;;   "scp: now without colon-omitting annoyance!"
+;;   (when (null (remove-if-not (lambda (arg) (string-match ":" arg))
+;;                              args))
+;;     (error "Surely you meant to add a colon in there somewhere?"))
+;;   (shell-command (mapconcat 'identity (cons "scp" args) " ")))
 
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
