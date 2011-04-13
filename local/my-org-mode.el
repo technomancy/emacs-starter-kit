@@ -1,0 +1,104 @@
+(setq org-agenda-files (quote (
+                               "~/Dropbox/Documents/gtd/journal.org"
+                               "~/Dropbox/Documents/gtd/gtd.org"
+                               "~/Dropbox/Documents/liam.org"
+                               "~/Dropbox/Documents/gtd/inbox.org")))
+
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+(setq org-todo-keywords (quote ((sequence "inbox(i)" "next(n)" "maybe(m)" "waiting(w)" "|" "done(d)" "cancelled(c)" "deferred(f)"))))
+(setq org-use-fast-todo-selection t)
+
+(global-set-key (kbd "C-`") 'org-agenda)
+
+(defun gtd ()
+  (interactive)
+  (find-file "~/Dropbox/Documents/gtd/gtd.org"))
+
+(defun journal ()
+  (interactive)
+  (find-file "~/Dropbox/Documents/gtd/journal.org"))
+
+(global-set-key (kbd "C-c g") 'gtd)
+(global-set-key (kbd "C-c j") 'journal)
+
+(setq org-stuck-projects
+      '("+LEVEL=1+project/-done" ("next" "waiting") ()))
+
+(setq org-tag-alist (quote ((:startgroup)
+                            ("@errands" . ?e)
+                            ("@calls" . ?c)
+                            ("@agenda" . ?a)
+                            ("@home" . ?h)
+                            (:endgroup)
+                            ("@work" . ?w)
+                            ("crypt" . ?s)
+                            )))
+
+(setq org-agenda-custom-commands (quote (
+                                         ("i" todo "inbox" nil)
+                                         ("N" tags "@work+TODO=\"next\"" nil)
+                                         ("n" tags "@home+TODO=\"next\"" nil)
+
+                                         ("w" tags "@work+TODO=\"waiting\"" nil)
+                                         ("W" tags "@home+TODO=\"waiting\"" nil)
+
+                                         ("h" tags "@home-TODO=\"done\"" nil)
+                                         ("e" tags "@errands-TODO=\"done\"" nil)
+                                         ("c" tags "@calls-TODO=\"done\"" nil)
+
+					 ("M" "meeting"
+					  ((tags "-TODO=\"done\"-LEVEL=1+@agenda")))
+
+                                         ("E" "Todo items without context (in error)" 
+                                          (( tags "+project+TODO=\"next\"-{@.*}")))
+                                         ("p" "projects"   
+                                          ((tags "+LEVEL=1+project"))))))
+
+;; Refile
+
+; Use IDO for target completion
+(setq org-completion-use-ido t)
+; Targets include this file and any file contributing to the agenda - up to 5 levels deep
+(setq org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))))
+; Targets start with the file name - allows creating level 1 tasks
+(setq org-refile-use-outline-path (quote file))
+; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
+(setq org-outline-path-complete-in-steps t)
+; Allow refile to create parent tasks with confirmation
+(setq org-refile-allow-creating-parent-nodes (quote confirm))
+
+;; Clocking
+(setq org-clock-out-remove-zero-time-clocks t)
+(setq org-agenda-log-mode-items (quote (clock)))
+(setq org-clock-persist 'history)
+(setq org-drawers (quote ("PROPERTIES" "LOGBOOK" "CLOCK")))
+(setq org-clock-into-drawer "CLOCK")
+
+;;;; (org-clock-persistence-insinuate)
+
+(defun bh/clock-in-task-by-id (id)
+  "Clock in a task by id"
+  (require 'org-id)
+  (save-restriction
+    (widen)
+    (org-with-point-at (org-id-find id 'marker)
+      (org-clock-in nil))))
+
+(defun bh/clock-in-organization-task ()
+  (interactive)
+  (bh/clock-in-task-by-id "4566445f-82d5-47c7-86c7-dee29ef82112"))
+
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+(setq org-crypt-key "978D4E9F")
+
+(require 'org-install)
+(require 'org)
+
+(provide 'my-org-mode)
