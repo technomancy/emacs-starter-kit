@@ -4,11 +4,9 @@
                            ("gnu" . "http://elpa.gnu.org/packages/")))
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-(require 'my-viper)
+(require 'my-vim)
 (require 'my-org-mode)
-(require 'my-remember)
 
-(define-key viper-vi-global-user-map "C-c /" 'org-sparse-tree)
 
 (color-theme-zenburn)
 

@@ -21,3 +21,7 @@ session*
 tramp
 \#*
 history
+/life.el~
+/init.el~
+/org-clock-save.el
+/.org-id-locations
