@@ -6,7 +6,8 @@
 
 (require 'my-vim)
 (require 'my-org-mode)
-
+(require 'my-wl)
+(require 'my-bbdb)
 
 (color-theme-zenburn)
 

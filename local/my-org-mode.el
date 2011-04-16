@@ -23,7 +23,8 @@
 ** next %^{First task}%?" :clock-in t :clock-keep nil)
                                     ("j" "Journal" entry (file "~/Dropbox/Documents/gtd/journal.org") "* %?" :clock-in t :clock-resume t)
                                     ("l" "liam" entry (file "~/Dropbox/Documents/liam.org") "* %?" :clock-in t :clock-resume t)
-                                    ("i" "inbox" entry (file "~/Dropbox/Documents/gtd/inbox.org") "* inbox %? %u %a"))))
+                                    ("i" "inbox" entry (file "~/Dropbox/Documents/gtd/inbox.org") "* inbox %? %u %a")
+                                    ("n" "note" entry (file "~/Dropbox/Documents/gtd/inbox.org") "* note %? %u %a"))))
 
 ;; Agenda
 (setq org-stuck-projects
