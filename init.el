@@ -65,14 +65,26 @@
 (regen-autoloads)
 (load custom-file 'noerror)
 
-;; You can keep system- or user-specific customizations here
-(setq system-specific-config (concat dotfiles-dir system-name ".el")
+;; domain-id is set to "foo" if your domain name is "foo.com",
+;; or to "domain" if the domain name is unknown.
+(setq domain-id (first (rest (split-string system-name "[.]"))))
+(if (not domain-id) (setq domain-id "domain"))
+
+;; You can keep domain-, system- or user-specific customizations here
+(setq domain-specific-config (concat dotfiles-dir domain-id ".el")
+      system-specific-config (concat dotfiles-dir system-name ".el")
       user-specific-config (concat dotfiles-dir user-login-name ".el")
+      domain-specific-dir (concat dotfiles-dir domain-id)
       user-specific-dir (concat dotfiles-dir user-login-name))
+(add-to-list 'load-path domain-specific-dir)
 (add-to-list 'load-path user-specific-dir)
 
+(if (file-exists-p domain-specific-config) (load domain-specific-config))
 (if (file-exists-p system-specific-config) (load system-specific-config))
 (if (file-exists-p user-specific-config) (load user-specific-config))
+
+(if (file-exists-p domain-specific-dir)
+  (mapc #'load (directory-files domain-specific-dir nil ".*el$")))
 (if (file-exists-p user-specific-dir)
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 
