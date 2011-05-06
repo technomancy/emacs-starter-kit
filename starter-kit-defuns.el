@@ -92,6 +92,9 @@ Symbols matching the text at point are put first in the completion list."
 (defun turn-off-tool-bar ()
   (tool-bar-mode -1))
 
+(defun turn-on-idle-highlight ()
+  (idle-highlight-mode t))
+
 (defun add-watchwords ()
   (font-lock-add-keywords
    nil '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
@@ -103,7 +106,7 @@ Symbols matching the text at point are put first in the completion list."
 (add-hook 'coding-hook 'turn-on-save-place-mode)
 (add-hook 'coding-hook 'pretty-lambdas)
 (add-hook 'coding-hook 'add-watchwords)
-(add-hook 'coding-hook 'idle-highlight)
+(add-hook 'coding-hook 'turn-on-idle-highlight)
   
 (defun run-coding-hook ()
   "Enable things that are convenient across all coding buffers."
