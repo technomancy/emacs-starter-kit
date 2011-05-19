@@ -87,6 +87,7 @@
   (ido-mode t)
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
+        ido-auto-merge-work-directories-length nil
         ido-create-new-buffer 'always
         ido-use-filename-at-point 'guess
         ido-max-prospects 10))
@@ -98,10 +99,8 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 
-(defvar esk-coding-hook nil
-  "Hook that gets run on activation of any programming mode.")
-
 (defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'auto-tail-revert-mode 'tail-mode)
 
 (random t) ;; Seed the random-number generator
 

@@ -62,7 +62,7 @@ imenu index, then jumps to that symbol's location."
                          (imenu--make-index-alist) 'imenu--subalist-p))))
      (cdr (assoc (ido-completing-read "Symbol: " (mapcar 'car lst)) lst)))))
 
-;;; These belong in coding-hook:
+;;; These belong in prog-mode-hook:
 
 ;; We have a number of turn-on-* functions since it's advised that lambda
 ;; functions not go in hooks. Repeatedly evaling an add-to-list with a
@@ -90,6 +90,9 @@ imenu index, then jumps to that symbol's location."
 (defun esk-turn-on-paredit ()
   (paredit-mode t))
 
+(defun esk-turn-on-idle-highlight-mode ()
+  (idle-highlight-mode t))
+
 (defun esk-pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("(?\\(lambda\\>\\)"
@@ -99,20 +102,16 @@ imenu index, then jumps to that symbol's location."
 
 (defun esk-add-watchwords ()
   (font-lock-add-keywords
-   nil '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
+   nil '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
           1 font-lock-warning-face t))))
 
-(add-hook 'esk-coding-hook 'esk-local-column-number-mode)
-(add-hook 'esk-coding-hook 'esk-local-comment-auto-fill)
-(add-hook 'esk-coding-hook 'esk-turn-on-hl-line-mode)
-(add-hook 'esk-coding-hook 'esk-turn-on-save-place-mode)
-(add-hook 'esk-coding-hook 'esk-pretty-lambdas)
-(add-hook 'esk-coding-hook 'esk-add-watchwords)
-(add-hook 'esk-coding-hook 'idle-highlight)
-
-(defun esk-run-coding-hook ()
-  "Enable things that are convenient across all coding buffers."
-  (run-hooks 'esk-coding-hook))
+(add-hook 'prog-mode-hook 'esk-local-column-number-mode)
+(add-hook 'prog-mode-hook 'esk-local-comment-auto-fill)
+(add-hook 'prog-mode-hook 'esk-turn-on-hl-line-mode)
+(add-hook 'prog-mode-hook 'esk-turn-on-save-place-mode)
+(add-hook 'prog-mode-hook 'esk-pretty-lambdas)
+(add-hook 'prog-mode-hook 'esk-add-watchwords)
+(add-hook 'prog-mode-hook 'esk-turn-on-idle-highlight-mode)
 
 (defun esk-turn-off-tool-bar ()
   (tool-bar-mode -1))
@@ -180,6 +179,7 @@ imenu index, then jumps to that symbol's location."
 
 (defun esk-paredit-nonlisp ()
   "Turn on paredit mode for non-lisps."
+  (interactive)
   (set (make-local-variable 'paredit-space-for-delimiter-predicates)
        '((lambda (endp delimiter) nil)))
   (paredit-mode 1))
