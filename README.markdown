@@ -1,18 +1,19 @@
 # Emacs Starter Kit
 
-The Starter Kit should provide a saner set of defaults than you get
-normally with Emacs. It was originally intended for beginners, but it
-should provide a reasonable working environment for anyone using Emacs
-for dynamic languages.
+The Starter Kit provides a saner set of defaults than you get normally
+with Emacs. It was originally intended for beginners, but it should
+provide a reasonable working environment for anyone using Emacs for
+dynamic languages.
 
-The latest version is at http://github.com/technomancy/emacs-starter-kit
+The latest release is at http://marmalade-repo.org/packages/starter-kit
+with the source at http://github.com/technomancy/emacs-starter-kit
 
 ## Learning
 
 This won't teach you Emacs, but it'll make it easier to get
 comfortable. To access the tutorial, press control-h followed by t.
 
-You may also find the [PeepCode Meet Emacs
+You may also find the commercial [PeepCode Meet Emacs
 screencast](http://peepcode.com/products/meet-emacs) helpful. The
 [Emacs Wiki](http://emacswiki.org) is also very handy.
 
@@ -20,26 +21,23 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
 
 You'll need Emacs 24, which comes with package.el.
 
-Add the "technomancy" archive source:
+Add Marmalade as a package archive source:
 
     (require 'package)
     (add-to-list 'package-archives
-                 '("technomancy" . "http://repo.technomancy.us/emacs/") t)
+                 '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
 Then you can install it:
 
-    M-x package-list-packages
-
-Move to the "starter-kit" line and press "i" to mark it for
-installation along with any other packages you desire. Press "x" to
-perform the installation.
+    M-x package-refresh-contents
+    M-x package-install RET starter-kit RET
 
 Improved support for various languages are packaged separately.
 
-* Javascript
-* Ruby
-* Perl
-* Lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
+* starter-kit-js
+* starter-kit-ruby
+* starter-kit-perl
+* starter-kit-lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
 
 The Starter Kit used to be a git repository that you checked out and
 used as your own personal .emacs.d directory, but it's been
@@ -78,11 +76,15 @@ you up to structure your .emacs.d directory as you wish.
 ## Upgrading
 
 Users of the old version of the Starter Kit should be able to upgrade
-with little fuss; the main difference is that the new one doesn't pull
-in a bunch of other package.el dependencies; users may pick and choose
-which they want. It's also more modular, so language-specific starter
-kit modules must be installed separately. User-specific and
-host-specific files are still honored.
+by deleting the starter-kit-specific files out of <tt>~/.emacs.d/</tt>:
+
+    $ rm -rf ~/.emacs.d/init.el ~/.emacs.d/elpa-to-submit/ ~/.emacs.d/starter-kit-*.el
+
+The main difference is that the new one doesn't pull in a bunch of
+other package.el dependencies; users may pick and choose which they
+want. It's also more modular, so language-specific starter kit modules
+must be installed separately. User-specific and host-specific files
+are still honored.
 
 ## Copyright
 
