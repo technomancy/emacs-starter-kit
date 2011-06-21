@@ -4,9 +4,9 @@
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
-;; Version: 2.0
+;; Version: 2.0.1
 ;; Keywords: convenience
-
+;; Package-Requires: ((inf-ruby "2.2.1") (starter-kit "2.0.1"))
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
@@ -17,6 +17,8 @@
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
 ;; This file contains tweaks specific to Ruby.
+
+;; This file is in need of a maintainer.
 
 ;;; License:
 
@@ -91,8 +93,6 @@ exec-to-string command, but it works and seems fast"
              (with-current-buffer comp-buffer-name
                (delete-region (point-min) (point-max))))))
        (ad-activate 'ruby-do-run-w/compilation)))
-
-  (add-hook 'ruby-mode-hook 'esk-paredit-nonlisp)
 
   ;; Rinari (Minor Mode for Ruby On Rails)
   (setq rinari-major-modes

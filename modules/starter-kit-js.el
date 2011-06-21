@@ -6,6 +6,7 @@
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
 ;; Version: 2.0
 ;; Keywords: convenience
+;; Package-Requires: ((starter-kit "2.0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -17,6 +18,8 @@
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
 ;; This file contains tweaks specific to Javascript.
+
+;; This file is in need of a maintainer.
 
 ;;; License:
 

@@ -4,8 +4,9 @@
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
-;; Version: 2.0
+;; Version: 2.0.1
 ;; Keywords: convenience
+;; Package-Requires: ((starter-kit "2.0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -60,6 +61,7 @@
   (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 
+  ;; TODO: look into parenface package
   (defface esk-paren-face
     '((((class color) (background dark))
        (:foreground "grey50"))
