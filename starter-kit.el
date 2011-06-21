@@ -46,8 +46,7 @@
   (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
     (when (fboundp mode) (funcall mode -1)))
 
-  (dolist (l '(uniquify starter-kit-defuns starter-kit-bindings
-                        starter-kit-misc starter-kit-eshell))
+  (dolist (l '(uniquify starter-kit-defuns starter-kit-misc starter-kit-eshell))
     (require l))
 
   ;; You can keep system- or user-specific customizations here

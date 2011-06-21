@@ -37,8 +37,9 @@ Then you can install it:
     M-x package-refresh-contents
     M-x package-install RET starter-kit RET
 
-Improved support for various languages are packaged separately.
+Other modules are also available:
 
+* starter-kit-bindings (spun out due to concerns about keybinding conventions)
 * starter-kit-js
 * starter-kit-ruby
 * starter-kit-perl
