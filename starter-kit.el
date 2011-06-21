@@ -40,8 +40,6 @@
 
 ;;;###autoload
 (progn
-  (add-to-list 'package-archives '("technomancy" . 
-                                   "http://repo.technomancy.us/emacs/") t)
   ;; Turn off mouse interface early in startup to avoid momentary display
   (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
     (when (fboundp mode) (funcall mode -1)))
@@ -59,7 +57,8 @@
   (when (file-exists-p esk-system-config) (load esk-system-config))
   (when (file-exists-p esk-user-config) (load esk-user-config))
   (when (file-exists-p esk-user-dir)
-    (mapc 'load (directory-files esk-user-dir nil ".*el$"))))
+    (dolist (l (directory-files esk-user-dir nil "^[^#].*el$"))
+      (load l))))
 
 (provide 'starter-kit)
 ;;; starter-kit.el ends here
