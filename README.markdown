@@ -8,6 +8,11 @@ that are not distributed with Emacs for various reasons.
 
 The latest version is at http://github.com/technomancy/emacs-starter-kit/
 
+This version of the Starter Kit acts as a set of config files you drop
+into your home directory. Version 2 (the v2 branch) is a set of
+packages you can pull in using package.el instead now that it's been
+included in Emacs.
+
 ## Learning
 
 This won't teach you Emacs, but it'll make it easier to get
@@ -67,27 +72,17 @@ where you should put code that you don't think would be useful to
 everyone. That will allow you to merge with newer versions of the
 starter-kit without conflicts.
 
-## Emacs Lisp Package Archive
+## Packages
 
-Libraries from [ELPA](http://tromey.com/elpa) are preferred when
-available since dependencies are handled automatically, and the burden
-to update them is removed from the user. In the long term, ideally
-everything would be installed via ELPA, and only package.el would need
-to be distributed with the starter kit. (Or better yet, package.el
-would come with Emacs...) See starter-kit-elpa.el for a list of
-libraries that are pending submission to ELPA. Packages get installed
-in the elpa/ directory.
+Libraries from [Marmalade](http://marmalade-repo.org) installed via
+package.el are preferred when available since dependencies are handled
+automatically, and the burden to update them is removed from the
+user.
 
 There's no vendor/ directory in the starter kit because if an external
 library is useful enough to be bundled with the starter kit, it should
-be useful enough to submit to ELPA so that everyone can use it, not
+be useful enough to submit to Marmalade so that everyone can use it, not
 just users of the starter kit.
-
-Sometimes packages are removed from the Starter Kit as they get added
-to ELPA itself. This has occasionally caused problems with certain
-packages. If you run into problems with such a package, try removing
-everything from inside the elpa/ directory and invoking M-x
-starter-kit-elpa-install in a fresh instance.
 
 ## Variants of Emacs
 
@@ -104,14 +99,12 @@ replacement for your regular dotfiles for a while. If there's anything
 you just can't live without, add it or let me know so I can add
 it. Take a look at what happens in init.el to get started.
 
-Also: see the file TODO. Helping submit new libraries to ELPA is the
+Also: see the file TODO. Helping submit new libraries to Marmalade is the
 easiest way to help out. There are two ways you can do this: either
-take new libraries and make them ready for ELPA, dropping them in the
+take new libraries and make them ready for Marmalade, dropping them in the
 elpa-to-submit directory or take files that are already in
 elpa-to-submit, ensuring all their dependencies are correctly loaded
-into ELPA, and sending them to the ELPA maintainer. There are details
-at http://tromey.com/elpa/upload.html for how ELPA submission
-works. Grep the project for TODO for other things.
+into Marmalade, and uploading them. Grep the project for TODO for other things.
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
