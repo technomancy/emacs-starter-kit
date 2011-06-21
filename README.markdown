@@ -102,7 +102,6 @@ are still honored.
 
 * Further testing of deeply-transitive dependencies
 * Ensure dependencies are loaded for byte-compilation in package.el
-* Automate tarball creation
 
 ## Copyright
 
