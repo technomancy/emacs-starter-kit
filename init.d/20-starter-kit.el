@@ -1,1 +1,1 @@
-(load "starter-kit-init.el")
+(require 'starter-kit)

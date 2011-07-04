@@ -1,4 +1,4 @@
-;;; init.el --- Where all the magic begins
+;;; starter-kit.el --- Where all the magic begins
 ;;
 ;; Part of the Emacs Starter Kit
 ;;
@@ -64,4 +64,4 @@
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 (if (file-exists-p user-specific-config) (load user-specific-config))
 
-;;; init.el ends here
+(provide 'starter-kit)
