@@ -22,6 +22,7 @@
 ;; features with packages rather than snippets.
 ;; 
 ;; To add additional customizations create a new file ending in .el
-;; in the current directory and it will be loaded automatically.
+;; in the init.d directory and it will be loaded automatically.
+;; prefix files with numeric indexes to control load order
 
 ;; end init.el
