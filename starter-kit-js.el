@@ -23,13 +23,8 @@
         '(progn (define-key espresso-mode-map "{" 'paredit-open-curly)
                 (define-key espresso-mode-map "}" 'paredit-close-curly-and-newline)
                 ;; fixes problem with pretty function font-lock
-                (define-key espresso-mode-map (kbd ",") 'self-insert-command)
-                (font-lock-add-keywords
-                 'espresso-mode `(("\\(function *\\)("
-                                   (0 (progn (compose-region (match-beginning 1)
-                                                             (match-end 1) "ƒ")
-                                             nil)))))))
-      )
+                (define-key espresso-mode-map (kbd ",") 'self-insert-command)))
+      (add-hook 'espresso-mode-hook 'pretty-functions))
 
   (autoload 'js-mode "js" "Start js-mode" t)
   (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
@@ -43,12 +38,15 @@
     '(progn (define-key js-mode-map "{" 'paredit-open-curly)
             (define-key js-mode-map "}" 'paredit-close-curly-and-newline)
             ;; fixes problem with pretty function font-lock
-            (define-key js-mode-map (kbd ",") 'self-insert-command)
-            (font-lock-add-keywords
-             'js-mode `(("\\(function *\\)("
-                               (0 (progn (compose-region (match-beginning 1)
-                                                         (match-end 1) "ƒ")
-                                         nil))))))))
+            (define-key js-mode-map (kbd ",") 'self-insert-command)))
+  (add-hook 'js-mode-hook 'pretty-functions))
+
+(defun pretty-functions ()
+  (font-lock-add-keywords
+   nil `(("\\(function *\\)("
+          (0 (progn (compose-region (match-beginning 1)
+                                    (match-end 1) "ƒ")
+                    nil))))))
 
 (provide 'starter-kit-js)
 ;;; starter-kit-js.el ends here
