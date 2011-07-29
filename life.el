@@ -11,8 +11,6 @@
 
 (require 'my-vim)
 (require 'my-org-mode)
-(require 'my-wl)
-(require 'my-bbdb)
 (require 'sunrise-commander)
 (require 'undo-tree)
 (require 'ledger)
