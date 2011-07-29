@@ -18,5 +18,6 @@
 
 (add-hook 'erlang-mode 'viper-mode)
 (add-hook 'org-mode 'viper-mode)
+(add-hook 'clojure-mode 'viper-mode)
 
 (provide 'my-vim)

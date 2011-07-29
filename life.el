@@ -1,4 +1,9 @@
-(add-to-list 'load-path (concat dotfiles-dir "/local"))
+(add-to-list 'load-path (concat dotfiles-dir "local"))
+(add-to-list 'load-path (concat dotfiles-dir "vendor"))
+(add-to-list 'load-path "/usr/share/emacs/site-lisp")
+
+(setq vendor-dir (concat dotfiles-dir "vendor"))
+(add-to-list 'load-path vendor-dir)
 
 (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
                            ("gnu" . "http://elpa.gnu.org/packages/")))
@@ -8,6 +13,14 @@
 (require 'my-org-mode)
 (require 'my-wl)
 (require 'my-bbdb)
+(require 'sunrise-commander)
+(require 'undo-tree)
+(require 'ledger)
+
+(global-undo-tree-mode)
+
+(require 'multi-term)
+(setq multi-term-program "/bin/bash")
 
 (color-theme-zenburn)
 
@@ -58,22 +71,17 @@
           (lambda ()
             (ibuffer-switch-to-saved-filter-groups "default")))
 
+(global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-;; bind Caps-Lock to M-x
-;; http://sachachua.com/wp/2008/08/04/emacs-caps-lock-as-m-x/
-;; of course, this disables normal Caps-Lock for *all* apps...
-(if (eq window-system 'x)
-    (shell-command "xmodmap -e 'clear Lock' -e 'keycode 66 = F13'"))
-(global-set-key [f13] 'execute-extended-command)
+(setq browse-url-browser-function (quote browse-url-generic))
+(setq browse-url-generic-program "chromium")
 
 (defun djcb-full-screen-toggle ()
-  "toggle full-screen mode"
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
 (global-set-key (kbd "<f11>")  'djcb-full-screen-toggle)
 
-;; move to current desktop 
 (add-hook 'server-switch-hook
   (lambda ()
     (call-process
@@ -82,49 +90,42 @@
 
 (setq espresso-indent-level 4)
 
-; (if (display-graphic-p)
-
-(add-hook 'window-setup-hook 
+(if (eq window-system 'x) (add-hook 'window-setup-hook 
           (lambda nil 
             (set-default-font "Bitstream Vera Sans Mono-14")
             (set-fontset-font (frame-parameter nil 'font)
                               'han '("cwTeXHeiBold" . "unicode-bmp")))
-          (setq default-frame-alist '((top . 0) (left . 0) (width . 100) (height . 40)))) 
+          (setq default-frame-alist '((top . 0) (left . 0) (width . 100) (height . 40)))))
 
-; (setq default-frame-alist '((font . "Inconsolata-dz-15")))
 (setq default-frame-alist '((font . "Bitstream Vera Sans Mono 14")))
-(mouse-avoidance-mode 'animate)
+(mouse-avoidance-mode 'exile)
 
-;; http://www.emacswiki.org/emacs/OverlaysToText
-(defun overlays-to-text ()
-  "Create a new buffer called *text* containing the visible text
-of the current buffer, ie. it converts overlays containing text
-into real text."
+(eval-after-load "wdired"
+  '(progn
+     (eval-after-load "viper"
+       '(progn
+          (defadvice wdired-change-to-wdired-mode (after viper activate)
+            (unless (eq viper-current-state 'emacs-state)
+              (viper-change-state 'vi-state)))
+          (defadvice wdired-finish-edit (after viper activate)
+            (unless (eq viper-current-state 'emacs-state)
+              (viper-change-state-to-vi)) ; back to normal state
+            (viper-modify-major-mode    ; back to dired map
+             'dired-mode 'vi-state dired-mode-map))))))
+  
+(when (require 'rainbow-delimiters nil 'noerror) 
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+
+(setq flyspell-issue-welcome-flag nil)
+
+(toggle-debug-on-error)
+
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+
+(defun indent-buffer ()
   (interactive)
-  (let ((tb (get-buffer-create "*text*"))
-        (s (point-min))
-        (os (overlays-in (point-min) (point-max))))
-    (with-current-buffer tb
-      (erase-buffer))
-    (setq os (sort os (lambda (o1 o2)
-                        (< (overlay-start o1)
-                           (overlay-start o2)))))
-    (mapc (lambda (o)
-            (let ((bt (buffer-substring-no-properties s (overlay-start o)))
-                  (b (overlay-get o 'before-string))
-                  (text (buffer-substring-no-properties (overlay-start o) (overlay-end o)))
-                  (a (overlay-get o 'after-string))
-                  (inv (overlay-get o 'invisible)))
-              (with-current-buffer tb
-                (insert bt)
-                (unless inv
-                  (when b (insert b))
-                  (insert text)
-                  (when a (insert a))))
-              (setq s (overlay-end o))))
-          os)
-    (let ((x (buffer-substring-no-properties s (point-max))))
-      (with-current-buffer tb
-        (insert x)))
-    (pop-to-buffer tb)))
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
 
+(setenv "DATABASE_URL" "postgresql://localhost:5432/tm_participation")

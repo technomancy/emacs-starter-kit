@@ -25,3 +25,4 @@ history
 /init.el~
 /org-clock-save.el
 /.org-id-locations
+*.elc

@@ -53,17 +53,18 @@ wl-message-visible-field-list
   "^Subject:"
   "^\\(From\\|Reply-To\\):"
   "^Organization:"
-  "^Message-Id:"
+  "^User-Agent"
   "^\\(Posted\\|Date\\):")
 
 wl-message-sort-field-list
 '("^From"
+  "^To"
+  "^Cc"
+  "^Date"
+  "^Subject"
   "^Organization:"
   "^X-Attribution:"
-  "^Subject"
-  "^Date"
-  "^To"
-  "^Cc"))
+  "^User-Agent"))
 
 (require 'bbdb-wl)
 (bbdb-wl-setup)
@@ -73,9 +74,24 @@ wl-message-sort-field-list
 (defun djcb-wl-summary-refile (&optional folder)
   (interactive)
   (wl-summary-refile (wl-summary-message-number) folder)
-  (wl-summary-next))
+)
+
+(setq mime-edit-split-message nil)
 
 (define-key wl-summary-mode-map (kbd "y")
-  '(lambda()(interactive)(djcb-wl-summary-refile "%[Gmail]/All Mail"))) 
+  '(lambda()(interactive)(wl-thread-dispose))) 
+
+(defun life-gtd-inbox ()
+  (interactive)
+  (djcb-wl-summary-refile "%gtd")
+  (org-capture))
+
+(define-key wl-summary-mode-map (kbd "i")
+  'life-gtd-inbox
+  )
+
+; (add-hook 'mail-citation-hook 'mu-cite-original)
+; (setq mu-cite-top-format
+;      '("On " date "," full-name " wrote:\n"))
 
 (provide 'my-wl)

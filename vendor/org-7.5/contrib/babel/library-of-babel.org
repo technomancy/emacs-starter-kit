@@ -1,0 +1,370 @@
+#+title:    The Library of Babel
+#+author:     Org-mode People
+#+STARTUP:  odd hideblocks
+
+* Introduction
+  The Library of Babel is an extensible collection of ready-made and
+  easily-shortcut-callable source-code blocks for handling common
+  tasks.  Org-babel comes pre-populated with the source-code blocks
+  located in this file. It is possible to add source-code blocks from
+  any org-mode file to the library by calling =(org-babel-lob-ingest
+  "path/to/file.org")=.
+  
+  This file is included in worg mainly less for viewing through the
+  web interface, and more for contribution through the worg git
+  repository.  If you have code snippets that you think others may
+  find useful please add them to this file and [[file:~/src/worg/worg-git.org::contribute-to-worg][contribute them]] to
+  worg.
+  
+  The raw Org-mode text of this file can be downloaded at
+  [[repofile:contrib/babel/library-of-babel.org][library-of-babel.org]]
+
+* Simple
+A collection of simple utility functions
+
+#+srcname: echo
+#+begin_src emacs-lisp :var input="echo'd"
+  input
+#+end_src
+
+* File I/O
+** reading and writing files
+Read the contents of the file at =file=.  The =:results vector= and
+=:results scalar= header arguments can be used to read the contents of
+file as either a table or a string.
+#+srcname: read
+#+begin_src emacs-lisp :var file="" :var format=""
+  (if (string= format "csv")
+      (with-temp-buffer
+        (org-table-import (expand-file-name file) nil)
+        (org-table-to-lisp))
+    (with-temp-buffer
+      (insert-file-contents (expand-file-name file))
+      (buffer-string)))
+#+end_src
+
+Write =data= to a file at =file=.  If =data= is a list, then write it
+as a table in traditional Org-mode table syntax.
+#+srcname: write
+#+begin_src emacs-lisp :var data="" :var file="" :var ext='()
+  (flet ((echo (r) (if (stringp r) r (format "%S" r))))
+    (with-temp-file file
+      (case (and (listp data)
+                 (or ext (intern (file-name-extension file))))
+        ('tsv (insert (orgtbl-to-tsv data '(:fmt echo))))
+        ('csv (insert (orgtbl-to-csv data '(:fmt echo))))
+        (t    (org-babel-insert-result data)))))
+  nil
+#+end_src
+
+** remote files
+**** json
+Read local or remote file in [[http://www.json.org/][json]] format into emacs-lisp objects.
+#+srcname: json
+#+begin_src emacs-lisp :var file='() :var url='()
+  (require 'json)
+  (cond
+   (file
+    (with-temp-filebuffer file
+      (goto-char (point-min))
+      (json-read)))
+   (url
+    (require 'w3m)
+    (with-temp-buffer
+      (w3m-retrieve url)
+      (goto-char (point-min))
+      (json-read))))
+#+end_src
+
+**** Google docs
+The following code blocks make use of the [[http://code.google.com/p/googlecl/][googlecl]] Google command line
+tool.  This tool provides functionality for accessing Google services
+from the command line, and the following code blocks use /googlecl/
+for reading from and writing to Google docs with Org-mode code blocks.
+
+****** read a document from Google docs
+The =google= command seems to be throwing "Moved Temporarily" errors
+when trying to download textual documents, but this is working fine
+for spreadsheets.
+#+source: gdoc-read
+#+begin_src emacs-lisp :var title="example" :var format="csv"
+  (let* ((file (concat title "." format))
+         (cmd (format "google docs get --format %S --title %S" format title)))
+    (message cmd) (message (shell-command-to-string cmd))
+    (prog1 (if (string= format "csv")
+               (with-temp-buffer
+                 (org-table-import (shell-quote-argument file) '(4))
+                 (org-table-to-lisp))
+             (with-temp-buffer
+               (insert-file-contents (shell-quote-argument file))
+               (buffer-string)))
+      (delete-file file)))
+#+end_src
+
+For example, a line like the following can be used to read the
+contents of a spreadsheet named =num-cells= into a table.
+: #+call: gdoc-read(title="num-cells"")
+
+A line like the following can be used to read the contents of a
+document as a string.
+: #+call: gdoc-read(title="loremi", :format "txt")
+
+****** write a document to a Google docs
+Write =data= to a google document named =title=.  If =data= is tabular
+it will be saved to a spreadsheet, otherwise it will be saved as a
+normal document.
+#+source: gdoc-write
+#+begin_src emacs-lisp :var title="babel-upload" :var data=fibs(n=10) :results silent
+  (let* ((format (if (listp data) "csv" "txt"))
+         (tmp-file (make-temp-file "org-babel-google-doc" nil (concat "." format)))
+         (cmd (format "google docs upload --title %S %S" title tmp-file)))
+    (with-temp-file tmp-file
+      (insert
+       (if (listp data)
+           (orgtbl-to-csv
+            data '(:fmt (lambda (el) (if (stringp el) el (format "%S" el)))))
+         (if (stringp data) data (format "%S" data)))))
+    (message cmd)
+    (prog1 (shell-command-to-string cmd) (delete-file tmp-file)))
+#+end_src
+
+example usage
+: #+source: fibs
+: #+begin_src emacs-lisp :var n=8
+:   (flet ((fib (m) (if (< m 2) 1 (+ (fib (- m 1)) (fib (- m 2))))))
+:     (mapcar (lambda (el) (list el (fib el))) (number-sequence 0 (- n 1))))
+: #+end_src
+: 
+: #+call: gdoc-write(title="fibs", data=fibs(n=10))
+
+* Plotting code
+
+** R
+  Plot column 2 (y axis) against column 1 (x axis). Columns 3 and beyond, if present, are ignored.
+
+#+srcname: R-plot(data=R-plot-example-data)
+#+begin_src R
+plot(data)
+#+end_src
+
+#+tblname: R-plot-example-data
+| 1 |  2 |
+| 2 |  4 |
+| 3 |  9 |
+| 4 | 16 |
+| 5 | 25 |
+
+#+lob: R-plot(data=R-plot-example-data)
+
+#+resname: R-plot(data=R-plot-example-data)
+: nil
+
+** Gnuplot
+
+* Org reference
+** headline references
+#+source: headline
+#+begin_src emacs-lisp :var headline=top :var file='()
+  (save-excursion
+    (when file (get-file-buffer file))
+    (org-open-link-from-string (org-make-link-string headline))
+    (save-restriction
+      (org-narrow-to-subtree)
+      (buffer-string)))
+#+end_src
+
+#+call: headline(headline="headline references")
+
+* Tables
+** LaTeX Table export
+*** booktabs
+This block can be used to wrap a table in the latex =booktabs=
+environment, it takes the following arguments -- all but the first two
+are optional.
+| arg   | description                                |
+|-------+--------------------------------------------|
+| table | a reference to the table                   |
+| align | optional alignment string                  |
+| env   | optional environment, default to "tabular" |
+| width | optional width specification string        |
+
+#+srcname: booktabs
+#+begin_src emacs-lisp :var table='((:head) hline (:body)) :var align='() :var env="tabular" :var width='() :noweb yes :results latex
+  (flet ((to-tab (tab)
+                 (orgtbl-to-generic
+                  (mapcar (lambda (lis)
+                            (if (listp lis)
+                                (mapcar (lambda (el)
+                                          (if (stringp el)
+                                              el
+                                            (format "%S" el))) lis)
+                              lis)) tab)
+                  (list :lend " \\\\" :sep " & " :hline "\\hline"))))
+    (org-fill-template
+     "
+  \\begin{%env}%width%align
+  \\toprule
+  %table
+  \\bottomrule
+  \\end{%env}\n"
+     (list
+      (cons "env"       (or env "table"))
+      (cons "width"     (if width (format "{%s}" width) ""))
+      (cons "align"     (if align (format "{%s}" align) ""))
+      (cons "table"
+            ;; only use \midrule if it looks like there are column headers
+            (if (equal 'hline (second table))
+                (concat (to-tab (list (first table)))
+                        "\n\\midrule\n"
+                        (to-tab (cddr table)))
+              (to-tab table))))))
+#+end_src
+
+*** longtable
+This block can be used to wrap a table in the latex =longtable=
+environment, it takes the following arguments -- all but the first two
+are optional.
+| arg       | description                                                 |
+|-----------+-------------------------------------------------------------|
+| table     | a reference to the table                                    |
+| align     | optional alignment string                                   |
+| width     | optional width specification string                         |
+| hline     | the string to use as hline separator, defaults to "\\hline" |
+| head      | optional "head" string                                      |
+| firsthead | optional "firsthead" string                                 |
+| foot      | optional "foot" string                                      |
+| lastfoot  | optional "lastfoot" string                                  |
+
+#+srcname: longtable
+#+begin_src emacs-lisp :var table='((:table)) :var align='() :var width='() :var hline="\\hline" :var firsthead='() :var head='() :var foot='() :var lastfoot='() :noweb yes :results latex
+  (org-fill-template
+   "
+  \\begin{longtable}%width%align
+  %firsthead
+  %head
+  %foot
+  %lastfoot
+  
+  %table
+  \\end{longtable}\n"
+   (list
+    (cons "width"     (if width (format "{%s}" width) ""))
+    (cons "align"     (if align (format "{%s}" align) ""))
+    (cons "firsthead" (if firsthead (concat firsthead "\n\\endfirsthead\n") ""))
+    (cons "head"      (if head (concat head "\n\\endhead\n") ""))
+    (cons "foot"      (if foot (concat foot "\n\\endfoot\n") ""))
+    (cons "lastfoot"  (if lastfoot (concat lastfoot "\n\\endlastfoot\n") ""))
+    (cons "table" (orgtbl-to-generic
+                   (mapcar (lambda (lis)
+                             (if (listp lis)
+                                 (mapcar (lambda (el)
+                                           (if (stringp el)
+                                               el
+                                             (format "%S" el))) lis)
+                               lis)) table)
+                   (list :lend " \\\\" :sep " & " :hline hline)))))
+#+end_src
+
+** Elegant lisp for transposing a matrix.
+
+#+tblname: transpose-example
+| 1 | 2 | 3 |
+| 4 | 5 | 6 |
+
+#+srcname: transpose
+#+begin_src emacs-lisp :var table=transpose-example
+  (apply #'mapcar* #'list table)
+#+end_src
+
+#+resname:
+| 1 | 4 |
+| 2 | 5 |
+| 3 | 6 |
+
+* Misc
+#+srcname: python-identity(a=1)
+#+begin_src python
+a
+#+end_src
+#+srcname: python-add(a=1, b=2)
+#+begin_src python
+a + b
+#+end_src
+* GANTT Charts
+
+The =elispgantt= source block was sent to the mailing list by Eric
+Fraga.  It was modified slightly by Tom Dye.
+ 
+#+source: elispgantt
+#+begin_src emacs-lisp :var table=gantttest
+  (let ((dates "")
+        (entries (nthcdr 2 table))
+        (milestones "")
+        (nmilestones 0)
+        (ntasks 0)
+        (projecttime 0)
+        (tasks "")
+        (xlength 1))
+    (message "Initial: %s\n" table)
+    (message "Entries: %s\n" entries)
+    (while entries
+      (let ((entry (first entries)))
+        (if (listp entry)
+            (let ((id (first entry))
+                  (type (nth 1 entry))
+                  (label (nth 2 entry))
+                  (task (nth 3 entry))
+                  (dependencies (nth 4 entry))
+                  (start (nth 5 entry))
+                  (duration (nth 6 entry))
+                  (end (nth 7 entry))
+                  (alignment (nth 8 entry)))
+              (if (> start projecttime) (setq projecttime start))
+              (if (string= type "task")
+                  (let ((end (+ start duration))
+                        (textposition (+ start (/ duration 2)))
+                        (flush ""))
+                    (if (string= alignment "left")
+                        (progn
+                          (setq textposition start)
+                          (setq flush "[left]"))
+                      (if (string= alignment "right")
+                          (progn
+                            (setq textposition end)
+                            (setq flush "[right]"))))
+                    (setq tasks
+                          (format "%s  \\gantttask{%s}{%s}{%d}{%d}{%d}{%s}\n"
+                                  tasks label task start end textposition flush))
+                    (setq ntasks (+ 1 ntasks))
+                    (if (> end projecttime)
+                        (setq projecttime end)))
+                (if (string= type "milestone")
+                    (progn
+                      (setq milestones
+                            (format
+                             "%s  \\ganttmilestone{$\\begin{array}{c}\\mbox{%s}\\\\ \\mbox{%s}\\end{array}$}{%d}\n"
+                             milestones label task start))
+                      (setq nmilestones (+ 1 nmilestones)))
+                  (if (string= type "date")
+                      (setq dates (format "%s  \\ganttdateline{%s}{%d}\n"
+                                          dates label start))
+                    (message "Ignoring entry with type %s\n" type)))))
+          (message "Ignoring non-list entry %s\n" entry)) ; end if list entry
+        (setq entries (cdr entries))))  ; end while entries left
+    (format "\\pgfdeclarelayer{background}
+  \\pgfdeclarelayer{foreground}
+  \\pgfsetlayers{background,foreground}
+  \\renewcommand{\\ganttprojecttime}{%d}
+  \\renewcommand{\\ganttntasks}{%d}
+  \\noindent
+  \\begin{tikzpicture}[y=-0.75cm,x=0.75\\textwidth]
+    \\begin{pgfonlayer}{background}
+      \\draw[very thin, red!10!white] (0,1+\\ganttntasks) grid [ystep=0.75cm,xstep=1/\\ganttprojecttime] (1,0);
+      \\draw[\\ganttdatelinecolour] (0,0) -- (1,0);
+      \\draw[\\ganttdatelinecolour] (0,1+\\ganttntasks) -- (1,1+\\ganttntasks);
+    \\end{pgfonlayer}
+  %s
+  %s
+  %s
+  \\end{tikzpicture}" projecttime ntasks tasks milestones dates))
+#+end_src
