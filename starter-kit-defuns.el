@@ -167,6 +167,16 @@ imenu index, then jumps to that symbol's location."
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
 
+(defun esk-suck-it (suckee)
+  "Insert a comment of appropriate length about what can suck it."
+  (interactive "MWhat can suck it? ")
+  (let ((prefix (concat ";; " suckee " can s"))
+        (postfix "ck it!")
+        (col (current-column)))
+    (insert prefix)
+    (dotimes (_ (- 80 col (length prefix) (length postfix))) (insert "u"))
+    (insert postfix)))
+
 (defun esk-insert-date ()
   "Insert a time-stamp according to locale's date and time format."
   (interactive)
