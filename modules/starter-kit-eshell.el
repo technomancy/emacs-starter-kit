@@ -1,6 +1,6 @@
 ;;; starter-kit-eshell.el --- Saner defaults and goodies: eshell tweaks
 ;;
-;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;; Copyright (c) 2008-2011 Phil Hagelberg and contributors
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
@@ -65,8 +65,12 @@
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
-;; (defun eshell/find (dir &rest opts)
-;;   (find-dired dir (mapconcat 'identity opts " ")))
+(defun eshell/find (dir &rest opts)
+  (find-dired dir (mapconcat (lambda (arg)
+                               (if (get-text-property 0 'escaped arg)
+                                   (concat "\"" arg "\"")
+                                 arg))
+                             opts " ")))
 
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb

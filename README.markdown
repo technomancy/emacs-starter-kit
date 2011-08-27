@@ -1,9 +1,8 @@
 # Emacs Starter Kit
 
-The Starter Kit provides a saner set of defaults than you get normally
-with Emacs. It was originally intended for beginners, but it should
-provide a reasonable working environment for anyone using Emacs for
-dynamic languages.
+The Starter Kit provides a more pleasant set of defaults than you get
+normally with Emacs. It was originally intended for beginners, but it
+offers a nicely augmented working environment for anyone using Emacs.
 
 The latest release is at http://marmalade-repo.org/packages/starter-kit
 with the source at http://github.com/technomancy/emacs-starter-kit
@@ -40,6 +39,7 @@ Then you can install it:
 Other modules are also available:
 
 * starter-kit-bindings (spun out due to concerns about keybinding conventions)
+* starter-kit-eshell
 * starter-kit-js
 * starter-kit-ruby
 * starter-kit-perl

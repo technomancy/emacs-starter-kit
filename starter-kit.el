@@ -1,6 +1,6 @@
 ;;; starter-kit.el --- Saner defaults and goodies.
 ;;
-;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;; Copyright (c) 2008-2011 Phil Hagelberg and contributors
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
@@ -44,8 +44,7 @@
   (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
     (when (fboundp mode) (funcall mode -1)))
 
-  (dolist (l '(uniquify starter-kit-defuns starter-kit-misc starter-kit-eshell))
-    (require l))
+  (mapc 'require '(uniquify starter-kit-defuns starter-kit-misc))
 
   ;; You can keep system- or user-specific customizations here
   (setq esk-system-config (concat user-emacs-directory system-name ".el")
@@ -57,8 +56,7 @@
   (when (file-exists-p esk-system-config) (load esk-system-config))
   (when (file-exists-p esk-user-config) (load esk-user-config))
   (when (file-exists-p esk-user-dir)
-    (dolist (l (directory-files esk-user-dir nil "^[^#].*el$"))
-      (load l))))
+    (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))
 
 (provide 'starter-kit)
 ;;; starter-kit.el ends here
