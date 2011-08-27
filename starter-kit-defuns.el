@@ -131,13 +131,6 @@ imenu index, then jumps to that symbol's location."
   (esk-untabify-buffer)
   (delete-trailing-whitespace))
 
-(defun esk-recentf-ido-find-file ()
-  "Find a recent file using ido."
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
-
 ;; Other
 
 (defun esk-eval-and-replace ()

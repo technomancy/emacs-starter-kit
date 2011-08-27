@@ -67,7 +67,6 @@
 
   ;; File finding
   (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
-  (global-set-key (kbd "C-x f") 'esk-recentf-ido-find-file)
   (global-set-key (kbd "C-c y") 'bury-buffer)
   (global-set-key (kbd "C-c r") 'revert-buffer)
 

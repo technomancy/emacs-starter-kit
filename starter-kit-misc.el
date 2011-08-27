@@ -76,9 +76,6 @@
 ;; (setq browse-url-browser-function 'browse-url-generic
 ;;       browse-url-generic-program "~/src/conkeror/conkeror")
 
-;; Save a list of recent files visited.
-(recentf-mode 1)
-
 ;; Highlight matching parentheses when the point is on them.
 (show-paren-mode 1)
 
@@ -90,6 +87,7 @@
         ido-auto-merge-work-directories-length nil
         ido-create-new-buffer 'always
         ido-use-filename-at-point 'guess
+        ido-use-virtual-buffers t
         ido-max-prospects 10))
 
 (set-default 'indent-tabs-mode nil)
