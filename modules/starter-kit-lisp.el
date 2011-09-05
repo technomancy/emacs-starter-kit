@@ -1,6 +1,6 @@
 ;;; starter-kit-lisp.el --- Saner defaults and goodies for lisp languages
 ;;
-;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;; Copyright (c) 2008-2011 Phil Hagelberg and contributors
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
@@ -82,13 +82,12 @@
     (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
               'esk-turn-on-paredit))
 
-  (eval-after-load 'clojure-mode
-    '(font-lock-add-keywords
-      'clojure-mode `(("(\\(fn\\>\\)"
-                       (0 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "\u0192")
-                                 nil)))))))
+  (defun esk-pretty-fn ()
+    (font-lock-add-keywords nil `(("(\\(fn\\>\\)"
+                                   (0 (progn (compose-region (match-beginning 1)
+                                                             (match-end 1)
+                                                             "\u0192") nil))))))
+  (add-hook 'clojure-mode-hook 'esk-pretty-fn))
 
 (provide 'starter-kit-lisp)
 ;;; starter-kit-lisp.el ends here
-
