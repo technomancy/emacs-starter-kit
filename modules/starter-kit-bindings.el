@@ -85,7 +85,7 @@
   (global-set-key (kbd "C-x C-m") 'shell)
 
   ;; If you want to be able to M-x without meta (phones, etc)
-  (global-set-key (kbd "C-c C-x") 'execute-extended-command)
+  (global-set-key (kbd "C-c x") 'execute-extended-command)
 
   ;; Help should search more than just commands
   (global-set-key (kbd "C-h a") 'apropos)
