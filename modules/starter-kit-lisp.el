@@ -6,7 +6,7 @@
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
 ;; Version: 2.0.2
 ;; Keywords: convenience
-;; Package-Requires: ((starter-kit "2.0.1"))
+;; Package-Requires: ((starter-kit "2.0.1") (elisp-slime-nav "0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -45,6 +45,7 @@
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
   (add-hook 'emacs-lisp-mode-hook 'esk-prog-mode-hook)
+  (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
 
   (defun esk-remove-elc-on-save ()
     "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -54,7 +55,6 @@
                 (if (file-exists-p (concat buffer-file-name "c"))
                     (delete-file (concat buffer-file-name "c"))))))
 
-  (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
 
 ;;; Enhance Lisp Modes
@@ -79,7 +79,8 @@
     (when (> (display-color-cells) 8)
       (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
                               '(("(\\|)" . 'esk-paren-face))))
-    (add-hook (intern (concat (symbol-name mode) "-mode-hook")) 'esk-turn-on-paredit)
+    (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+              'esk-turn-on-paredit)
     (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
               'esk-turn-on-paredit))
 
