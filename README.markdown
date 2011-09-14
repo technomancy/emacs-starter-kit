@@ -21,8 +21,9 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
 You'll need Emacs 24, which comes with package.el. It's not hard to
 compile [from source](http://github.com/emacsmirror/emacs), but
 precompiled versions are readily available for
-[Debian-based systems](http://emacs.naquadah.org/) and
-[Mac OS X](http://emacsformacosx.com).
+[Debian-based systems](http://emacs.naquadah.org/),
+[Mac OS X](http://emacsformacosx.com), and
+[Windows](http://code.google.com/p/emacs-for-windows/updates/list).
 
 Add Marmalade as a package archive source in ~/.emacs.d/init.el:
 
