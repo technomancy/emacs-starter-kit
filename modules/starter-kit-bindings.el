@@ -40,6 +40,9 @@
 
 ;;;###autoload
 (progn
+  ;; It's all about the project.
+  (global-set-key (kbd "C-c f") 'find-file-in-project)
+
   ;; You know, like Readline.
   (global-set-key (kbd "C-M-h") 'backward-kill-word)
 
