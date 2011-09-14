@@ -44,6 +44,7 @@
 (progn
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+  (add-hook 'emacs-lisp-mode-hook 'esk-prog-mode-hook)
 
   (defun esk-remove-elc-on-save ()
     "If you're saving an elisp file, likely the .elc is no longer valid."

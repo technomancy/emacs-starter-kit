@@ -92,6 +92,9 @@
 (add-hook 'prog-mode-hook 'esk-add-watchwords)
 (add-hook 'prog-mode-hook 'esk-turn-on-idle-highlight-mode)
 
+(defun esk-prog-mode-hook ()
+  (run-hooks 'prog-mode-hook))
+
 (defun esk-turn-off-tool-bar ()
   (tool-bar-mode -1))
 
