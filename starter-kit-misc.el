@@ -46,22 +46,19 @@
 ;; can't do it at launch or emacsclient won't always honor it
 (add-hook 'before-make-frame-hook 'esk-turn-off-tool-bar)
 
-(ansi-color-for-comint-mode-on)
-
 (setq visible-bell t
       inhibit-startup-message t
       color-theme-is-global t
       shift-select-mode nil
       mouse-yank-at-point t
-      x-select-enable-clipboard t
-      require-final-newline t ; crontabs break without this
-      truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(face trailing lines-tail tabs)
       whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
       oddmuse-directory "~/.emacs.d/oddmuse"
-      save-place-file "~/.emacs.d/places")
+      save-place-file "~/.emacs.d/places"
+      backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
+      diff-switches "-u")
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -80,15 +77,15 @@
 (show-paren-mode 1)
 
 ;; ido-mode is like magic pixie dust!
-(when (functionp 'ido-mode)
-  (ido-mode t)
-  (setq ido-enable-prefix nil
-        ido-enable-flex-matching t
-        ido-auto-merge-work-directories-length nil
-        ido-create-new-buffer 'always
-        ido-use-filename-at-point 'guess
-        ido-use-virtual-buffers t
-        ido-max-prospects 10))
+(ido-mode t)
+(setq ido-enable-prefix nil
+      ido-enable-flex-matching t
+      ido-auto-merge-work-directories-length nil
+      ido-create-new-buffer 'always
+      ido-use-filename-at-point 'guess
+      ido-use-virtual-buffers t
+      ido-handle-duplicate-virtual-buffers 2
+      ido-max-prospects 10)
 
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
@@ -109,22 +106,9 @@
 ;; Add this back in at the end of the list.
 (add-to-list 'hippie-expand-try-functions-list 'try-complete-file-name-partially t)
 
-;; Don't clutter up directories with files~
-(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
-
-;; Associate modes with file extensions
-
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
-(add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-
 (eval-after-load 'grep
   '(when (boundp 'grep-find-ignored-files)
      (add-to-list 'grep-find-ignored-files "*.class")))
-
-;; Default to unified diffs
-(setq diff-switches "-u")
 
 ;; Cosmetics
 
@@ -135,7 +119,7 @@
 
 (eval-after-load 'magit
   '(progn
-     (set-face-foreground 'magit-diff-add "green3")
+     (set-face-foreground 'magit-diff-add "green4")
      (set-face-foreground 'magit-diff-del "red3")))
 
 ;; Platform-specific stuff

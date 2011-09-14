@@ -93,9 +93,6 @@
   ;; Should be able to eval-and-replace anywhere.
   (global-set-key (kbd "C-c e") 'esk-eval-and-replace)
 
-  ;; For debugging Emacs modes
-  (global-set-key (kbd "C-c p") 'esk-message-point)
-
   ;; M-S-6 is awkward
   (global-set-key (kbd "C-c q") 'join-line)
 
