@@ -42,6 +42,7 @@
       eshell-buffer-shorthand t
       eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
 
+;;;###autoload
 (eval-after-load 'esh-opt
   '(progn
      (require 'em-prompt)
@@ -61,16 +62,26 @@
      (add-to-list 'eshell-command-completions-alist
                   '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))))
 
+;;;###autoload
 (defun eshell/cds ()
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
-(defun eshell/find (dir &rest opts)
-  (find-dired dir (mapconcat (lambda (arg)
-                               (if (get-text-property 0 'escaped arg)
-                                   (concat "\"" arg "\"")
-                                 arg))
-                             opts " ")))
+;; these two haven't made it upstream yet
+;;;###autoload
+(when (not (functionp 'eshell/find))
+  (defun eshell/find (dir &rest opts)
+    (find-dired dir (mapconcat (lambda (arg)
+                                 (if (get-text-property 0 'escaped arg)
+                                     (concat "\"" arg "\"")
+                                   arg))
+                               opts " "))))
+
+;;;###autoload
+(when (not (functionp 'eshell/rgrep))
+  (defun eshell/rgrep (&rest args)
+    "Use Emacs grep facility instead of calling external grep."
+    (eshell-grep "rgrep" args t)))
 
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
