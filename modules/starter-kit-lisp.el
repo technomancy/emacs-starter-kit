@@ -4,9 +4,9 @@
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
-;; Version: 2.0.2
+;; Version: 2.0.3
 ;; Keywords: convenience
-;; Package-Requires: ((starter-kit "2.0.1") (elisp-slime-nav "0.1"))
+;; Package-Requires: ((starter-kit "2.0.2") (elisp-slime-nav "0.1"))
 
 ;; This file is not part of GNU Emacs.
 
