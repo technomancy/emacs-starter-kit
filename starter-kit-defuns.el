@@ -56,7 +56,8 @@
   (auto-fill-mode t))
 
 (defun esk-turn-on-hl-line-mode ()
-  (when window-system (hl-line-mode t)))
+  (when (> (display-color-cells) 8)
+    (hl-line-mode t)))
 
 (defun esk-turn-on-save-place-mode ()
   (require 'saveplace)
