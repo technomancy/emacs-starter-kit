@@ -22,7 +22,7 @@ You'll need Emacs 24, which comes with package.el. It's not hard to
 compile [from source](http://github.com/emacsmirror/emacs), but
 precompiled versions are readily available for
 [Debian-based systems](http://emacs.naquadah.org/),
-[Mac OS X](http://emacsformacosx.com), and
+[Mac OS X](http://emacsformacosx.com/builds), and
 [Windows](http://code.google.com/p/emacs-for-windows/updates/list).
 
 Add Marmalade as a package archive source in ~/.emacs.d/init.el:
@@ -60,7 +60,7 @@ host-specific configuration.
 ## FAQ
 
 **Q:** When I try to create a new file or buffer, the autocompletion is eager and tries to use the name of an existing file or buffer.  
-**A:** That's called +ido-mode+, and it's awesome! But sometimes it
+**A:** That's called <tt>ido-mode</tt>, and it's awesome! But sometimes it
   gets in the way. To temporarily disable it, press C-f while the
   prompt is open. You can also press C-j while it's still enabled to
   force the creation of the name.
@@ -68,7 +68,9 @@ host-specific configuration.
 **Q:** When I'm writing Javascript, all my functions show up as ƒ. Am I going insane?  
 **A:** That's actually a render-time hack. The file on disk shows as
   "function", but it's just rendered using the script F in order to
-  tone down the verbosity inherent in the language a bit.
+  tone down the verbosity inherent in the language a bit. The same
+  happens with <tt>fn</tt> in Clojure and <tt>lambda</tt> to λ in
+  other lisps.
 
 **Q:** I can't delete parentheses in Lisp!  
 **A:** To be specific, you can't delete parenthesis if deleting the
@@ -81,15 +83,18 @@ host-specific configuration.
   a region regardless of Paredit's rules, and you can always insert a
   single character like a close-paren by prefixing it with C-q. You
   may find [the Paredit cheat 
-  sheet](http://www.emacswiki.org/emacs/PareditCheatsheet) helpful.
+  sheet](http://www.emacswiki.org/emacs/PareditCheatsheet)
+  helpful. You can also enable paredit for non-lisp modes using the
+  <tt>esk-paredit-nonlisp</tt> function.
 
 **Q:** How awesome is Emacs?  
 **A:** So awesome.
 
 ## Upgrading
 
-Users of the old version of the Starter Kit should be able to upgrade
-by deleting the starter-kit-specific files out of <tt>~/.emacs.d/</tt>:
+Users of the old version of the Starter Kit (version 1) should be able
+to upgrade by deleting the starter-kit-specific files out of
+<tt>~/.emacs.d/</tt>:
 
     $ rm -rf ~/.emacs.d/init.el ~/.emacs.d/elpa-to-submit/ ~/.emacs.d/starter-kit-*.el
 
@@ -98,11 +103,6 @@ other package.el dependencies; users may pick and choose which they
 want. It's also more modular, so language-specific starter kit modules
 must be installed separately. User-specific and host-specific files
 are still honored.
-
-## Todo
-
-* Further testing of deeply-transitive dependencies
-* Ensure dependencies are loaded for byte-compilation in package.el
 
 ## Copyright
 
