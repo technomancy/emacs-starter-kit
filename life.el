@@ -118,8 +118,8 @@
 
 (toggle-debug-on-error)
 
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;(load "auctex.el" nil t t)
+;(load "preview-latex.el" nil t t)
 
 (defun indent-buffer ()
   (interactive)
@@ -127,3 +127,6 @@
     (indent-region (point-min) (point-max) nil)))
 
 (setenv "DATABASE_URL" "postgresql://localhost:5432/tm_participation")
+
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
