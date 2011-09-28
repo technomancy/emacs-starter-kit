@@ -30,7 +30,7 @@ use [version 1](https://github.com/technomancy/emacs-starter-kit/tree/master).
 
 Add Marmalade as a package archive source in ~/.emacs.d/init.el:
 
-```Emacs Lisp
+```Lisp
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
@@ -54,7 +54,7 @@ Other modules are also available:
 It's recommended to create a list of packages in init.el which will be
 installed if they are found to not be present:
 
-```Emacs Lisp
+```Lisp
 (when (not package-archive-contents)
   (package-refresh-contents))
 
