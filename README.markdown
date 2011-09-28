@@ -25,12 +25,17 @@ precompiled versions are readily available for
 [Mac OS X](http://emacsformacosx.com/builds), and
 [Windows](http://code.google.com/p/emacs-for-windows/updates/list).
 
+If you need to maintain compatibility with Emacs 23 or 22, you need to
+use [version 1](https://github.com/technomancy/emacs-starter-kit/tree/master).
+
 Add Marmalade as a package archive source in ~/.emacs.d/init.el:
 
-    (require 'package)
-    (add-to-list 'package-archives
-                 '("marmalade" . "http://marmalade-repo.org/packages/") t)
-    (package-initialize)
+```Emacs Lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(package-initialize)
+````
 
 Then you can install it:
 
@@ -46,16 +51,34 @@ Other modules are also available:
 * starter-kit-perl
 * starter-kit-lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
 
-The Starter Kit used to be a git repository that you checked out and
-used as your own personal .emacs.d directory, but it's been
-restructured so that it can be treated like any other package, freeing
-you up to structure your .emacs.d directory as you wish.
+It's recommended to create a list of packages in init.el which will be
+installed if they are found to not be present:
+
+```Emacs Lisp
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+;; Add in your own as you wish:
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-bindings)
+  "A list of packages to ensure are installed at launch.")
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+```
+That way you can be ensured of a consistent experience across machines.
 
 There are a few conventions for naming files which will get loaded
 automatically. ~/.emacs.d/$USER.el as well as any files in the
 ~/.emacs.d/$USER/ directory. Finally, the Starter Kit will look for a
 file named after the current hostname ending in ".el" which will allow
 host-specific configuration.
+
+The Starter Kit used to be a git repository that you checked out and
+used as your own personal .emacs.d directory, but it's been
+restructured so that it can be treated like any other package, freeing
+you up to structure your .emacs.d directory as you wish. See
+"Upgrading" below.
 
 ## FAQ
 
@@ -82,8 +105,10 @@ host-specific configuration.
   expressions. Two things to remember: you can always use C-w to kill
   a region regardless of Paredit's rules, and you can always insert a
   single character like a close-paren by prefixing it with C-q. You
-  may find [the Paredit cheat 
-  sheet](http://www.emacswiki.org/emacs/PareditCheatsheet)
+  may find
+  [the Paredit cheat sheet](http://www.emacswiki.org/emacs/PareditCheatsheet)
+  or
+  [this Paredit walkthrough](https://github.com/technomancy/paredit-screencast/blob/master/outline.markdown)
   helpful. You can also enable paredit for non-lisp modes using the
   <tt>esk-paredit-nonlisp</tt> function.
 
@@ -93,20 +118,22 @@ host-specific configuration.
 ## Upgrading
 
 Users of the old version of the Starter Kit (version 1) should be able
-to upgrade by deleting the starter-kit-specific files out of
-<tt>~/.emacs.d/</tt>:
+to upgrade easily. Move your old Starter Kit checkout at
+<tt>~/.emacs.d</tt> out of the way and create a new directory
+containing <tt>init.el</tt> with the lines above. Copy your
+<tt>username.el</tt> and <tt>username</tt> directory from your old
+checkout into the new <tt>~/.emacs.d</tt>. You should be able to check
+this new directory into your main dotfiles repository instead of
+keeping it separate.
 
-    $ rm -rf ~/.emacs.d/init.el ~/.emacs.d/elpa-to-submit/ ~/.emacs.d/starter-kit-*.el
-
-The main difference is that the new one doesn't pull in a bunch of
-other package.el dependencies; users may pick and choose which they
-want. It's also more modular, so language-specific starter kit modules
-must be installed separately. User-specific and host-specific files
-are still honored.
+The main difference in version 2 is that the new one doesn't pull in a
+bunch of other package.el dependencies; users may pick and choose
+which they want, including language-specific modules. Read
+[more about the differences with version 1](http://technomancy.us/153).
 
 ## Copyright
 
-Copyright (C) 2008-2011 Phil Hagelberg and contributors
+Copyright © 2008-2011 Phil Hagelberg and contributors
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
