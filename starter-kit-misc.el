@@ -87,6 +87,18 @@
       ido-handle-duplicate-virtual-buffers 2
       ido-max-prospects 10)
 
+;; Keep spreading that magic ido pixie dust!
+(eval-after-load 'ido-ubiquitous
+  '(cond 
+    ;; New version
+    ((fboundp 'ido-ubiquitous)
+     (ido-ubiquitous 1))
+    ;; Old version
+    ((boundp 'ido-ubiquitous-enabled)
+     ;; Probably not required, since the old version of ido-ubiquitous
+     ;; is enabled by default.
+     (setq ido-ubiquitous-enabled t)))
+
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
 (set-default 'imenu-auto-rescan t)
