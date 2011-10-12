@@ -97,7 +97,7 @@
     ((boundp 'ido-ubiquitous-enabled)
      ;; Probably not required, since the old version of ido-ubiquitous
      ;; is enabled by default.
-     (setq ido-ubiquitous-enabled t)))
+     (setq ido-ubiquitous-enabled t))))
 
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
