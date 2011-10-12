@@ -1,6 +1,6 @@
 # Emacs Starter Kit — History of User-Visible Changes
 
-## 2.0.3 / ???
+## 2.0.3 / 2011-10-11
 
 * Update ido-ubiquitous to work better with M-x rgrep.
 * Save smex command history between Emacs launches.
