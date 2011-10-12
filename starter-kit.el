@@ -44,6 +44,7 @@
   (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
     (when (fboundp mode) (funcall mode -1)))
 
+  (add-to-list 'load-path (file-name-directory load-file))
   (mapc 'require '(uniquify starter-kit-defuns starter-kit-misc))
 
   ;; You can keep system- or user-specific customizations here
