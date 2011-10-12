@@ -124,16 +124,12 @@
      (set-face-foreground 'magit-diff-add "green4")
      (set-face-foreground 'magit-diff-del "red3")))
 
-;; Platform-specific stuff
-(when (eq system-type 'darwin)
-  ;; Work around a bug on OS X where system-name is FQDN
-  (setq esk-system-name (car (split-string system-name "\\."))))
-
 ;; Get around the emacswiki spam protection
-(add-hook 'oddmuse-mode-hook
-          (lambda ()
-            (unless (string-match "question" oddmuse-post)
-              (setq oddmuse-post (concat "uihnscuskc=1;" oddmuse-post)))))
+(eval-after-load 'oddmuse
+  (add-hook 'oddmuse-mode-hook
+            (lambda ()
+              (unless (string-match "question" oddmuse-post)
+                (setq oddmuse-post (concat "uihnscuskc=1;" oddmuse-post))))))
 
 (provide 'starter-kit-misc)
 ;;; starter-kit-misc.el ends here
