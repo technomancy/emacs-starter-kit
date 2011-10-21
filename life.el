@@ -13,7 +13,7 @@
 (require 'my-org-mode)
 (require 'sunrise-commander)
 (require 'undo-tree)
-(require 'ledger)
+; (require 'ledger)
 
 (global-undo-tree-mode)
 
@@ -29,26 +29,24 @@
                      (set-face-background
                       'mumamo-background-chunk-submode2 "#3F4F3F")
                      (set-face-background
-                      'mumamo-background-chunk-submode3 "#3F3F4F"))))
+                      'mumamo-background-chunk-submode3 "#3F3F4F")
+                     (set-face-attribute 'flymake-warnline nil
+                                         :background zenburn-bg
+                                         :underline "#ff7700")
+                     (set-face-attribute 'flymake-errline nil
+                                         :background zenburn-bg
+                                         :underline "#ff0000"))))
 (require 'flymake)
 
-(set-face-attribute 'flymake-warnline nil
-                    :background zenburn-bg
-                    :underline "#ff7700")
-(set-face-attribute 'flymake-errline nil
-                    :background zenburn-bg
-                    :underline "#ff0000")
-
-(require 'rvm)
-(rvm-use-default)
+; (require 'rvm)
+; (rvm-use-default)
 
 (defun shutdown-emacs-server () (interactive)
   (when (not (eq window-system 'x))
     (message "Initializing x windows system.")
     (x-initialize-window-system)
     (when (not x-display-name) (setq x-display-name (getenv "DISPLAY")))
-    (select-frame (make-frame-on-display x-display-name '((window-system . x))))
-    )
+    (select-frame (make-frame-on-display x-display-name '((window-system . x)))) )
   (let ((last-nonmenu-event nil)(window-system "x"))(save-buffers-kill-emacs)))
 
 (require 'ibuffer) 
@@ -79,6 +77,20 @@
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
 (global-set-key (kbd "<f11>")  'djcb-full-screen-toggle)
+
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+    (set-frame-parameter nil 'fullscreen
+                         (if (equal 'fullboth current-value)
+                             (if (boundp 'old-fullscreen) old-fullscreen nil)
+                           (progn (setq old-fullscreen current-value)
+                                  'fullboth)))))
+(global-set-key [f11] 'toggle-fullscreen)
+                                        ; Make new frames fullscreen by default. Note: this hook doesn't do
+                                        ; anything to the initial frame if it's in your .emacs, since that file is
+                                        ; read _after_ the initial frame is created.
+(add-hook 'after-make-frame-functions 'toggle-fullscreen)
 
 (add-hook 'server-switch-hook
   (lambda ()
@@ -130,3 +142,8 @@
 
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
+
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
