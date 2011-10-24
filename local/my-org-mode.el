@@ -14,6 +14,7 @@
 (define-key viper-vi-global-user-map "C-c /" 'org-sparse-tree)
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key (kbd "<f12>") 'org-agenda)
+(global-set-key (kbd "C-`") 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key (kbd "C-M-r") 'org-capture)
 
@@ -59,6 +60,7 @@
                                    ("c" tags "@calls-TODO=\"done\"" nil)
                                    ("w" tags "@waiting-TODO=\"done\"" nil)
                                    ("r" tags "refile" nil)
+                                   ("S" "Stories" tags-todo "+story")
                                    ("s" tags "+LEVEL=1+maybe" nil)
                                    ("E" "Todo items without context (in error)" 
                                     (( tags "+project+TODO=\"next\"-{@.*}")))
