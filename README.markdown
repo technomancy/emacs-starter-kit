@@ -49,7 +49,9 @@ Other modules are also available:
 * starter-kit-js
 * starter-kit-ruby
 * starter-kit-perl
-* starter-kit-lisp (including Emacs Lisp, Clojure, Scheme, and Common Lisp)
+* starter-kit-lisp (enhances Emacs Lisp, Clojure, Scheme, and Common Lisp)
+
+These modules are installed separately from the base Starter Kit package.
 
 It's recommended to create a list of packages in init.el which will be
 installed if they are found to not be present:
