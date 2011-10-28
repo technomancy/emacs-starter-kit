@@ -40,7 +40,7 @@
 ;; associated with that task, go to the end of your item and type:
 ;;
 ;; M-x org-screen
-;; 
+;;
 ;; This will prompt you for a name of a screen session.  Type in a
 ;; name and it will insert a link into your org file at your current
 ;; location.
@@ -79,10 +79,10 @@ is copied from ansi-term method."
 
   ;; Pick the name of the new buffer.
   (let ((term-ansi-buffer-name
-        (generate-new-buffer-name 
+        (generate-new-buffer-name
          (org-screen-buffer-name name))))
     (setq term-ansi-buffer-name
-          (term-ansi-make-term 
+          (term-ansi-make-term
           term-ansi-buffer-name org-screen-program-name nil arg name))
     (set-buffer term-ansi-buffer-name)
     (term-mode)
@@ -104,5 +104,5 @@ is copied from ansi-term method."
 		 '("screen" . "elisp:(org-screen-goto \"%s\")"))
   (setq org-link-abbrev-alist
 	'(("screen" . "elisp:(org-screen-goto \"%s\")"))))
- 
+
 (provide 'org-screen)

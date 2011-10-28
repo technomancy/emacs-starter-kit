@@ -25,7 +25,7 @@
 ;;; Commentary:
 
 ;; See the online documentation for more information
-;; 
+;;
 ;;   http://orgmode.org/worg/org-contrib/babel/
 
 ;;; Code:
@@ -192,7 +192,7 @@ has taken place."
 Example and verbatim code include escaped portions of
 an org-mode buffer code that should be treated as normal
 org-mode text."
-  (or (org-in-indented-comment-line) 
+  (or (org-in-indented-comment-line)
       (save-excursion
 	(save-match-data
 	  (goto-char (point-at-bol))

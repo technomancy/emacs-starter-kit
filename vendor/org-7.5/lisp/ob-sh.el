@@ -56,7 +56,7 @@ This will be passed to  `shell-command-on-region'")
 This function is called by `org-babel-execute-src-block'."
   (let* ((session (org-babel-sh-initiate-session
 		   (cdr (assoc :session params))))
-         (result-params (cdr (assoc :result-params params))) 
+         (result-params (cdr (assoc :result-params params)))
          (full-body (org-babel-expand-body:generic
 		     body params (org-babel-variable-assignments:sh params))))
     (org-babel-reassemble-table

@@ -351,7 +351,7 @@ Either remove headline and meta data, or do special formatting."
 		 (priority (or (match-string 3 headline) ""))
 		 (heading (or (match-string 4 headline) ""))
 		 (tags (or (match-string 5 headline) ""))
-		 (backend-spec (assq org-export-current-backend 
+		 (backend-spec (assq org-export-current-backend
 				     org-inlinetask-export-templates))
 		 (format-str (org-add-props (nth 1 backend-spec)
 				 '(org-protected t)))

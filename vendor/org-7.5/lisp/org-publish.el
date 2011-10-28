@@ -197,8 +197,8 @@ The following properties control the creation of a concept index.
 Other properties affecting publication.
 
   :body-only              Set this to 't' to publish only the body of the
-                         documents, excluding everything outside and 
-                         including the <body> tags in HTML, or 
+                         documents, excluding everything outside and
+                         including the <body> tags in HTML, or
                          \begin{document}..\end{document} in LaTeX."
   :group 'org-publish
   :type 'alist)
@@ -525,9 +525,9 @@ matching filenames."
 		 (xm (concat "^" b (if r ".+" "[^/]+") "\\.\\(" x "\\)$")))
 	    (when
 		(or
-		   (and 
+		   (and
 		  i (member filename
-			    (mapcar 
+			    (mapcar
 			     (lambda (file) (expand-file-name file b))
 			     i)))
 		   (and
@@ -566,8 +566,8 @@ PUB-DIR is the publishing directory."
 	(setq export-buf-or-file
 	      (funcall (intern (concat "org-export-as-" format))
 		       (plist-get plist :headline-levels)
-		       nil plist nil 
-		       (plist-get plist :body-only) 
+		       nil plist nil
+		       (plist-get plist :body-only)
 		       pub-dir))
 	(when (and (bufferp export-buf-or-file)
 		   (buffer-live-p export-buf-or-file))
@@ -800,7 +800,7 @@ Default for SITEMAP-FILENAME is 'sitemap.org'."
 					(+ (length indent-str) 2) ?\ )))))))
 	    ;; This is common to 'flat and 'tree
 	    (let ((entry
-		   (org-publish-format-file-entry sitemap-file-entry-format 
+		   (org-publish-format-file-entry sitemap-file-entry-format
 						  file project-plist))
 		  (regexp "\\(.*\\)\\[\\([^][]+\\)\\]\\(.*\\)"))
 	      (cond ((string-match-p regexp entry)
@@ -809,7 +809,7 @@ Default for SITEMAP-FILENAME is 'sitemap.org'."
 				     "[[file:" link "]["
 				     (match-string 2 entry)
 				     "]]" (match-string 3 entry) "\n")))
-		    (t 
+		    (t
 		     (insert (concat indent-str " + [[file:" link "]["
 				     entry
 				     "]]\n"))))))))
@@ -819,10 +819,10 @@ Default for SITEMAP-FILENAME is 'sitemap.org'."
 (defun org-publish-format-file-entry (fmt file project-plist)
   (format-spec fmt
 	     `((?t . ,(org-publish-find-title file t))
-	       (?d . ,(format-time-string sitemap-date-format 
+	       (?d . ,(format-time-string sitemap-date-format
 					  (org-publish-find-date file)))
 	       (?a . ,(or (plist-get project-plist :author) user-full-name)))))
-			    
+
 (defun org-publish-find-title (file &optional reset)
   "Find the title of FILE in project."
   (or

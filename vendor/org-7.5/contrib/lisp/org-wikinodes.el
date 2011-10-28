@@ -174,7 +174,7 @@ setting of `org-wikinodes-create-targets'."
 	(message "New Wiki target `%s' created in current buffer"
 		 target))))))
 
-;;; The target cache 
+;;; The target cache
 
 (defvar org-wikinodes-directory-targets-cache nil)
 
@@ -206,7 +206,7 @@ setting of `org-wikinodes-create-targets'."
 	(while (re-search-forward re nil t)
 	  (push (org-match-string-no-properties 4) targets))))
     (nreverse targets)))
-		    
+
 (defun org-wikinodes-get-links-for-directory (dir)
   "Return an alist that connects wiki links to files in directory DIR."
   (let ((files (directory-files dir nil "\\`[^.#].*\\.org\\'"))
@@ -328,7 +328,7 @@ with working links."
 	(setcdr m (cons '(org-wikinodes-activate-links) (cdr m)))
       (message
        "Failed to add wikinodes to `org-font-lock-extra-keywords'."))))
-  
+
 (add-hook 'org-font-lock-set-keywords-hook
 	  'org-wikinodes-add-to-font-lock-keywords)
 

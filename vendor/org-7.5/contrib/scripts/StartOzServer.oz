@@ -1,5 +1,5 @@
 %%% *************************************************************
-%%% Copyright (C) 2009 Torsten Anders (www.torsten-anders.de) 
+%%% Copyright (C) 2009 Torsten Anders (www.torsten-anders.de)
 %%% This program is free software; you can redistribute it and/or
 %%% modify it under the terms of the GNU General Public License
 %%% as published by the Free Software Foundation; either version 2
@@ -41,7 +41,7 @@ MyCompiler = Emacs.condSend.compiler
 {MyCompiler enqueue(setSwitch(expression false))}
 {MyCompiler enqueue(feedVirtualString("declare X=3\n{Browse X*X}"))}
 
-%% Note: expressions starting with keyword declare need keyword in 
+%% Note: expressions starting with keyword declare need keyword in
 {MyCompiler enqueue(setSwitch(expression true))}
 {Browse
  {MyCompiler enqueue(feedVirtualString("declare X=3\nin X*X" return(result: $)))}}
@@ -109,13 +109,13 @@ proc {MakeServer Host PortNo ?MyServer ?MyClient}
       thread H in % P
 	 %% suspends until a connection has been accepted
 	 {MyServer accept(host:H
-			  acceptClass:Open.socket  
-			  accepted:?MyClient)} 
+			  acceptClass:Open.socket
+			  accepted:?MyClient)}
 %	    {Myserver accept(host:H port:P)} % suspends until a connection has been accepted
 	 %% !!?? port number of client is usually created randomly..
 	 {System.showInfo "% connection accepted from host "#H}
       end
-      %% !!??? 
+      %% !!???
       %% If Accept is called recursively, then server accepts multiple connections. These share the same compiler instance (e.g. variable bindings are shared). For multiple independent compiler instances call the OzServer application multiple times.
       %% However, how shall the output for multiple connections be sorted?? Would using the different client sockets created with the Server accept method work?
       %% NB: The number of clients accepted concurrently must be limited to the number set by {MyServer listen}
@@ -135,7 +135,7 @@ MySocket = {MakeServer localhost MyPort _/*MyServer*/}
 
 
 %%
-%% Read socket input 
+%% Read socket input
 %%
 
 declare
@@ -183,7 +183,7 @@ MyStream = {ReadToStream MySocket 1024}
 %%
 
 %% NOTE: Input code must be expression
-thread 
+thread
    {ForAll {ReadToStream MySocket 1024}
     proc {$ Code}
        Result
@@ -192,7 +192,7 @@ thread
 % 				 "skip\n" % do something in any case..
 				 Code
 				 "\ncatch E then {Error.printException E}\n"
-				 "error\n" % in case of an error, return 'error' 
+				 "error\n" % in case of an error, return 'error'
 				 "end\n"]
 		   List.append}
     in
@@ -216,5 +216,5 @@ end
 
 
 
-   
+
 

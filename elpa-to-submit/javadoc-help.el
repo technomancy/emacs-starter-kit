@@ -76,7 +76,7 @@
 ;;
 ;;  Set up the javadocs by going to the Javadoc-help menu.  You can then add
 ;;  a url-based javadoc or a local file-based javadoc using the 'u' or 'f'
-;;  command key.  The javadoc urls should be pointing to the main index 
+;;  command key.  The javadoc urls should be pointing to the main index
 ;;  directory of the javadoc, which containing the allclasses-frame.html file.
 ;;  For example, http://commons.apache.org/lang/api-release/, /opt/jsee/docs/api/, or
 ;;  c:/jdk/docs/api/.  The entered javadocs are saved persistently.
@@ -93,7 +93,7 @@
 ;;    .*lang.*String
 ;;    java.io
 ;;
-;;  The lookup might produce multiple matches.  The *Javadoc-Search-Result* 
+;;  The lookup might produce multiple matches.  The *Javadoc-Search-Result*
 ;;  window offers a number of commands to view the class, the package, or the
 ;;  main javadoc page.
 ;;
@@ -174,7 +174,7 @@
          (search-term (jdh-get-search-input initial-search-term))
          match-list
          single-result-url)
-    (when (and search-term 
+    (when (and search-term
                (> (length search-term) 0))
       (setq match-list (jdh-search-in-files search-term))
       (if (null match-list)
@@ -361,7 +361,7 @@
 (defun jdh-get-search-input (initial-search-term)
   "Get the search term input from user."
   (interactive)
-  (let* ((input-str (read-from-minibuffer 
+  (let* ((input-str (read-from-minibuffer
                      "Search Name: "
                      initial-search-term
                      nil
@@ -376,7 +376,7 @@
   "Search the search term in the javadoc files."
   (let ((allclasses-files (jdh-get-allclasses-files))
         (match-list nil))
-    (if (and search-term 
+    (if (and search-term
              (> (length search-term) 0))
         (mapc (lambda (file-record)
                 (when file-record
@@ -493,7 +493,7 @@
 
 ; Set up bound searching method for (thing-at-point 'java-identifier)
 (require 'thingatpt)
-(put 'java-identifier 'bounds-of-thing-at-point 
+(put 'java-identifier 'bounds-of-thing-at-point
      (lambda ()
        "Determine where a Java identifier begins and ends for (thing-at-point 'java-identifier)"
        (save-excursion

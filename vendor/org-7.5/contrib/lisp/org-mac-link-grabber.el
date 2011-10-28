@@ -2,7 +2,7 @@
 ;;; application and insert them as links into org-mode documents
 ;;
 ;; Copyright (c) 2010 Free Software Foundation, Inc.
-;; 
+;;
 ;; Author: Anthony Lander <anthony.lander@gmail.com>
 ;; Version: 1.0.1
 ;; Keywords: org, mac, hyperlink
@@ -50,7 +50,7 @@
 ;; add (require 'org-mac-link-grabber) to your .emacs, and optionally
 ;; bind a key to activate the link grabber menu, like this:
 ;;
-;; (add-hook 'org-mode-hook (lambda () 
+;; (add-hook 'org-mode-hook (lambda ()
 ;;   (define-key org-mode-map (kbd "C-c g") 'omlg-grab-link)))
 ;;
 ;;
@@ -159,7 +159,7 @@ applications and inserting them in org documents"
 			  (when (and active (eq input key))
 				(call-interactively grab-function))))
 		  descriptors)))
-  
+
 (defalias 'omgl-grab-link 'omlg-grab-link
   "Renamed, and this alias will be obsolete next revision.")
 
@@ -342,7 +342,7 @@ applications and inserting them in org documents"
 					 "	return theUrl & \"::split::\" & theName & \"\n\"\n"
 					 "end tell\n"))))
 	(car (split-string result "[\r\n]+" t))))
-	
+
 (defun org-mac-safari-get-frontmost-url ()
   (interactive)
   (message "Applescript: Getting Safari url...")
@@ -359,7 +359,7 @@ applications and inserting them in org documents"
 (defun org-mac-safari-insert-frontmost-url ()
   (interactive)
   (insert (org-mac-safari-get-frontmost-url)))
-		
+
 
 ;;
 ;;

@@ -3492,7 +3492,7 @@ given in `org-agenda-start-on-weekday'."
   (setq org-agenda-last-arguments (list include-all start-day span))
   (org-compile-prefix-format 'agenda)
   (org-set-sorting-strategy 'agenda)
-  (let* ((span (org-agenda-ndays-to-span 
+  (let* ((span (org-agenda-ndays-to-span
 		(or span org-agenda-ndays org-agenda-span)))
 	 (today (org-today))
 	 (sd (or start-day today))
@@ -4339,7 +4339,7 @@ of what a project is and how to check if it stuck, customize the variable
 	  (if (zerop (buffer-size))
 	      (setq entries nil)
 	    (setq entries (buffer-substring (point-min) (- (point-max) 1)))
-	    (setq entries 
+	    (setq entries
 		  (with-temp-buffer
 		    (insert entries) (goto-char (point-min))
 		    (while (re-search-forward "\n[ \t]+\\(.+\\)$" nil t)
@@ -4702,7 +4702,7 @@ This function is invoked if `org-agenda-todo-ignore-deadlines',
 	    b3 (match-beginning 3) e3 (match-end 3)
 	    todo-state (save-match-data (ignore-errors (org-get-todo-state)))
 	    show-all (or (eq org-agenda-repeating-timestamp-show-all t)
-			 (member todo-state 
+			 (member todo-state
 				 org-agenda-repeating-timestamp-show-all)))
       (catch :skip
 	(and (org-at-date-range-p) (throw :skip nil))
@@ -4956,7 +4956,7 @@ be skipped."
 	      pos (1- (match-beginning 1))
 	      todo-state (save-match-data (org-get-todo-state))
 	      show-all (or (eq org-agenda-repeating-timestamp-show-all t)
-			   (member todo-state 
+			   (member todo-state
 				    org-agenda-repeating-timestamp-show-all))
 	      d2 (org-time-string-to-absolute
 		  (match-string 1) d1 'past show-all)
@@ -5461,7 +5461,7 @@ The modified list may contain inherited tags, and tags matched by
 	   2 (length (car new)) 'face 'org-time-grid (car new))))
       (when (and todayp org-agenda-show-current-time-in-grid)
 	(push (org-format-agenda-item
-	       nil 
+	       nil
 	       org-agenda-current-time-string
 	       "" nil
 	       (format-time-string "%H:%M "))
@@ -7918,7 +7918,7 @@ This is a command that has to be installed in `calendar-mode-map'."
 	(when (string-match regexp (get-text-property (point) 'txt))
 	  (setq entries-marked (+ entries-marked 1))
 	  (call-interactively 'org-agenda-bulk-mark))))
-    (if (not entries-marked) 
+    (if (not entries-marked)
 	(message "No entry matching this regexp."))))
 
 (defun org-agenda-bulk-unmark ()

@@ -1289,7 +1289,7 @@ lang=\"%s\" xml:lang=\"%s\">
 				   `((?t . ,title)
 				     (?a . ,author) (?d . ,date) (?e . ,email)))))
 	  (insert  "<h1 class=\"title\">" title "</h1>")))
-      
+
       (if (and org-export-with-toc (not body-only))
 	  (progn
 	    (push (format "<h%d>%s</h%d>\n"

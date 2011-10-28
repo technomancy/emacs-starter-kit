@@ -18,16 +18,16 @@ function init()
 		// parse command line arguments
 		var cmdLine = window.arguments[0];
 		cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
-		
+
 		embedFonts = cmdLine.handleFlag("embed-fonts", false);
 		finalMathJaxURL = cmdLine.handleFlagWithParam("final-mathjax-url", false);
-		
+
 		if (!embedFonts && !finalMathJaxURL) {
 			alert("You must eiher specify --embed-fonts or --final-mathjax-url");
 			window.close();
 			return;
 		}
-		
+
 		sourceFilePath = cmdLine.getArgument(0);
 		destFilePath = cmdLine.getArgument(1);
 		if ( !sourceFilePath || !destFilePath ) {
@@ -35,7 +35,7 @@ function init()
 			window.close();
 			return;
 		}
-		
+
 		sourceFile = cmdLine.resolveFile(sourceFilePath);
 		if (! (sourceFile.exists() && sourceFile.isFile()) ) {
 			alert("Invalid source file path.");
@@ -43,7 +43,7 @@ function init()
 			return;
 		}
 		sourceURI = cmdLine.resolveURI(sourceFilePath);
-		
+
 		// create a nsIFile object for the output file
 		try{
 			destFile = cmdLine.resolveURI(destFilePath).QueryInterface(Components.interfaces.nsIFileURL).file;
@@ -52,7 +52,7 @@ function init()
 			window.close();
 			return;
 		}
-		
+
 		// add iframeLoaded() as an onload event handler, then navigate to the source file
 		docFrame.addEventListener("DOMContentLoaded", iframeLoaded, true);
 		docFrame.setAttribute("src", sourceURI.spec);
@@ -86,15 +86,15 @@ function fileURLtoDataURI(url)
 		.getService(Components.interfaces.nsIIOService);
 	var url_object = ios.newURI(url, "", null);
 	var file = url_object.QueryInterface(Components.interfaces.nsIFileURL).file;
-								
-	var data = "";  
-	var fstream = Components.classes["@mozilla.org/network/file-input-stream;1"].  
+
+	var data = "";
+	var fstream = Components.classes["@mozilla.org/network/file-input-stream;1"].
 		createInstance(Components.interfaces.nsIFileInputStream);
 	fstream.init(file, -1, -1, false);
-	var bstream = Components.classes["@mozilla.org/binaryinputstream;1"].  
-		createInstance(Components.interfaces.nsIBinaryInputStream);  
-	bstream.setInputStream(fstream);  
-				
+	var bstream = Components.classes["@mozilla.org/binaryinputstream;1"].
+		createInstance(Components.interfaces.nsIBinaryInputStream);
+	bstream.setInputStream(fstream);
+
 	var bytes = bstream.readBytes(bstream.available());
 	b64bytes = btoa(bytes);
 
@@ -108,28 +108,28 @@ function serialize()
 
 	var searchURIList = new Array();
 	var replacementURIList = new Array();
-	
+
 	log("serialize: preprocessing");
 
 	// remove the MathJax status message window
 	msgdiv = docFrame.contentDocument.getElementById("MathJax_Message");
 	msgdiv.parentNode.removeChild(msgdiv);
-	
+
 	/* Loop through all CSS rules to find all @font-face rules.
 	   At this point, they refer to local absolute paths using file:// URLs.
 	   Replace them either with appropriate URLs relative to finalMathJaxURL
 	   or with data URIs. */
-	
+
 	for (var i = 0; i<docFrame.contentDocument.styleSheets.length; i++) {
 		var stylesheet = docFrame.contentDocument.styleSheets[i];
-		
+
 		for (var j=0; j< stylesheet.cssRules.length; j++) {
 			var rule = stylesheet.cssRules[j];
 			if (rule.cssText.match("font-face")) {
 
 				url = rule.style.getPropertyValue("src");
 				url = url.match(/url\(\"(.+)\"\)/)[1];
-				
+
 				// Since the properties seem read-only here, we populate
 				// searchURIList and replacementURIList to do text substitution
 				// after serialization
@@ -138,7 +138,7 @@ function serialize()
 					replacementURIList.push(fileURLtoDataURI(url));
 				} else {
 					replacementURIList.push(url.replace(MathJaxURL, finalMathJaxURL));
-				}				
+				}
 			}
 		}
 	}
@@ -157,11 +157,11 @@ function serialize()
 
 	var serializer = new XMLSerializer();
 	var xhtml = serializer.serializeToString(docFrame.contentDocument);
-	
+
 	log("serialize: postprocessing");
 	// make the MathJax URL relative again
 	//	xhtml = xhtml.replace(findMathJaxURL, "MathJax");
-	
+
 	try{
 		r1 = RegExp("&lt;!--/\\*--&gt;&lt;!\\[CDATA\\[/\\*&gt;&lt;!--\\*/", "g");
 		xhtml = xhtml.replace(r1, "");
@@ -172,7 +172,7 @@ function serialize()
 	}catch(e){alert(e);}
 	for (var i=0; i<searchURIList.length; i++)
 		xhtml = xhtml.replace(searchURIList[i], replacementURIList[i]);
-	
+
 	save(xhtml);
 	window.close();
 }
@@ -183,7 +183,7 @@ function save(xhtml)
 		var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].
 			createInstance(Components.interfaces.nsIFileOutputStream);
 
-		foStream.init(destFile, 0x02 | 0x08 | 0x20, 0666, 0); 
+		foStream.init(destFile, 0x02 | 0x08 | 0x20, 0666, 0);
 		// write, create, truncate
 
 		// write in UTF-8 encoding

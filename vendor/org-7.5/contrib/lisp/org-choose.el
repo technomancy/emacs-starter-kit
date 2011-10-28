@@ -44,13 +44,13 @@
 ;;     * Use C-S-right to change the keyword set.  Use this to change to
 ;;       the "choose" keyword set that you just defined.
 
-;;     * Use S-right to advance the TODO mark to the next setting.  
+;;     * Use S-right to advance the TODO mark to the next setting.
 
 ;;       For "choose", that means you like this alternative more than
 ;;       before.  Other alternatives will be automatically demoted to
 ;;       keep your settings consistent.
 
-;;     * Use S-left to demote TODO to the previous setting.  
+;;     * Use S-left to demote TODO to the previous setting.
 
 ;;       For "choose", that means you don't like this alternative as much
 ;;       as before.  Other alternatives will be automatically promoted,
@@ -81,7 +81,7 @@ Indexes are 0-based or `nil'.
    static-default
    all-keywords)
 
-(defvar org-choose-mark-data 
+(defvar org-choose-mark-data
    ()
    "Alist of information for choose marks.
 
@@ -99,7 +99,7 @@ Each entry is an `org-choose-mark-data.'" )
       (not
 	 (string-match "(.*)" i))
       (list i i)
-      (let* 
+      (let*
 	 (
 	    (end-text (match-beginning 0))
 	    (vanilla-text (substring i 0 end-text))
@@ -114,7 +114,7 @@ Each entry is an `org-choose-mark-data.'" )
 		  ;;When string starts with "," `split-string' doesn't
 		  ;;make a first arg, so in that case make one
 		  ;;manually.
-		  (if 
+		  (if
 		     (string-match "^," args)
 		     (cons nil arglist-x)
 		     arglist-x)))
@@ -155,11 +155,11 @@ Each entry is an `org-choose-mark-data.'" )
 			;;item.
 			(top-upper-range
 			   (or top-upper-range (1- num-items)))
-			(lower-range-length 
+			(lower-range-length
 			   (1+ (- static-default bot-lower-range)))
-			(upper-range-length 
+			(upper-range-length
 			   (- top-upper-range static-default))
-			(range-length 
+			(range-length
 			   (min upper-range-length lower-range-length)))
 
 
@@ -192,7 +192,7 @@ Each entry is an `org-choose-mark-data.'" )
 ;;;_  . org-choose-filter-tail
 (defun org-choose-filter-tail (raw)
    "Return a translation of RAW to vanilla and set appropriate
-buffer-local variables. 
+buffer-local variables.
 
 RAW is a list of strings representing the input text of a choose
 interpretation."
@@ -217,7 +217,7 @@ interpretation."
 	    (push vanilla-mark vanilla-list)))
 
       (org-choose-setup-vars bot-lower-range top-upper-range
-	 static-default index (reverse all-mark-texts)) 
+	 static-default index (reverse all-mark-texts))
       (nreverse vanilla-list)))
 
 ;;;_  . org-choose-setup-filter
@@ -232,35 +232,35 @@ interpretation."
 ;;;_  . org-choose-conform-after-promotion
 (defun org-choose-conform-after-promotion (entry-pos keywords highest-ok-ix)
   "Conform the current item after another item was promoted"
-   
+
    (unless
       ;;Skip the entry that triggered this by skipping any entry with
       ;;the same starting position.  plist uses the start of the
       ;;header line as the position, but map no longer does, so we
       ;;have to go back to the heading.
-      (= 
+      (=
 	 (save-excursion
 	    (org-back-to-heading)
-	    (point)) 
+	    (point))
 	 entry-pos)
       (let
 	 ((ix
 	     (org-choose-get-entry-index keywords)))
 	 ;;If the index of the entry exceeds the highest allowable
 	 ;;index, change it to that.
-	 (when (and ix 
+	 (when (and ix
 		  (> ix highest-ok-ix))
-	    (org-todo 
+	    (org-todo
 	       (nth highest-ok-ix keywords))))))
 ;;;_  . org-choose-conform-after-demotion
 (defun org-choose-conform-after-demotion (entry-pos keywords
 					       raise-to-ix
-					       old-highest-ok-ix) 
+					       old-highest-ok-ix)
   "Conform the current item after another item was demoted."
 
    (unless
       ;;Skip the entry that triggered this.
-      (= 
+      (=
 	 (save-excursion
 	    (org-back-to-heading)
 	    (point))
@@ -271,11 +271,11 @@ interpretation."
 	 ;;If the index of the entry was at or above the old allowable
 	 ;;position, change it to the new mirror position if there is
 	 ;;one.
-	 (when (and 
-		  ix 
+	 (when (and
+		  ix
 		  raise-to-ix
 		  (>= ix old-highest-ok-ix))
-	    (org-todo 
+	    (org-todo
 	       (nth raise-to-ix keywords))))))
 
 ;;;_ , org-choose-keep-sensible (the org-trigger-hook function)
@@ -285,7 +285,7 @@ setting was changed."
    (let*
       (  (from (plist-get change-plist :from))
 	 (to (plist-get change-plist :to))
-	 (entry-pos 
+	 (entry-pos
 	    (set-marker
 	       (make-marker)
 	       (plist-get change-plist :position)))
@@ -301,11 +301,11 @@ setting was changed."
 		  (org-choose-mark-data.-all-keywords data))
 	       (old-index
 		  (org-choose-get-index-in-keywords
-		     from 
+		     from
 		     keywords))
 	       (new-index
 		  (org-choose-get-index-in-keywords
-		     to 
+		     to
 		     keywords))
 	       (highest-ok-ix
 		  (org-choose-highest-other-ok
@@ -322,7 +322,7 @@ setting was changed."
 			 (> new-index old-index))
 			(list
 			   #'org-choose-conform-after-promotion
-			   entry-pos keywords 
+			   entry-pos keywords
 			   highest-ok-ix))
 		     (t	;;Otherwise the entry was demoted.
 			(let
@@ -336,14 +336,14 @@ setting was changed."
 				 (org-choose-highest-other-ok
 				    old-index
 				    data)))
-			   
+
 			   (list
-			      #'org-choose-conform-after-demotion 
-			      entry-pos 
+			      #'org-choose-conform-after-demotion
+			      entry-pos
 			      keywords
 			      raise-to-ix
 			      old-highest-ok-ix))))))
-	    
+
 	    (if funcdata
 	       ;;The funny-looking names are to make variable capture
 	       ;;unlikely.  (Poor-man's lexical bindings).
@@ -354,8 +354,8 @@ setting was changed."
 			;;We may call `org-todo', so let various hooks
 			;;`nil' so we don't cause loops.
 			org-after-todo-state-change-hook
-			org-trigger-hook 
-			org-blocker-hook 
+			org-trigger-hook
+			org-blocker-hook
 			org-todo-get-default-hook
 			;;Also let this alist `nil' so we don't log
 			;;secondary transitions.
@@ -364,7 +364,7 @@ setting was changed."
 		     (funcall map-over-entries
 			#'(lambda ()
 			     (apply func-d473 args-46k))))))))
-      
+
       ;;Remove the marker
       (set-marker entry-pos nil)))
 
@@ -391,7 +391,7 @@ setting was changed."
 
 (defun org-choose-get-fn-map-group ()
    "Return a function to map over the group"
-   
+
    #'(lambda (fn)
        (require 'org-agenda) ;; `org-map-entries' seems to need it.
 	(save-excursion
@@ -400,7 +400,7 @@ setting was changed."
 	  (let
  	      ((level (org-reduced-level (org-outline-level))))
 	    (save-restriction
-	      (org-map-entries 
+	      (org-map-entries
 	       fn
 	       (format "LEVEL=%d" level)
 	       'tree))))))
@@ -416,10 +416,10 @@ If there is none, return 0"
 	 ;;Func maps over applicable entries.
 	 (map-over-entries
 	    (org-choose-get-fn-map-group))
-	 
+
 	 (indexes-list
 	    (remove nil
-	       (funcall map-over-entries 
+	       (funcall map-over-entries
 		  #'(lambda ()
 		       (org-choose-get-entry-index keywords))))))
       (if
@@ -436,7 +436,7 @@ given that another mark has index IX.
 DATA must be a `org-choose-mark-data.'."
 
    (let
-      (		
+      (
 	 (bot-lower-range
 	    (org-choose-mark-data.-bot-lower-range data))
 	 (top-upper-range
@@ -453,7 +453,7 @@ DATA must be a `org-choose-mark-data.'."
 
 ;;;_  . org-choose-get-default-mark-index
 
-(defun org-choose-get-default-mark-index (data) 
+(defun org-choose-get-default-mark-index (data)
   "Return the index of the default mark in a choose interpretation.
 
 DATA must be a `org-choose-mark-data.'."
@@ -473,7 +473,7 @@ DATA must be a `org-choose-mark-data.'."
 ;;;_  . org-choose-get-mark-N
 (defun org-choose-get-mark-N (n data)
    "Get the text of the nth mark in a choose interpretation."
-   
+
    (let*
       ((l (org-choose-mark-data.-all-keywords data)))
       (nth n l)))

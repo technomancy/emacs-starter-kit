@@ -270,7 +270,7 @@ Also exclude files matching `org-mobile-files-exclude-regexp'."
 		     (t nil)))
 		  org-mobile-files)))
 	 (files (delete
-		 nil 
+		 nil
 		 (mapcar (lambda (f)
 			   (unless (and (not (string= org-mobile-files-exclude-regexp ""))
 					(string-match org-mobile-files-exclude-regexp f))
@@ -497,7 +497,7 @@ agenda view showing the flagged items."
 				 org-mobile-directory))
     (save-excursion
       (setq buf (find-file file))
-      (when (and (= (point-min) (point-max))) 
+      (when (and (= (point-min) (point-max)))
 	(insert "\n")
 	(save-buffer)
 	(when org-mobile-use-encryption

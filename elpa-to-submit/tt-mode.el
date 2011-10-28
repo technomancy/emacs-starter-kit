@@ -6,7 +6,7 @@
 ;;
 ;; $Id$
 ;;
-;; This file adds simple font highlighting of TT directives when you are 
+;; This file adds simple font highlighting of TT directives when you are
 ;; editing Template Toolkit files.
 ;;
 ;; I usually give these files an extension of .tt and in order to automatically
@@ -22,7 +22,7 @@
 ;;
 ;; Author: Dave Cross <dave@dave.org.uk>
 ;;
-;; 
+;;
 ;; $Log: tt-mode.el,v $
 ;; Revision 1.1.1.1  2006/01/10 21:49:53  dave
 ;; dave.org.uk web site
@@ -57,18 +57,18 @@
 
 (defvar tt-keywords "\\bGET\\b\\|\\bCALL\\b\\|\\bSET\\b\\|\\bDEFAULT\\b\\|\\bINSERT\\b\\|\\bINCLUDE\\b\\|\\bBLOCK\\b\\|\\bEND\\b\\|\\bPROCESS\\b\\|\\bWRAPPER\\b\\|\\bIF\\b\\|\\bUNLESS\\b\\|\\bELSIF\\b\\|\\bELSE\\b\\|\\bSWITCH\\b\\|\\bCASE\\b\\|\\bFOR\\b\\|\\bFOREACH\\b\\|\\bWHILE\\b\\|\\bFILTER\\b\\|\\bUSE\\b\\|\\bMACRO\\b\\|\\bPERL\\b\\|\\bRAWPERL\\b\\|\\bTRY\\b\\|\\bTHROW\\b\\|\\bCATCH\\b\\|\\bFINAL\\b\\|\\bLAST\\b\\|\\bRETURN\\b\\|\\bSTOP\\b\\|\\bCLEAR\\b\\|\\bMETA\\b\\|\\bTAGS")
 
-(defvar tt-font-lock-keywords 
+(defvar tt-font-lock-keywords
    (list
     ;; Fontify [& ... &] expressions
-    '("\\(\\[%[-+]?\\)\\(.+?\\)\\([-+]?%\\]\\)"  
+    '("\\(\\[%[-+]?\\)\\(.+?\\)\\([-+]?%\\]\\)"
       (1 font-lock-string-face t)
       (2 font-lock-variable-name-face t)
       (3 font-lock-string-face t))
     ;; Look for keywords within those expressions
     (list (concat
 	   "\\[%[-+]? *\\("
-	   tt-keywords 
-	   "\\)") 
+	   tt-keywords
+	   "\\)")
 	  1 font-lock-keyword-face t)
     '("\\[% *\\(#.*?\\)%\\]"
       (1 font-lock-comment-face t))

@@ -58,7 +58,7 @@
       (org-store-link-props
        :link (org-make-link "eshell:" link)
        :description command))))
-  
+
 
 (provide 'org-eshell)
 

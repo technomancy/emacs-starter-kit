@@ -113,11 +113,11 @@ type         The type of entry.  Valid types are:
 target       Specification of where the captured item should be placed.
              In Org-mode files, targets usually define a node.  Entries will
              become children of this node, other types will be added to the
-             table or list in the body of this node.  
+             table or list in the body of this node.
 
-             Most target specifications contain a file name.  If that file 
-             name is the empty string, it defaults to `org-default-notes-file'.  
-             A file can also be given as a variable, function, or Emacs Lisp 
+             Most target specifications contain a file name.  If that file
+             name is the empty string, it defaults to `org-default-notes-file'.
+             A file can also be given as a variable, function, or Emacs Lisp
              form.
 
              Valid values are:

@@ -67,7 +67,7 @@ large example block")
 (defcustom org-eval-light-interpreters '("lisp" "emacs-lisp" "ruby" "shell")
   "Interpreters allows for evaluation tags.
 This is a list of program names (as strings) that can evaluate code and
-insert the output into an Org-mode buffer.  Valid choices are 
+insert the output into an Org-mode buffer.  Valid choices are
 
 lisp    Interpret Emacs Lisp code and display the result
 shell   Pass command to the shell and display the result
@@ -189,7 +189,7 @@ commented by `org-eval-light-make-region-example'."
   (with-temp-buffer
     (insert code)
     (shell-command-on-region (point-min) (point-max) cmd nil 'replace)
-    (buffer-string)))  
+    (buffer-string)))
 
 (defadvice org-ctrl-c-ctrl-c (around org-cc-eval-source activate)
   (if (org-eval-light-inside-snippet)

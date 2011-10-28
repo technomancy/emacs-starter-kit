@@ -163,7 +163,7 @@ Dates and Times
 
 Capture - Refile - Archive
 
-* Capture::			
+* Capture::
 * Refiling notes::		Moving a tree from one place to another
 * Archiving::			What to do with finished projects
 
@@ -214,7 +214,7 @@ Exporting
 * HTML export::			Exporting to HTML
 * LaTeX and PDF export::	Exporting to La@TeX{}, and processing to PDF
 * DocBook export::		Exporting to DocBook
-* iCalendar export::		
+* iCalendar export::
 
 Miscellaneous
 
@@ -296,7 +296,7 @@ yourself.
 @end smalllisp
 
 With this setup, all files with extension @samp{.org} will be put
-into Org mode. 
+into Org mode.
 
 @node Feedback,  , Activation, Introduction
 @section Feedback
@@ -922,7 +922,7 @@ action}) from the DONE states (which need @emph{no further action}).  If
 you don't provide the separator bar, the last state is used as the DONE
 state.
 With this setup, the command @kbd{C-c C-t} will cycle an entry from TODO
-to FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED.  
+to FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED.
 
 Sometimes you may want to use different sets of TODO keywords in
 parallel.  For example, you may want to have the basic
@@ -1377,7 +1377,7 @@ Prompt for a date and insert a corresponding timestamp.  When the cursor is
 at an existing timestamp in the buffer, the command is used to modify this
 timestamp instead of inserting a new one.  When this command is used twice in
 succession, a time range is inserted.  With a prefix, also add the current
-time. 
+time.
 @c
 @item C-c !
 Like @kbd{C-c .}, but insert an inactive timestamp that will not cause
@@ -1526,7 +1526,7 @@ projects need to be moved around.  Moving completed project trees to an
 archive file keeps the system compact and fast.
 
 @menu
-* Capture::			
+* Capture::
 * Refiling notes::		Moving a tree from one place to another
 * Archiving::			What to do with finished projects
 @end menu
@@ -1567,7 +1567,7 @@ for capturing new stuff.
 Start a capture process.  You will be placed into a narrowed indirect buffer
 to edit the item.
 @item C-c C-c
-Once you are done entering information into the capture buffer, 
+Once you are done entering information into the capture buffer,
 @kbd{C-c C-c} will return you to the window configuration before the capture
 process, so that you can resume your work without further distraction.
 @item C-c C-w
@@ -1796,7 +1796,7 @@ available in the TODO list are described in @ref{Agenda commands}.
 Show the global TODO list.  This collects the TODO items from all
 agenda files (@pxref{Agenda Views}) into a single buffer.
 @item C-c a T
-Like the above, but allows selection of a specific TODO keyword. 
+Like the above, but allows selection of a specific TODO keyword.
 @end table
 
 @node Matching tags and properties, Timeline, Global TODO list, Built-in agenda views
@@ -1871,13 +1871,13 @@ This is a special search that lets you select entries by matching a substring
 or specific words using a boolean logic.
 @end table
 For example, the search string @samp{computer equipment} will find entries
-that contain @samp{computer equipment} as a substring. 
+that contain @samp{computer equipment} as a substring.
 Search view can also search for specific keywords in the entry, using Boolean
 logic.  The search string @samp{+computer +wifi -ethernet -@{8\.11[bg]@}}
 will search for note entries that contain the keywords @code{computer}
 and @code{wifi}, but not the keyword @code{ethernet}, and which are also
 not matched by the regular expression @code{8\.11[bg]}, meaning to
-exclude both 8.11b and 8.11g. 
+exclude both 8.11b and 8.11g.
 
 Note that in addition to the agenda files, this command will also search
 the files listed in @code{org-agenda-text-search-extra-files}.
@@ -1917,7 +1917,7 @@ Go to the original location of the item and delete other windows.
 Delete other windows.
 @c
 @item d @r{/} w
-Switch to day/week view. 
+Switch to day/week view.
 @c
 @item f @r{and} b
 Go forward/backward in time to display the following
@@ -2151,7 +2151,7 @@ but not any simpler
 You can make words @b{*bold*}, @i{/italic/}, _underlined_, @code{=code=}
 and @code{~verbatim~}, and, if you must, @samp{+strike-through+}.  Text
 in the code and verbatim string is not processed for Org-mode specific
-syntax, it is exported verbatim.  To insert a horizontal rules, use a line 
+syntax, it is exported verbatim.  To insert a horizontal rules, use a line
 consisting of only dashes, and at least 5 of them.
 
 @node Comment lines,  , Emphasis and monospace, Structural markup elements
@@ -2295,7 +2295,7 @@ that planning information can be incorporated into desktop calendars.
 * HTML export::			Exporting to HTML
 * LaTeX and PDF export::	Exporting to La@TeX{}, and processing to PDF
 * DocBook export::		Exporting to DocBook
-* iCalendar export::		
+* iCalendar export::
 @end menu
 
 @node Export options, The export dispatcher, Exporting, Exporting

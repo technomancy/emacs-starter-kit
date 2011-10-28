@@ -140,8 +140,8 @@ The cheat can be saved with `cheat-save-current-buffer'."
 (defun cheat-command (&rest rest)
   "Run the cheat command with the given arguments, display the output."
   (interactive "sArguments for cheat: \n")
-  (let* ((cmd (string-join " " rest)) 
-         (buffer (get-buffer-create 
+  (let* ((cmd (string-join " " rest))
+         (buffer (get-buffer-create
                   (concat "*Cheat: " cmd "*"))))
       (shell-command (concat "cheat " cmd) buffer)))
 

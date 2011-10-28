@@ -207,7 +207,7 @@ applications in order to mimic `org-store-link'.  Used by
   :group 'org-mairix)
 
 (defcustom org-mairix-mutt-display-command
-  "xterm -title 'mairix search: %search%' -e 'unset COLUMNS; mutt -f 
+  "xterm -title 'mairix search: %search%' -e 'unset COLUMNS; mutt -f
 ~/mail/mairix -e \"push <display-message>\"' &"
   "Command to execute to display mairix search results via mutt within
 an xterm.
@@ -244,7 +244,7 @@ along with general mairix configuration."
   :group 'org-mairix-gnus
   :type 'string)
 
-(defcustom org-mairix-gnus-select-display-group-function 
+(defcustom org-mairix-gnus-select-display-group-function
 'org-mairix-gnus-select-display-group-function-gg
   "Hook to call to select the group that contains the matching articles.
 We should not need this, it is owed to a problem of gnus that people were
@@ -285,7 +285,7 @@ to do that -- so you're likely to see zombies floating around.
 
 If you can improve this, please do!"
   (if (not (equal (substring search 0 2) "m:" ))
-      (error "org-mairix-gnus-display-results: display of search other than 
+      (error "org-mairix-gnus-display-results: display of search other than
 message-id not implemented yet"))
   (setq message-id (substring search 2 nil))
   (require 'gnus)

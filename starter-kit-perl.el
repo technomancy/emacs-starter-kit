@@ -14,7 +14,7 @@
 (add-to-list 'auto-mode-alist '("\\.tt$" . tt-mode))
 
 ;; TODO: flymake
-;; TODO: electric bugaloo 
+;; TODO: electric bugaloo
 
 (provide 'starter-kit-perl)
 ;; starter-kit-perl.el ends here

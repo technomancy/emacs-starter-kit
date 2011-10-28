@@ -9,13 +9,13 @@
   located in this file. It is possible to add source-code blocks from
   any org-mode file to the library by calling =(org-babel-lob-ingest
   "path/to/file.org")=.
-  
+
   This file is included in worg mainly less for viewing through the
   web interface, and more for contribution through the worg git
   repository.  If you have code snippets that you think others may
   find useful please add them to this file and [[file:~/src/worg/worg-git.org::contribute-to-worg][contribute them]] to
   worg.
-  
+
   The raw Org-mode text of this file can be downloaded at
   [[repofile:contrib/babel/library-of-babel.org][library-of-babel.org]]
 
@@ -134,7 +134,7 @@ example usage
 :   (flet ((fib (m) (if (< m 2) 1 (+ (fib (- m 1)) (fib (- m 2))))))
 :     (mapcar (lambda (el) (list el (fib el))) (number-sequence 0 (- n 1))))
 : #+end_src
-: 
+:
 : #+call: gdoc-write(title="fibs", data=fibs(n=10))
 
 * Plotting code
@@ -244,7 +244,7 @@ are optional.
   %head
   %foot
   %lastfoot
-  
+
   %table
   \\end{longtable}\n"
    (list
@@ -294,7 +294,7 @@ a + b
 
 The =elispgantt= source block was sent to the mailing list by Eric
 Fraga.  It was modified slightly by Tom Dye.
- 
+
 #+source: elispgantt
 #+begin_src emacs-lisp :var table=gantttest
   (let ((dates "")

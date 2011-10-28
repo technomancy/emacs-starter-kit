@@ -52,9 +52,9 @@
 					 ("M" "meeting"
 					  ((tags "-TODO=\"done\"-LEVEL=1+@agenda")))
 
-                                         ("E" "Todo items without context (in error)" 
+                                         ("E" "Todo items without context (in error)"
                                           (( tags "+project+TODO=\"next\"-{@.*}")))
-                                         ("p" "projects"   
+                                         ("p" "projects"
                                           ((tags "+LEVEL=1+project"))))))
 
 ;; Refile

@@ -97,7 +97,7 @@
 ;;    :PROPERTIES:
 ;;      :TRIGGER: chain-siblings(NEXT)
 ;;    :END:
-;; 
+;;
 ;; ** This is the second in this chain
 ;;
 ;; ** This is the third in this chain
@@ -112,7 +112,7 @@
 ;;   :END:
 ;;
 ;; ** This is the fifth in this chain
-;; 
+;;
 ;; * Start writing report
 ;;   :PROPERTIES:
 ;;     :ID: XYZ-is-my-id
@@ -237,7 +237,7 @@ this ID property, that entry is also checked."
 	    ;; and split it on whitespace.
 	    (setq blocker (org-entry-get pos "BLOCKER")
 		  blockers (and blocker (org-split-string blocker "[ \t]+")))
-	    
+
 	    ;; go through all the blockers
 	    (while (setq bl (pop blockers))
 	      (cond
@@ -268,7 +268,7 @@ this ID property, that entry is also checked."
 	    )))
     (when org-depend-tag-blocked
       (org-toggle-tag "blocked" (if proceed-p 'off 'on)))
-    
+
     proceed-p))
 
 (add-hook 'org-trigger-hook 'org-depend-trigger-todo)

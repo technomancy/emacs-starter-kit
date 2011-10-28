@@ -40,7 +40,7 @@
 ;; - add more useful header arguments (user, passwd, database, etc...)
 ;; - support for more engines (currently only supports mysql)
 ;; - what's a reasonable way to drop table data into SQL?
-;; 
+;;
 
 ;;; Code:
 (require 'ob)

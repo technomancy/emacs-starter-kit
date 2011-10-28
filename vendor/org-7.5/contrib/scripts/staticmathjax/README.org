@@ -22,15 +22,15 @@ The code is licensed under the GNU General Public License version
   To run Static MathJax, an existing XULRunner installation is
   required. From the directory to which you unpacked Static MathJax,
   run:
-    
+
   xulrunner application.ini <--embed-fonts | --final-mathjax-url <URL>>
   <input file> <output file>
 
   If you prefer to call "staticmathjax" instead of "xulrunner
   application.ini", link xulrunner-stub into the directory:
   ln /usr/lib/xulrunner-1.9.2.8/xulrunner-stub ./staticmathjax
-  
-  - input file :: 
+
+  - input file ::
       name of the input file (the result of a HTML export
       from Org-mode). It is assumed that this file uses the
 	  UTF-8 character encoding.
@@ -38,27 +38,27 @@ The code is licensed under the GNU General Public License version
   - output file ::
       name of the output file.
 
-  - --embed-fonts :: 
+  - --embed-fonts ::
       if specified, the math fonts will be embedded into
 	  the output file using data: URIs
 
-  - --final-mathjax-url <URL> :: 
+  - --final-mathjax-url <URL> ::
 	  if --embed-fonts is not specified, this
       must be the URL to a MathJax installation folder (e.g. "MathJax"
       if MathJax is installed in a subdirectory, or
       "http://orgmode.org/mathjax" to use the version hosted on the Org
       website.
-	  
+
 	  All references to math fonts in the output file will point to
 	  this directory.
 
 * Caveats
-  
+
   The input file must not use a MathJax installation on the
   web. Otherwise, due to a security feature of Firefox, MathJax will
   fallback to image fonts.  If you have unpacked MathJax to a
   subdirectory "MathJax", specify the following in your Org file:
-  
+
   #+MathJax: path:"MathJax"
 
   The math is rendered in Firefox, so MathJax applies its
@@ -69,7 +69,7 @@ The code is licensed under the GNU General Public License version
   Internet Explorer does not use the correct font, because it only
   supports the EOT font format. For all other browsers (including
   Firefox), MathJax uses the OTF font format.
-  
+
   Embedding fonts into the HTML file wastes some space due to the
   base64 encoding used in data: URIs.
 

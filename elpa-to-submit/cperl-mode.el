@@ -1385,7 +1385,7 @@
 ;;; `beginning-of-buffer':	Replaced two occurences with goto-char...
 ;;; `cperl-calculate-indent':	`char-after' could be nil...
 ;;; `cperl-find-pods-heres':	REx can start after "[" too
-;;;				Hightlight (??{}) in RExen too 
+;;;				Hightlight (??{}) in RExen too
 ;;; `cperl-maybe-white-and-comment-rex': New constant
 ;;; `cperl-white-and-comment-rex': Likewise
 ;;;				XXXX Not very efficient, but hard to make
@@ -1406,7 +1406,7 @@
 ;;; `cperl-calculate-indent':	Likewise
 ;;;				Don't special-case REx with non-empty 1st line
 ;;; `cperl-find-pods-heres':	In RExen, highlight non-literal backslashes
-;;;				Invert highlighting of charclasses: 
+;;;				Invert highlighting of charclasses:
 ;;;					now the envelop is highlighted
 ;;;				Highlight many others 0-length builtins
 ;;; `cperl-praise':		Mention indenting and highlight in RExen
@@ -2815,7 +2815,7 @@ versions of Emacs."
 	  ["Contract groups" cperl-contract-levels
 	   cperl-use-syntax-table-text-property]
 	  "----"
-	  ["Find next interpolated" cperl-next-interpolated-REx 
+	  ["Find next interpolated" cperl-next-interpolated-REx
 	   (next-single-property-change (point-min) 'REx-interpolated)]
 	  ["Find next interpolated (no //o)"
 	   cperl-next-interpolated-REx-0
@@ -3489,7 +3489,7 @@ or as help on variables `cperl-tips', `cperl-problems',
   (or (bolp)
       (beginning-of-line))
   (insert
-  "my $o = sprintf grep //, <<EOP, $ENV{$_} or warn $$msg[0] for @ARGV; #junk 
+  "my $o = sprintf grep //, <<EOP, $ENV{$_} or warn $$msg[0] for @ARGV; #junk
 some string
 EOP
 -f _ or -f $_ or die 'What?';
@@ -4475,7 +4475,7 @@ Will not look before LIM."
 				    (skip-chars-backward " \t")
 				    (looking-at "[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*:")))
 			     (get-text-property (point) 'first-format-line)))
-		   
+
 		   ;; Look at previous line that's at column 0
 		   ;; to determine whether we are in top-level decls
 		   ;; or function's arg decls.  Set basic-indent accordingly.
@@ -4709,7 +4709,7 @@ and closing parentheses and brackets."
 	 ((eq 'toplevel (elt i 0)) ;; [toplevel start char-after state immed-after-block]
 	  (+ (save-excursion		; To beg-of-defun, or end of last sexp
 	       (goto-char (elt i 1))	; start = Good place to start parsing
-	       (- (current-indentation) ; 
+	       (- (current-indentation) ;
 		  (if (elt i 4) cperl-indent-level 0)))	; immed-after-block
 	     (if (eq (elt i 2) ?{) cperl-continued-brace-offset 0) ; char-after
 	     ;; Look at previous line that's at column 0
@@ -5026,7 +5026,7 @@ modify syntax-type text property if the situation is too hard."
 		 (set-syntax-table reset-st))
 	     (or end
 		 (and
-		      cperl-brace-recursing 
+		      cperl-brace-recursing
 		      (or (eq ostart  ?\{)
 			  (eq starter ?\{)))
 		 (message
@@ -5581,7 +5581,7 @@ the sections using `cperl-pod-head-face', `cperl-pod-face',
 	       ;;; XXX What to do: foo <<bar ???
 	       ;;; XXX Need to support print {a} <<B ???
 				       (forward-sexp -1)
-				       (save-match-data	
+				       (save-match-data
 					; $foo << b; $f .= <<B;
 					; ($f+1) << b; a($f) . <<B;
 					; foo 1, <<B; $x{a} <<b;
@@ -5613,7 +5613,7 @@ the sections using `cperl-pod-head-face', `cperl-pod-face',
 			qtag (regexp-quote tag))
 		  (cond (cperl-pod-here-fontify
 			 ;; Highlight the starting delimiter
-			 (cperl-postpone-fontification 
+			 (cperl-postpone-fontification
 			  b1 e1 'face my-cperl-delimiters-face)
 			 (cperl-put-do-not-fontify b1 e1 t)))
 		  (forward-line)
@@ -5979,7 +5979,7 @@ the sections using `cperl-pod-head-face', `cperl-pod-face',
 ;;;m^a[x\\[:alpha:][:alpha:]\\[:alpha:][-aa-[[:alpha:]\\[:alpha:][:alpha:]]^;
 			(save-excursion
 			  (goto-char (1+ b))
-			  ;; First 
+			  ;; First
 			  (cperl-look-at-leading-count is-x-REx e)
 			  (setq hairy-RE
 				(concat
@@ -6148,7 +6148,7 @@ the sections using `cperl-pod-head-face', `cperl-pod-face',
 					    "\\=[01234567]?[01234567]?"
 					    (1- e) 'to-end))
 				      (and (memq qtag (append "89" nil))
-					   (re-search-forward 
+					   (re-search-forward
 					    "\\=[0123456789]*" (1- e) 'to-end))
 				      (and (eq qtag ?x)
 					   (re-search-forward
@@ -7542,7 +7542,7 @@ indentation and initial hashes.  Behaves usually outside of comment."
 				   ","
 				   cperl-maybe-white-and-comment-rex
 				   "\\([$@%*]\\([a-zA-Z0-9_:]+\\|[^a-zA-Z0-9_]\\)\\)"))
-			;; Bug in font-lock: limit is used not only to limit 
+			;; Bug in font-lock: limit is used not only to limit
 			;; searches, but to set the "extend window for
 			;; facification" property.  Thus we need to minimize.
 			(, (if cperl-font-lock-multiline
@@ -8515,7 +8515,7 @@ construct.  DONE-TO and STATEPOS indicate changes to internal caches maintained
 by CPerl."
   (interactive "P")
   (or arg
-      (setq arg (if (eq cperl-syntaxify-by-font-lock 
+      (setq arg (if (eq cperl-syntaxify-by-font-lock
 			(if backtrace 'backtrace 'message)) 0 1)))
   (setq arg (if (> arg 0) (if backtrace 'backtrace 'message) t))
   (setq cperl-syntaxify-by-font-lock arg)
@@ -9988,7 +9988,7 @@ We suppose that the regexp is scanned already."
 (defun cperl-invert-if-unless-modifiers ()
   "Change `B if A;' into `if (A) {B}' etc if possible.
 \(Unfinished.)"
-  (interactive)				; 
+  (interactive)				;
   (let (A B pre-B post-B pre-if post-if pre-A post-A if-string
 	  (w-rex "\\<\\(if\\|unless\\|while\\|until\\|for\\|foreach\\)\\>"))
     (and (= (char-syntax (preceding-char)) ?w)

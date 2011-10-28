@@ -62,9 +62,9 @@
                                    ("r" tags "refile" nil)
                                    ("S" "Stories" tags-todo "+story")
                                    ("s" tags "+LEVEL=1+maybe" nil)
-                                   ("E" "Todo items without context (in error)" 
+                                   ("E" "Todo items without context (in error)"
                                     (( tags "+project+TODO=\"next\"-{@.*}")))
-                                   ("p" "projects"   
+                                   ("p" "projects"
                                     ((tags "+LEVEL=1+project"))))))
 
 ;; Refile
@@ -90,7 +90,7 @@
 (defun life/clock-in-to-started (kw)
   (if (member (org-get-todo-state) (list "inbox" "next"))
       "started"))
-  
+
 ;; Crypt
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)

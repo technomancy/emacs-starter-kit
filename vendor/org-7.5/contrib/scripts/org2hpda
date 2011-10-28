@@ -1,30 +1,30 @@
-# org2hpda - a small utility to generate hipster pda style printouts from org mode 
+# org2hpda - a small utility to generate hipster pda style printouts from org mode
 # Copyright (C) 2007  Christian Egli
-# 
+#
 # Version: 0.6
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Commentary:
 # ===========
 #
-# set cal-tex-diary to true so that diary entries show up in the calendar 
+# set cal-tex-diary to true so that diary entries show up in the calendar
 #
 # Usage:
 # ======
 #
-# run this makefile with 
+# run this makefile with
 #
 #  make -f org2hpda
 #
@@ -32,7 +32,7 @@
 # two PDFs containing nicely printed weekly and monthly calendars. One
 # is done in the style of a pocketMod (http://www.pocketmod.com/) and
 # the other is done in the style of the Hipster PDA
-# (http://en.wikipedia.org/wiki/Hipster_PDA). 
+# (http://en.wikipedia.org/wiki/Hipster_PDA).
 #
 # Requirements:
 # =============
@@ -47,7 +47,7 @@ DIARY = $($(EMACS) -eval "diary-file")
 # Number of weeks to be printed. Should be a multiple of 4, because 4
 # of them are merged on one page. Can be set when invoking the script
 # as follows: make NUMBER_OF_WEEKS=8 -f org2hpda
-NUMBER_OF_WEEKS = 4 
+NUMBER_OF_WEEKS = 4
 
 hipsterFiles =  weekCalendar.pdf yearCalendar.pdf monthCalendar3.pdf monthCalendar2.pdf monthCalendar1.pdf
 pocketModFiles =  weekCalendar.pdf yearCalendar-rotated.pdf \
@@ -58,8 +58,8 @@ all: pocketMod.pdf hipsterPDA.pdf
 %.dvi: %.tex
 	# Quick hack to massage the LaTeX produced by cal-tex
 	# quote '@', then increase font size of week calendars,
-	# increase font of diary entries in moth calendar and 
-	# finally reduce links to their destination, i.e. 
+	# increase font of diary entries in moth calendar and
+	# finally reduce links to their destination, i.e.
 	# change '[[http://foo][bar]]' to 'bar'
 	sed 	-e 's/\\verb|@|/\@/g' \
 		-e 's/documentclass\[11pt\]/documentclass[12pt]/g' \

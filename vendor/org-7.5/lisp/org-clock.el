@@ -2033,7 +2033,7 @@ from the dynamic block defintion."
   ;; much easier because there can be a fixed format with a
   ;; well-defined number of columns...
   (let* ((hlchars '((1 . "*") (2 . "/")))
-	 (lwords (assoc (or (plist-get params :lang) 
+	 (lwords (assoc (or (plist-get params :lang)
 			    org-export-default-language)
 			org-clock-clocktable-language-setup))
 	 (multifile (plist-get params :multifile))
@@ -2118,14 +2118,14 @@ from the dynamic block defintion."
        (if multifile (concat (nth 1 lwords) "|") "")  ; file column, maybe
        (if level-p   (concat (nth 2 lwords) "|") "")  ; level column, maybe
        (if timestamp (concat (nth 3 lwords) "|") "")  ; timestamp column, maybe
-       (concat (nth 4 lwords) "|" 
+       (concat (nth 4 lwords) "|"
 	       (nth 5 lwords) "|\n"))                 ; headline and time columns
 
       ;; Insert the total time in the table
       (insert-before-markers
        "|-\n"                            ; a hline
        "|"                               ; table line starter
-       (if multifile (concat "| " (nth 6 lwords) " ") "") 
+       (if multifile (concat "| " (nth 6 lwords) " ") "")
 				         ; file column, maybe
        (if level-p   "|"      "")        ; level column, maybe
        (if timestamp "|"      "")        ; timestamp column, maybe

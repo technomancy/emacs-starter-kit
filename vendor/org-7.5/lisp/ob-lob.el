@@ -25,7 +25,7 @@
 ;;; Commentary:
 
 ;; See the online documentation for more information
-;; 
+;;
 ;;   http://orgmode.org/worg/org-contrib/babel/
 
 ;;; Code:
@@ -93,7 +93,7 @@ if so then run the appropriate source block from the Library."
       (beginning-of-line 1)
       (if (looking-at org-babel-lob-one-liner-regexp)
           (append
-	   (mapcar #'org-babel-clean-text-properties 
+	   (mapcar #'org-babel-clean-text-properties
 		   (list
 		    (format "%s%s(%s)%s"
 			    (match-string 2)
@@ -102,7 +102,7 @@ if so then run the appropriate source block from the Library."
 			    (or (match-string 6) "") (match-string 7))
 		    (match-string 8)))
 	   (list (length (match-string 1))))))))
-  
+
 (defun org-babel-lob-execute (info)
   "Execute the lob call specified by INFO."
   (let ((params (org-babel-process-params

@@ -301,7 +301,7 @@ this heading."
 	  (org-paste-subtree (org-get-valid-level level (and heading 1)))
 	  ;; Shall we append inherited tags?
 	  (and itags
-	       (or (and (eq org-archive-subtree-add-inherited-tags 'infile) 
+	       (or (and (eq org-archive-subtree-add-inherited-tags 'infile)
 			infile-p)
 		   (eq org-archive-subtree-add-inherited-tags t))
 	       (org-set-tags-to atags))

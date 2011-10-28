@@ -37,7 +37,7 @@
 
 
 
-(defcustom org-drill-question-tag 
+(defcustom org-drill-question-tag
   "drill"
   "Tag which topics must possess in order to be identified as review topics
 by `org-drill'."
@@ -253,10 +253,10 @@ for review unless they were already reviewed in the recent past?")
       (setf (nth j list) temp)
       (setq i (1+ i))))
   list)
-    
+
 
 (defun time-to-inactive-org-timestamp (time)
-  (format-time-string 
+  (format-time-string
    (concat "[" (substring (cdr org-time-stamp-formats) 1 -1) "]")
    time))
 
@@ -423,7 +423,7 @@ Returns a list: (INTERVAL N EF OFMATRIX), where:
       (/ (+ 100 (* (* (/ -1 b) (log (- 1 (* (/ b a ) (abs p)))))
                    (sign p)))
          100))))
-      
+
 
 (defun inter-repetition-interval-sm5 (last-interval n ef &optional of-matrix)
   (let ((of (get-optimal-factor n ef of-matrix)))
@@ -442,9 +442,9 @@ Returns a list: (INTERVAL N EF OFMATRIX), where:
                               (modify-of (get-optimal-factor n ef of-matrix)
                                          quality org-learn-fraction))
           ef next-ef)
-    
+
     (cond
-     ;; "Failed" -- reset repetitions to 0, 
+     ;; "Failed" -- reset repetitions to 0,
      ((<= quality org-drill-failure-quality)
       (list -1 1 ef of-matrix))      ; Not clear if OF matrix is supposed to be
                                      ; preserved
@@ -502,10 +502,10 @@ Returns a list: (INTERVAL N EF OFMATRIX), where:
                 (if (eq ch ??)
                     "0-2 Means you have forgotten the item.
 3-5 Means you have remembered the item.
- 
-0 - Completely forgot. 
-1 - Even after seeing the answer, it still took a bit to sink in. 
-2 - After seeing the answer, you remembered it. 
+
+0 - Completely forgot.
+1 - Even after seeing the answer, it still took a bit to sink in.
+2 - After seeing the answer, you remembered it.
 3 - It took you awhile, but you finally remembered.
 4 - After a little bit of thought you remembered.
 5 - You remembered the item really easily.
@@ -673,7 +673,7 @@ Consider reformulating the item to make it easier to remember.\n"
 ;; recall, nil if they chose to quit.
 
 (defun org-drill-present-simple-card ()
-  (with-hidden-cloze-text 
+  (with-hidden-cloze-text
    (org-drill-hide-all-subheadings-except nil)
    (org-display-inline-images t)
    (org-cycle-hide-drawers 'all)
@@ -682,7 +682,7 @@ Consider reformulating the item to make it easier to remember.\n"
 
 
 (defun org-drill-present-two-sided-card ()
-  (with-hidden-cloze-text 
+  (with-hidden-cloze-text
    (let ((drill-sections (org-drill-hide-all-subheadings-except nil)))
      (when drill-sections
        (save-excursion
@@ -698,13 +698,13 @@ Consider reformulating the item to make it easier to remember.\n"
 
 
 (defun org-drill-present-multi-sided-card ()
-  (with-hidden-cloze-text 
+  (with-hidden-cloze-text
    (let ((drill-sections (org-drill-hide-all-subheadings-except nil)))
      (when drill-sections
        (save-excursion
          (goto-char (nth (random (length drill-sections)) drill-sections))
          (org-show-subtree)))
-     (org-display-inline-images t)    
+     (org-display-inline-images t)
      (org-cycle-hide-drawers 'all)
      (prog1
          (org-drill-presentation-prompt)
@@ -736,11 +736,11 @@ Consider reformulating the item to make it easier to remember.\n"
       (org-show-subtree)
       (org-drill-unhide-clozed-text))))
 
-  
+
 (defun org-drill-present-spanish-verb ()
   (let ((prompt nil)
         (reveal-headings nil))
-    (with-hidden-cloze-text 
+    (with-hidden-cloze-text
      (case (random 6)
        (0
         (org-drill-hide-all-subheadings-except '("Infinitive"))
@@ -798,17 +798,17 @@ See `org-drill' for more details."
   (let ((card-type (org-entry-get (point) "DRILL_CARD_TYPE"))
         (cont nil))
     (save-restriction
-      (org-narrow-to-subtree) 
+      (org-narrow-to-subtree)
       (org-show-subtree)
       (org-cycle-hide-drawers 'all)
-      
+
       (let ((presentation-fn (cdr (assoc card-type org-drill-card-type-alist))))
         (cond
          (presentation-fn
           (setq cont (funcall presentation-fn)))
          (t
           (error "Unknown card type: '%s'" card-type))))
-      
+
       (cond
        ((not cont)
         (message "Quit")
@@ -964,9 +964,9 @@ Session duration %s
 Recall of reviewed items:
  Excellent (5):     %3d%%   |   Near miss (2):     %3d%%
  Good (4):          %3d%%   |   Failure (1):       %3d%%
- Hard (3):          %3d%%   |   Total failure (0): %3d%% 
+ Hard (3):          %3d%%   |   Total failure (0): %3d%%
 
-Session finished. Press a key to continue..." 
+Session finished. Press a key to continue..."
     (length *org-drill-done-entries*)
     (org-drill-pending-entry-count)
     (propertize

@@ -34,7 +34,7 @@
 
 @c Below we define the following macros for Org key tables:
 
-@c orgkey{key}                        A key item                     
+@c orgkey{key}                        A key item
 @c orgcmd{key,cmd}                    Key with command name
 @c xorgcmd{key,cmmand}                Key with command name as @itemx
 @c orgcmdnki{key,cmd}                 Like orgcmd, but do not index the key
@@ -6295,14 +6295,14 @@ like this:
 @subsubsection Template elements
 
 Now lets look at the elements of a template definition.  Each entry in
-@code{org-capture-templates} is a list with the following items: 
+@code{org-capture-templates} is a list with the following items:
 
 @table @var
 @item keys
 The keys that will select the template, as a string, characters
 only, for example @code{"a"} for a template to be selected with a
 single key, or @code{"bt"} for selection with two keys.  When using
-several keys, keys using the same prefix key must be sequential 
+several keys, keys using the same prefix key must be sequential
 in the list and preceded by a 2-element entry explaining the
 prefix key, for example
 @example
@@ -9960,7 +9960,7 @@ title.  If the tree head entry has or inherits an @code{EXPORT_FILE_NAME}
 property, that name will be used for the export.
 @orgcmd{C-c C-e L,org-export-as-latex-to-buffer}
 Export to a temporary buffer.  Do not create a file.
-@item C-c C-e v l/L 
+@item C-c C-e v l/L
 Export only the visible part of the document.
 @item M-x org-export-region-as-latex
 Convert the region to @LaTeX{} under the assumption that it was Org-mode
@@ -10726,7 +10726,7 @@ variable, called @code{org-publish-project-alist}.  Each element of the list
 configures one project, and may be in one of the two following forms:
 
 @lisp
-   ("project-name" :property value :property value ...) 
+   ("project-name" :property value :property value ...)
      @r{i.e.@: a well-formed property list with alternating keys and values}
 @r{or}
    ("project-name" :components ("project-name" "project-name" ...))
@@ -11226,7 +11226,7 @@ e.g.@:
 
 Org-mode provides a number of features for working with live source code,
 including editing of code blocks in their native major-mode, evaluation of
-code blocks, converting code blocks into source files (known as @dfn{tangling} 
+code blocks, converting code blocks into source files (known as @dfn{tangling}
 in literate programming), and exporting code blocks and their
 results in several formats.  This functionality was contributed by Eric
 Schulte and Dan Davison, and was originally named Org-babel.
@@ -11408,7 +11408,7 @@ Include the code block in the tangled output to file @samp{filename}.
 @kindex  C-c C-v t
 @subsubheading Functions
 @table @code
-@item org-babel-tangle 
+@item org-babel-tangle
 Tangle the current file.  Bound to @kbd{C-c C-v t}.
 @item org-babel-tangle-file
 Choose a file to tangle.   Bound to @kbd{C-c C-v f}.

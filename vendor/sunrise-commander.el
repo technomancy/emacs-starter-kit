@@ -2087,7 +2087,7 @@ automatically:
            (sort-regexp-fields nil "^.*$" "[/.][^/.]+$" beg end))
           ((eq opt ?t)
            (sr-sort-by-operation
-            (lambda (x) (sr-attribute-sort-op 5 t x)) "TIME")) 
+            (lambda (x) (sr-attribute-sort-op 5 t x)) "TIME"))
           ((eq opt ?S)
            (sr-sort-by-operation
             (lambda (x) (sr-attribute-sort-op 7 t x)) "SIZE"))
@@ -3161,7 +3161,7 @@ or (c)ontents? ")
                 (t
                  (setq filter (concat filter (char-to-string next-char)))
                  (if (not (eq next-char sr-fuzzy-negation-character))
-                     (setq next-char (char-to-string next-char)  
+                     (setq next-char (char-to-string next-char)
                            regex (if (string= "" regex) ".*" regex)
                            regex (concat regex (regexp-quote next-char) ".*"))
                    (setq next-char (char-to-string (read-next filter))

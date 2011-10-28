@@ -38,7 +38,7 @@
 (require 'ob-ref)
 
 (defvar org-babel-screen-location "screen"
-  "The command location for screen. 
+  "The command location for screen.
 In case you want to use a different screen than one selected by your $PATH")
 
 (defvar org-babel-default-header-args:screen

@@ -101,7 +101,7 @@ the the Emacs diary"
     (shell-command "sw_vers" (current-buffer))
     (when (re-search-backward "10\\.[56]" nil t)
       (omi-concat-leopard-ics all-calendars)))
-  
+
   ;; move all caldav ics files to the same place as local ics files
   (mapc
    (lambda (x)
@@ -111,7 +111,7 @@ the the Emacs diary"
                      (concat "~/Library/Calendars/" y)))
       (directory-files x nil ".*ics$")))
    caldav-folders)
-  
+
   ;; check calendar has contents and import
   (setq import-calendars (directory-files "~/Library/Calendars" 1 ".*ics$"))
   (mapc
@@ -179,7 +179,7 @@ date range so that Emacs calendar view doesn't grind to a halt"
 	       (and
 		(= yearEntry (+ year 1)) (/= monthEntry 1)))
 	  (delete-region startEntry endEntry))))
-    (while 
+    (while
 	(re-search-forward "^END:VEVENT$" nil t)
       (delete-blank-lines))
     (goto-line 1)

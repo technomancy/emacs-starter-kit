@@ -294,7 +294,7 @@ METHOD may be `cp', `mv', or `ln', default taken from `org-attach-method'."
        ((eq method 'ln) (add-name-to-file file fname)))
       (org-attach-commit)
       (org-attach-tag)
-      (when org-attach-store-link-p 
+      (when org-attach-store-link-p
 	(org-attach-store-link file))
       (if visit-dir
 	  (dired attach-dir)

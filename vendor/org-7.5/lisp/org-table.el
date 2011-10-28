@@ -51,7 +51,7 @@
 (defvar orgtbl-after-send-table-hook nil
   "Hook for functions attaching to `C-c C-c', if the table is sent.
 This can be used to add additional functionality after the table is sent
-to the receiver position, othewise, if table is not sent, the functions 
+to the receiver position, othewise, if table is not sent, the functions
 are not run.")
 
 (defcustom orgtbl-optimized (eq org-enable-table-editor 'optimized)
@@ -534,7 +534,7 @@ property, locally or anywhere up in the hierarchy."
 	 (end (org-table-end))
 	 (txt (buffer-substring-no-properties beg end))
 	 (file (or file (org-entry-get beg "TABLE_EXPORT_FILE" t)))
-	 (format (or format 
+	 (format (or format
 		     (org-entry-get beg "TABLE_EXPORT_FORMAT" t)))
 	 buf deffmt-readable)
     (unless file
@@ -1405,7 +1405,7 @@ first dline below it is used.  When ABOVE is non-nil, the one above is used."
     (org-move-to-column col)
     (unless (or hline1p hline2p
 		(not (or (not org-table-fix-formulas-confirm)
-			 (funcall org-table-fix-formulas-confirm 
+			 (funcall org-table-fix-formulas-confirm
 				  "Fix formulas? "))))
       (org-table-fix-formulas
        "@" (list (cons (number-to-string dline1) (number-to-string dline2))
@@ -2695,7 +2695,7 @@ known that the table will be realigned a little later anyway."
       (setq eqlnum (nreverse eqlnum) eqlname (nreverse eqlname))
       ;; Expand ranges in lhs of formulas
       (setq eqlname (org-table-expand-lhs-ranges eqlname))
-      
+
       ;; Get the correct line range to process
       (if all
 	  (progn
@@ -2727,7 +2727,7 @@ known that the table will be realigned a little later anyway."
 	(when (member name1 seen-fields)
 	      (error "Several field/range formulas try to set %s" name1))
 	(push name1 seen-fields)
-	  
+
 	(and (not a)
 	     (string-match "@\\([0-9]+\\)\\$\\([0-9]+\\)" name)
 	     (setq a (list name
@@ -2744,7 +2744,7 @@ known that the table will be realigned a little later anyway."
 	  (push (append a (list (cdr eq))) eqlname1)
 	  (org-table-put-field-property :org-untouchable t)))
       (setq eqlname1 (nreverse eqlname1))
-      
+
       ;; Now evaluate the column formulas, but skip fields covered by
       ;; field formulas
       (goto-char beg)

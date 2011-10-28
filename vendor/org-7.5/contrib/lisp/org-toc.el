@@ -276,7 +276,7 @@ specified, then make `org-toc-recenter' use this value."
 ;;; Navigation functions:
 (defun org-toc-goto (&optional jump cycle)
   "From Org TOC buffer, follow the targeted subtree in the Org window.
-If JUMP is non-nil, go to the base buffer.  
+If JUMP is non-nil, go to the base buffer.
 If JUMP is 'delete, go to the base buffer and delete other windows.
 If CYCLE is non-nil, cycle the targeted subtree in the Org window."
   (interactive)
@@ -457,15 +457,15 @@ status."
 (defun org-toc-help ()
   "Display a quick help message in the echo-area for `org-toc-mode'."
   (interactive)
-  (let ((st-start 0) 
+  (let ((st-start 0)
 	(help-message
 	 "\[space\]   show heading                     \[1-4\] hide headlines below this level
 \[TAB\]     jump to heading                  \[f\]   toggle follow mode (currently %s)
 \[return\]  jump and delete others windows   \[i\]   toggle info mode (currently %s)
 \[S-TAB\]   cycle subtree (in Org)           \[S\]   toggle show subtree mode (currently %s)
-\[C-S-TAB\] global cycle (in Org)            \[r\]   toggle recenter mode (currently %s)   
+\[C-S-TAB\] global cycle (in Org)            \[r\]   toggle recenter mode (currently %s)
 \[:\]       cycle subtree (in TOC)           \[c\]   toggle column view (currently %s)
-\[n/p\]     next/previous heading            \[s\]   save TOC configuration 
+\[n/p\]     next/previous heading            \[s\]   save TOC configuration
 \[q\]       quit the TOC                     \[g\]   restore last TOC configuration"))
     (while (string-match "\\[[^]]+\\]" help-message st-start)
       (add-text-properties (match-beginning 0)

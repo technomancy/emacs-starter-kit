@@ -5,7 +5,7 @@
 (setq vendor-dir (concat dotfiles-dir "vendor"))
 (add-to-list 'load-path vendor-dir)
 
-(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+(setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
@@ -49,18 +49,18 @@
     (select-frame (make-frame-on-display x-display-name '((window-system . x)))) )
   (let ((last-nonmenu-event nil)(window-system "x"))(save-buffers-kill-emacs)))
 
-(require 'ibuffer) 
+(require 'ibuffer)
 (setq ibuffer-saved-filter-groups
-      (quote (("default"      
+      (quote (("default"
                ("Org" ;; all org-related buffers
-                (mode . org-mode))  
+                (mode . org-mode))
                ("Programming"
                 (or
                  (mode . ruby-mode)
                  (mode . perl-mode)
                  (mode . python-mode)
                  (mode . emacs-lisp-mode)
-                 )) 
+                 ))
                ))))
 
 (add-hook 'ibuffer-mode-hook
@@ -100,8 +100,8 @@
 
 (setq espresso-indent-level 4)
 
-(if (eq window-system 'x) (add-hook 'window-setup-hook 
-          (lambda nil 
+(if (eq window-system 'x) (add-hook 'window-setup-hook
+          (lambda nil
             (set-default-font "Bitstream Vera Sans Mono-14")
             (set-fontset-font (frame-parameter nil 'font)
                               'han '("cwTeXHeiBold" . "unicode-bmp")))
@@ -122,8 +122,8 @@
               (viper-change-state-to-vi)) ; back to normal state
             (viper-modify-major-mode    ; back to dired map
              'dired-mode 'vi-state dired-mode-map))))))
-  
-(when (require 'rainbow-delimiters nil 'noerror) 
+
+(when (require 'rainbow-delimiters nil 'noerror)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 (setq flyspell-issue-welcome-flag nil)

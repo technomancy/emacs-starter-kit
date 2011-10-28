@@ -112,7 +112,7 @@ started as needed)."
   (setq comint-input-sender 'inferior-moz-input-sender)
   (define-key inferior-moz-mode-map "\C-cc" (lambda () (interactive) (insert moz-repl-name ".")))
   (add-hook 'comint-output-filter-functions 'inferior-moz-track-repl-name nil t))
-            
+
 (defun inferior-moz-track-repl-name (comint-output)
   (when (string-match "\\(\\w+\\)> $" comint-output)
     (setq moz-repl-name (match-string 1 comint-output))))
@@ -130,7 +130,7 @@ comint-simple-send, here we *first* concatenate input and
 newline, then send it all together.  This prevents newline to be
 interpreted on its own."
   (comint-send-string proc (concat string "\n")))
-    
+
 (defun inferior-moz-switch-to-mozilla (arg)
   "Show the inferior mozilla buffer.  Start the process if needed."
   (interactive "P")

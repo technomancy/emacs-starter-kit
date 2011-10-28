@@ -179,7 +179,7 @@ looks like tree2, where the level is 2."
         (when (or (not min) (< level min)) (setq min level))
         (when (> level max) (setq max level))))
     (cons (or min 0) max)))
-  
+
 (defun org-invoice-collapse-list (ls)
   "Reorganize the given list by dates."
   (let ((min-max (org-invoice-level-min-max ls)) new)
@@ -212,7 +212,7 @@ looks like tree2, where the level is 2."
                     (+ price (cdr (assoc 'price (car bucket)))))
             (nconc bucket (list info))))))
     (nreverse new)))
-  
+
 (defun org-invoice-info-to-table (info)
   "Create a single org table row from the given info alist."
   (let ((title (cdr (assoc 'title info)))
@@ -221,19 +221,19 @@ looks like tree2, where the level is 2."
         (price (cdr (assoc 'price info)))
         (with-price (plist-get org-invoice-table-params :price)))
     (unless total
-      (setq 
+      (setq
        org-invoice-total-time (+ org-invoice-total-time work)
        org-invoice-total-price (+ org-invoice-total-price price)))
     (setq total (and total (org-minutes-to-hh:mm-string total)))
     (setq work  (and work  (org-minutes-to-hh:mm-string work)))
-    (insert-before-markers 
+    (insert-before-markers
      (concat "|" title
              (cond
               (total (concat "|" total))
               (work  (concat "|" work)))
              (and with-price price (concat "|" (format "%.2f" price)))
              "|" "\n"))))
-  
+
 (defun org-invoice-list-to-table (ls)
   "Convert a list of heading info to an org table"
   (let ((with-price (plist-get org-invoice-table-params :price))
@@ -241,7 +241,7 @@ looks like tree2, where the level is 2."
         (with-header (plist-get org-invoice-table-params :headers))
         (org-invoice-total-time 0)
         (org-invoice-total-price 0))
-    (insert-before-markers 
+    (insert-before-markers
      (concat "| Task / Date | Time" (and with-price "| Price") "|\n"))
     (dolist (info ls)
       (insert-before-markers "|-\n")
@@ -266,9 +266,9 @@ heading that begins the invoice data, usually using the
       (org-clock-sum)
       (run-hook-with-args 'org-invoice-start-hook)
       (cons org-invoice-current-invoice
-            (org-invoice-collapse-list 
+            (org-invoice-collapse-list
              (org-map-entries 'org-invoice-heading-info t 'tree 'archive))))))
-  
+
 (defun org-dblock-write:invoice (params)
   "Function called by OrgMode to write the invoice dblock.  To
 create an invoice dblock you can use the `org-invoice-report'
@@ -395,5 +395,5 @@ I place mine under a third-level heading like so:
     (if report (goto-char report)
       (org-create-dblock (list :name "invoice")))
     (org-update-dblock)))
-  
+
 (provide 'org-invoice)

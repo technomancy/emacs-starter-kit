@@ -35,7 +35,7 @@
 
 ;; - a working scheme implementation
 ;;   (e.g. guile http://www.gnu.org/software/guile/guile.html)
-;;   
+;;
 ;; - for session based evaluation cmuscheme.el is required which is
 ;;   included in Emacs
 

@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 
 ;; Known bugs or limitations:
@@ -35,7 +35,7 @@
 ;;   not well-rendered (for example, *strong *{something}notstrong*)
 ;;
 
-					
+
 
 ;;; Code:
 
@@ -53,16 +53,16 @@
 (defun textile-re-concat (l)
   "Concatenate the elements of a list with a \\| separator and
 non-matching parentheses"
-  (concat 
+  (concat
    "\\(?:"
    (mapconcat 'identity l "\\|")
    "\\)"))
 
 
-(setq textile-attributes 
+(setq textile-attributes
       '("{[^}]*}" "([^)]*)" "\\[[^]]*\\]"))
 
-(setq textile-blocks 
+(setq textile-blocks
       '("^h1" "^h2" "^h3" "^h4" "^h5" "^h6" "^p" "^bq" "^fn[0-9]+" "^#+ " "^\\*+ " "^table"))
 
 (setq textile-inline-markup
@@ -80,11 +80,11 @@ non-matching parentheses"
 
 (defun textile-block-matcher (bloc)
   "Return the matcher regexp for a block element"
-  (concat 
+  (concat
    "^"
-   bloc 
-   (textile-re-concat textile-alignments) "?" 
-   (textile-re-concat textile-attributes) "*" 
+   bloc
+   (textile-re-concat textile-alignments) "?"
+   (textile-re-concat textile-attributes) "*"
    "\\. "
    "\\(\\(?:.\\|\n\\)*?\\)\n\n"))
 
@@ -93,25 +93,25 @@ non-matching parentheses"
   (concat
    (textile-re-concat (append textile-blocks textile-inline-markup))
    (textile-re-concat textile-alignments) "*"
-   (textile-re-concat textile-attributes) "*" 
-   "\\(" attr-start "[^" 
+   (textile-re-concat textile-attributes) "*"
+   "\\(" attr-start "[^"
    (if (string-equal attr-end "\\]") "]" attr-end)
    "]*" attr-end "\\)"))
 
 (defun textile-inline-markup-matcher (markup)
   "Return the matcher regexp for an inline markup"
   (concat
-   "\\W\\(" 
+   "\\W\\("
    markup
    "\\(?:\\w\\|\\w.*?\\w\\|[[{(].*?\\w\\)"
-   markup 
+   markup
    "\\)\\W"))
 
 (defun textile-list-bullet-matcher (bullet)
   "Return the matcher regexp for a list bullet"
   (concat
    "^\\(" bullet "\\)"
-   (textile-re-concat textile-alignments) "*" 
+   (textile-re-concat textile-alignments) "*"
    (textile-re-concat textile-attributes) "*"))
 
 (defun textile-alignments-matcher ()
@@ -123,8 +123,8 @@ non-matching parentheses"
 (defun textile-table-matcher ()
   "Return the matcher regexp for a table row or header"
   (concat
-   "\\(?:" 
-   "^table" (textile-re-concat textile-table-alignments) "*" (textile-re-concat textile-attributes) "*" "\\. *$" 
+   "\\(?:"
+   "^table" (textile-re-concat textile-table-alignments) "*" (textile-re-concat textile-attributes) "*" "\\. *$"
    "\\|"
    "^" (textile-re-concat textile-table-alignments) "*" (textile-re-concat textile-attributes) "*" "\\(?:\\. *|\\)"
    "\\|"
@@ -162,7 +162,7 @@ non-matching parentheses"
        `(,(textile-block-matcher "h1") 1 'textile-h1-face t t)
        `(,(textile-block-matcher "h2") 1 'textile-h2-face t t)
        `(,(textile-block-matcher "h3") 1 'textile-h3-face t t)
-       `(,(textile-block-matcher "h4") 1 'textile-h4-face t t) 
+       `(,(textile-block-matcher "h4") 1 'textile-h4-face t t)
        `(,(textile-block-matcher "h5") 1 'textile-h5-face t t)
        `(,(textile-block-matcher "h6") 1 'textile-h6-face t t)
        ;; blockquotes
@@ -177,11 +177,11 @@ non-matching parentheses"
        ;; emphasis
        `(,(textile-inline-markup-matcher "__") 1 'textile-emph-face prepend t)
        `(,(textile-inline-markup-matcher "_") 1 'textile-emph-face prepend t)
-       '("<em>\\(.\\|\n\\)*?</em>" 0 'textile-emph-face prepend t) 
+       '("<em>\\(.\\|\n\\)*?</em>" 0 'textile-emph-face prepend t)
        ;; strength
        `(,(textile-inline-markup-matcher "\\*\\*") 1 'textile-strong-face prepend t)
        `(,(textile-inline-markup-matcher "\\*") 1 'textile-strong-face prepend t)
-       '("<strong>\\(.\\|\n\\)*?</strong>" 0 'textile-strong-face prepend t) 
+       '("<strong>\\(.\\|\n\\)*?</strong>" 0 'textile-strong-face prepend t)
        ;; citation
        `(,(textile-inline-markup-matcher "\\?\\?") 1 'textile-citation-face prepend t)
        ;; code
@@ -201,9 +201,9 @@ non-matching parentheses"
        `(,(textile-image-matcher) 0 'textile-image-face t t)
 
        ;; ordered list bullet
-       `(,(textile-list-bullet-matcher "#+") 1 'textile-ol-bullet-face)       
+       `(,(textile-list-bullet-matcher "#+") 1 'textile-ol-bullet-face)
        ;; unordered list bullet
-       `(,(textile-list-bullet-matcher "\\*+") 1 'textile-ul-bullet-face) 
+       `(,(textile-list-bullet-matcher "\\*+") 1 'textile-ul-bullet-face)
 
        ;; style
        `(,(textile-attribute-matcher "{" "}") 1 'textile-style-face t t)
@@ -222,7 +222,7 @@ non-matching parentheses"
        `(,(textile-link-matcher) 0 'textile-link-face t t)
 
         ;; <pre> blocks
-       '("<pre>\\(.\\|\n\\)*?</pre>" 0 'textile-pre-face t t) 
+       '("<pre>\\(.\\|\n\\)*?</pre>" 0 'textile-pre-face t t)
        ;; <code> blocks
        '("<code>\\(.\\|\n\\)*?</code>" 0 'textile-code-face t t))
       "Keywords/Regexp for fontlocking of textile-mode")

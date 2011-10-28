@@ -41,13 +41,13 @@
 ;;
 ;; you might want to bind this to a key with something like the
 ;; following message-mode binding
-;; 
+;;
 ;;   (add-hook 'message-mode-hook
 ;;             (lambda ()
 ;;               (local-set-key "\C-c\M-o" 'org-mime-htmlize)))
 ;;
 ;; and the following org-mode binding
-;; 
+;;
 ;;   (add-hook 'org-mode-hook
 ;;             (lambda ()
 ;;               (local-set-key "\C-c\M-o" 'org-mime-org-buffer-htmlize)))

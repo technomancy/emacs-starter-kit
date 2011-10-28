@@ -86,7 +86,7 @@ org-static-mathjax-options:      The string given with #+STATICMATHJAX: in the f
 						 (set 'org-static-mathjax-mathjax-path
 							  (car (read-from-string
 									(substring mathjax-options (match-end 0))))))))
-			   (add-hook 'after-save-hook 
+			   (add-hook 'after-save-hook
 						 'org-static-mathjax-process
 						 nil t)))))
 
@@ -117,20 +117,20 @@ org-static-mathjax-options:      The string given with #+STATICMATHJAX: in the f
 			 (set symbol (eval (car (read-from-string
 									 (substring options (match-end 0))))))))
 	   '(embed-fonts output-file-name))
-	  
+
 	  ; debug
 	  (when org-static-mathjax-debug
 		(message "output file name, embed-fonts")
 		(print output-file-name)
 		(print embed-fonts))
-	  
+
 	  ; open (temporary) input file, copy contents there, replace MathJax path with local installation
 	  (with-temp-buffer
 		(insert html-code)
 		(goto-char 1)
 		(replace-regexp mathjax-oldpath mathjax-newpath)
 		(write-file input-file-name))
-	  
+
 	  ; prepare argument list for call-process
 	  (let ((call-process-args (list org-static-mathjax-xulrunner-path
 									 nil nil nil
@@ -146,10 +146,10 @@ org-static-mathjax-options:      The string given with #+STATICMATHJAX: in the f
 		(if (not embed-fonts)
 			(progn
 			  (add-to-list 'call-process-args "--final-mathjax-url" t)
-			  (add-to-list 'call-process-args 
+			  (add-to-list 'call-process-args
 						   (file-name-directory org-static-mathjax-mathjax-path)
 						   t)))
-		
+
 		; debug
 		(when org-static-mathjax-debug
 		  (print call-process-args))
