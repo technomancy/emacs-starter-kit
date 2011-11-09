@@ -64,6 +64,7 @@
   (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
   (global-set-key (kbd "C-M-s") 'isearch-forward)
   (global-set-key (kbd "C-M-r") 'isearch-backward)
+  (global-set-key (kbd "M-%") 'query-replace-regexp)
 
   ;; Jump to a definition in the current file. (Protip: this is awesome.)
   (global-set-key (kbd "C-x C-i") 'imenu)
