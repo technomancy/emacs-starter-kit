@@ -53,6 +53,19 @@ Other modules are also available:
 
 These modules are installed separately from the base Starter Kit package.
 
+If you are going to use starter-kit-ruby, you'll need to add
+tromey.com as a package source as well as Marmalade. starter-kit-ruby
+depends on packages that exist on tromey.com, but not on Marmalade.
+
+```Lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives
+             '("tromey" . "http://tromey.com/elpa/") t)
+(package-initialize)
+```
+
 It's recommended to create a list of packages in init.el which will be
 installed if they are found to not be present:
 
