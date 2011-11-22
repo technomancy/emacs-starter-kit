@@ -22,6 +22,7 @@
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.feature$" . ruby-mode))
 
 ;; We never want to edit Rubinius bytecode or MacRuby binaries
 (add-to-list 'completion-ignored-extensions ".rbc")
