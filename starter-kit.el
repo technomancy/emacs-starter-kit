@@ -48,8 +48,12 @@
 
   ;; You can keep system- or user-specific customizations here
   (setq esk-system-config (concat user-emacs-directory system-name ".el")
+        esk-system-dir (concat user-emacs-directory system-name)
         esk-user-config (concat user-emacs-directory user-login-name ".el")
         esk-user-dir (concat user-emacs-directory user-login-name))
+
+  (add-to-list 'load-path esk-system-dir)
+  (add-to-list 'load-path esk-user-dir)
 
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
@@ -67,6 +71,8 @@
   (esk-eval-after-init
    '(progn
       (when (file-exists-p esk-system-config) (load esk-system-config))
+      (when (file-exists-p esk-system-dir)
+        (mapc 'load (directory-files esk-system-dir nil "^[^#].*el$")))
       (when (file-exists-p esk-user-config) (load esk-user-config))
       (when (file-exists-p esk-user-dir)
         (mapc 'load (directory-files esk-user-dir nil "^[^#].*el$"))))))
