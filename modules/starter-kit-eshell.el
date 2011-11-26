@@ -84,6 +84,23 @@
     "Use Emacs grep facility instead of calling external grep."
     (eshell-grep "rgrep" args t)))
 
+(defun eshell/extract (file)
+  (let ((command (some (lambda (x)
+                         (if (string-match-p (car x) file)
+                             (cadr x)))
+                       '((".*\.tar.bz2" "tar xjf")
+                         (".*\.tar.gz" "tar xzf")
+                         (".*\.bz2" "bunzip2")
+                         (".*\.rar" "unrar x")
+                         (".*\.gz" "gunzip")
+                         (".*\.tar" "tar xf")
+                         (".*\.tbz2" "tar xjf")
+                         (".*\.tgz" "tar xzf")
+                         (".*\.zip" "unzip")
+                         (".*\.Z" "uncompress")
+                         (".*" "echo 'Could not extract the file:'")))))
+    (eshell-command-result (concat command " " file))))
+
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
 ;; * cloning git repos, github repos
