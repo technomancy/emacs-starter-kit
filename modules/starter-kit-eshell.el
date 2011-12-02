@@ -101,6 +101,21 @@
                          (".*" "echo 'Could not extract the file:'")))))
     (eshell-command-result (concat command " " file))))
 
+(defface esk-eshell-error-prompt-face
+  '((((class color) (background dark)) (:foreground "red" :bold t))
+    (((class color) (background light)) (:foreground "red" :bold t)))
+  "Face for nonzero prompt results"
+  :group 'eshell-prompt)
+
+(add-hook 'eshell-after-prompt-hook
+          (defun esk-eshell-exit-code-prompt-face ()
+            (when (and eshell-last-command-status
+                       (not (zerop eshell-last-command-status)))
+              (let ((inhibit-read-only t))
+                (add-text-properties
+                 (save-excursion (beginning-of-line) (point)) (point-max)
+                 '(face esk-eshell-error-prompt-face))))))
+
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
 ;; * cloning git repos, github repos
