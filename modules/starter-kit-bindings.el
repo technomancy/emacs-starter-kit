@@ -91,7 +91,7 @@
   (global-set-key (kbd "C-c x") 'execute-extended-command)
 
   ;; Help should search more than just commands
-  (global-set-key (kbd "C-h a") 'apropos)
+  (define-key 'help-command "a" 'apropos)
 
   ;; Should be able to eval-and-replace anywhere.
   (global-set-key (kbd "C-c e") 'esk-eval-and-replace)
