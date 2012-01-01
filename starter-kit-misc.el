@@ -56,9 +56,9 @@
       whitespace-style '(face trailing lines-tail tabs)
       whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
-      oddmuse-directory "~/.emacs.d/oddmuse"
-      save-place-file "~/.emacs.d/places"
-      backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
+      oddmuse-directory (concat user-emacs-directory "oddmuse")
+      save-place-file (concat user-emacs-directory "places")
+      backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       diff-switches "-u")
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
