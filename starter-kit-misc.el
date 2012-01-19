@@ -93,7 +93,7 @@
 (defvar ffap-c-commment-regexp "^/\\*+"
   "Matches an opening C-style comment, like \"/***\".")
 
-(defadvice ffap-guesser (after avoid-c-comments activate)
+(defadvice ffap-file-at-point (after avoid-c-comments activate)
   "Don't return paths like \"/******\" unless they actually exist.
 
 This fixes the bug where ido would try to suggest a C-style
