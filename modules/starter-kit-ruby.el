@@ -18,8 +18,6 @@
 
 ;; This file contains tweaks specific to Ruby.
 
-;; This file is in need of a maintainer.
-
 ;;; License:
 
 ;; This program is free software; you can redistribute it and/or
