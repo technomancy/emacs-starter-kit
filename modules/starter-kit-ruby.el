@@ -1,6 +1,6 @@
 ;;; starter-kit-ruby.el --- Saner defaults and goodies for Ruby
 ;;
-;; Copyright (c) 2008-2010 Phil Hagelberg and contributors
+;; Copyright (c) 2008-2012 Phil Hagelberg and contributors
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
