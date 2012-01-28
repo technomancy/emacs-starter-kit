@@ -48,7 +48,7 @@
        (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
        (define-key ruby-mode-map (kbd "C-M-h") 'backward-kill-word)))
 
-  (global-set-key (kbd "C-h S-r") 'ri)
+  (define-key 'help-command (kbd "S-r") 'ri)
 
   ;; Rake files are ruby, too, as are gemspecs, rackup files, etc.
   (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
