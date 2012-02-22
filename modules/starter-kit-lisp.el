@@ -83,10 +83,11 @@
               'esk-turn-on-paredit))
 
   (defun esk-pretty-fn ()
-    (font-lock-add-keywords nil `(("(\\(fn\\>\\)"
+    (font-lock-add-keywords nil `(("(\\(\\<fn\\>\\)"
                                    (0 (progn (compose-region (match-beginning 1)
                                                              (match-end 1)
-                                                             "\u0192") nil))))))
+                                                             "\u0192"
+                                                             'decompose-region)))))))
   (add-hook 'clojure-mode-hook 'esk-pretty-fn)
   (add-hook 'clojurescript-mode-hook 'esk-pretty-fn))
 
