@@ -51,8 +51,6 @@
         esk-user-config (concat user-emacs-directory user-login-name ".el")
         esk-user-dir (concat user-emacs-directory user-login-name))
 
-  (add-to-list 'load-path esk-user-dir)
-
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
