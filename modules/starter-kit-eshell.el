@@ -116,6 +116,34 @@
                  (save-excursion (beginning-of-line) (point)) (point-max)
                  '(face esk-eshell-error-prompt-face))))))
 
+(defun esk-eshell-in-dir (&optional prompt)
+  "Change the directory of an existing eshell to the directory of the file in
+  the current buffer or launch a new eshell if one isn't running.  If the
+  current buffer does not have a file (e.g., a *scratch* buffer) launch or raise
+  eshell, as appropriate.  Given a prefix arg, prompt for the destination
+  directory."
+  (interactive "P")
+  (let* ((name (buffer-file-name))
+         (dir (cond (prompt (read-directory-name "Directory: " nil nil t))
+                    (name (file-name-directory name))
+                    (t nil)))
+         (buffers (delq nil (mapcar (lambda (buf)
+                                      (with-current-buffer buf
+                                        (when (eq 'eshell-mode major-mode)
+                                          (buffer-name))))
+                                    (buffer-list))))
+         (buffer (cond ((eq 1 (length buffers)) (first buffers))
+                       ((< 1 (length buffers)) (ido-completing-read
+                                                "Eshell buffer: " buffers nil t
+                                                nil nil (first buffers)))
+                       (t (eshell)))))
+    (with-current-buffer buffer
+      (when dir
+        (eshell/cd (list dir))
+        (eshell-send-input))
+      (end-of-buffer)
+      (pop-to-buffer buffer))))
+
 ;; Port features from
 ;; http://blog.peepcode.com/tutorials/2009/shell-method-missing/shell_method_missing.rb
 ;; * cloning git repos, github repos
