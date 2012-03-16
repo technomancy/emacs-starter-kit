@@ -23,7 +23,7 @@ compile [from source](http://github.com/emacsmirror/emacs), but
 precompiled versions are readily available for
 [Debian-based systems](http://emacs.naquadah.org/),
 [Mac OS X](http://emacsformacosx.com/builds), and
-[Windows](http://code.google.com/p/emacs-for-windows/updates/list).
+[Windows](http://code.google.com/p/emacs-for-windows/downloads/list).
 
 If you need to maintain compatibility with Emacs 23 or 22, you need to
 use [version 1](https://github.com/technomancy/emacs-starter-kit/tree/master).
