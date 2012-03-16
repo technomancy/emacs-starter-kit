@@ -35,9 +35,10 @@ Add Marmalade as a package archive source in ~/.emacs.d/init.el:
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
-````
+```
 
-Then you can install it:
+Evaluate that code by hitting `M-x eval-buffer` in init.el, then you
+can install it:
 
     M-x package-refresh-contents
     M-x package-install RET starter-kit RET
