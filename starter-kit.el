@@ -56,7 +56,7 @@
   (global-set-key (kbd "M-x") 'smex)
 
   (defun esk-eval-after-init (form)
-    "Add `(lambda () FORM)' to `after-init-hook'. 
+    "Add `(lambda () FORM)' to `after-init-hook'.
 
     If Emacs has already finished initialization, also eval FORM immediately."
     (let ((func (list 'lambda nil form)))
@@ -64,8 +64,8 @@
       (when after-init-time
         (eval form))))
 
-  (esk-eval-after-init 
-   '(progn 
+  (esk-eval-after-init
+   '(progn
       (when (file-exists-p esk-system-config) (load esk-system-config))
       (when (file-exists-p esk-user-config) (load esk-user-config))
       (when (file-exists-p esk-user-dir)
