@@ -68,6 +68,21 @@
   "Change directory to the project's root."
   (eshell/cd (locate-dominating-file default-directory "src")))
 
+;;;###autoload
+(defun eshell/cds ()
+  "Change directory to the project's root."
+  (eshell/cd (locate-dominating-file default-directory "src")))
+
+;;;###autoload
+(defun eshell/cdl ()
+  "Change directory to the project's root."
+  (eshell/cd (locate-dominating-file default-directory "lib")))
+
+;;;###autoload
+(defun eshell/cdg ()
+  "Change directory to the project's root."
+  (eshell/cd (locate-dominating-file default-directory ".git")))
+
 ;; these two haven't made it upstream yet
 ;;;###autoload
 (when (not (functionp 'eshell/find))
@@ -84,6 +99,7 @@
     "Use Emacs grep facility instead of calling external grep."
     (eshell-grep "rgrep" args t)))
 
+;;;###autoload
 (defun eshell/extract (file)
   (let ((command (some (lambda (x)
                          (if (string-match-p (car x) file)
