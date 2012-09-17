@@ -177,7 +177,7 @@ Symbols matching the text at point are put first in the completion list."
   (load autoload-file))
 
 (defun sudo-edit (&optional arg)
-  (interactive "p")
+  (interactive "P")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
