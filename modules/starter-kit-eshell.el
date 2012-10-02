@@ -4,7 +4,7 @@
 ;;
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/StarterKit
-;; Version: 2.0.2
+;; Version: 2.0.3
 ;; Keywords: convenience
 
 ;; This file is not part of GNU Emacs.
