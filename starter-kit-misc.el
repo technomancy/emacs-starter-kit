@@ -110,7 +110,14 @@ comment as a filename."
 (set-default 'imenu-auto-rescan t)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'text-mode-hook 'turn-on-flyspell)
+;; (when (executable-find ispell-program-name) 
+;;       (add-hook 'text-mode-hook 'turn-on-flyspell))
+
+(eval-after-load "ispell"
+  '(when (executable-find ispell-program-name)
+   (add-hook 'text-mode-hook 'turn-on-flyspell)))
+
+
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'auto-tail-revert-mode 'tail-mode)
