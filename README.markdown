@@ -17,7 +17,7 @@ screencast](http://peepcode.com/products/meet-emacs) helpful. The
 [Emacs Wiki](http://emacswiki.org) is also very handy.
 
 ## Installation
-
+### Install via ELPA
 You'll need Emacs 24, which comes with package.el. It's not hard to
 compile [from source](http://github.com/emacsmirror/emacs), but
 precompiled versions are readily available for
@@ -82,6 +82,31 @@ used as your own personal .emacs.d directory, but it's been
 restructured so that it can be treated like any other package, freeing
 you up to structure your .emacs.d directory as you wish. See
 "Upgrading" below.
+
+### Install from Git
+
+If you want to keep up with the bleeding edge, you can install the
+packages from github.
+
+```Sh
+git clone https://github.com/technomancy/emacs-starter-kit.git ~/.emacs.d/emacs-starter-kit
+```
+
+And add to your ~/.emacs.d/init.el
+```Lisp
+(add-to-list 'load-path "~/.emacs.d/emacs-starter-kit/")
+(add-to-list 'load-path "~/.emacs.d/emacs-starter-kit/modules/")
+(require 'starter-kit)
+(require 'starter-kit-lisp)
+(require 'starter-kit-eshell)
+(require 'starter-kit-bindings) 
+(require 'starter-kit-js)
+(require 'starter-kit-ruby)
+(require 'starter-kit-perl)
+```
+
+You will need to delete starter-kit packages from ELPA if you have
+previously installed them.
 
 ## FAQ
 
