@@ -76,7 +76,7 @@
       (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
                               '(("(\\|)" . 'esk-paren-face))))
     (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-              'paredit-mode))
+              'smartparens-mode))
 
   (defun esk-pretty-fn ()
     (font-lock-add-keywords nil `(("(\\(\\<fn\\>\\)"
