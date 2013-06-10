@@ -79,7 +79,7 @@
 
 ;; ido-mode is like magic pixie dust!
 (ido-mode t)
-(ido-ubiquitous t)
+(ido-ubiquitous-mode)
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
       ido-auto-merge-work-directories-length nil
@@ -110,7 +110,7 @@ comment as a filename."
 (set-default 'imenu-auto-rescan t)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-;; (when (executable-find ispell-program-name) 
+;; (when (executable-find ispell-program-name)
 ;;       (add-hook 'text-mode-hook 'turn-on-flyspell))
 
 (eval-after-load "ispell"
@@ -129,7 +129,7 @@ comment as a filename."
   '(progn
      (dolist (f '(try-expand-line try-expand-list try-complete-file-name-partially))
        (delete f hippie-expand-try-functions-list))
-     
+
      ;; Add this back in at the end of the list.
      (add-to-list 'hippie-expand-try-functions-list 'try-complete-file-name-partially t)))
 
