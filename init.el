@@ -76,4 +76,61 @@
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 (if (file-exists-p user-specific-config) (load user-specific-config))
 
+;; nikhiltri's custom options
+(menu-bar-mode 0)
+
+(add-to-list 'auto-mode-alist '("\\.info" . conf-windows-mode))
+
+(setq auto-mode-alist
+  (cons '("\\.\\(php\\|inc\\|conf\\|module\\|test\\|install\\|theme\\)\\w?" . php-mode) auto-mode-alist))
+(autoload 'php-mode "php-mode" "PHP mode." t)
+
+;; Set indents width to two spaces, and don't use the tab character
+(setq c-basic-offset 2)
+(setq default-tab-width 2)
+(setq-default indent-tabs-mode nil)
+
+;; Enable scrolling with the mouse
+(require 'mouse)
+(xterm-mouse-mode t)
+(defun track-mouse (e))
+(require 'mwheel)
+(mwheel-install)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil) 
+
+;; Highlight current line
+(global-hl-line-mode 1)
+(set-face-foreground 'highlight nil)
+(set-face-background 'highlight "#333333")
+
+;; Make the cursor a bar
+;(set-default 'cursor-type 'box)
+;(setq-default cursor-type 'box) 
+;(setq cursor-type 'box)
+(setq-default cursor-type 'bar)
+
+;; Show column-number in the mode line
+;(column-number-mode 1)
+
+(global-visual-line-mode 1)      ; Wrap text nicely
+(setq search-highlight t)        ; Highlight search object
+
+;; Show line-number in a left column buffer
+(global-linum-mode 1)
+(setq linum-format "%d  ")
+
+;; Indent arrays nicely 
+(add-hook 'php-mode-hook (lambda ()
+    (defun ywb-php-lineup-arglist-intro (langelem)
+      (save-excursion
+        (goto-char (cdr langelem))
+        (vector (+ (current-column) c-basic-offset))))
+    (defun ywb-php-lineup-arglist-close (langelem)
+      (save-excursion
+        (goto-char (cdr langelem))
+        (vector (current-column))))
+    (c-set-offset 'arglist-intro 'ywb-php-lineup-arglist-intro)
+    (c-set-offset 'arglist-close 'ywb-php-lineup-arglist-close)))
+
 ;;; init.el ends here
