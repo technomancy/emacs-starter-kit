@@ -31,7 +31,7 @@ TODO: more to write here, but the place to start is with the
 
 ## Copyright
 
-Copyright © 2008-2013 Phil Hagelberg and contributors
+Copyright © 2008-2014 Phil Hagelberg and contributors
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
