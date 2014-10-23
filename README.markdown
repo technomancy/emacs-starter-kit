@@ -26,12 +26,45 @@ personal journey for which you must take the first steps.
 
 ## Getting Started
 
-TODO: more to write here, but the place to start is with the
+If you do nothing else, start by adding
+[Marmalade](https://marmalade-repo.org/) to your packages list and
+installing the
 [better-defaults package](https://github.com/technomancy/better-defaults).
+Place this in your `~/.emacs.d/init.el` file:
+
+```lisp
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+```
+
+Evaluate it with `M-x eval-buffer` and run `M-x package-install [RET] better-defaults`.
+
+### If you liked ... you might also like
+
+These are all libraries that focus on doing one thing and do it consistently well.
+
+* [magit](http://magit.github.io/) use git without being driven insane.
+* [smex](https://github.com/nonsequitur/smex) for getting ido-style feedback in M-x.
+* [ido-ubiquitous](https://github.com/DarwinAwardWinner/ido-ubiquitous) for geting ido goodness everywhere else.
+* [paredit](http://www.emacswiki.org/emacs/ParEdit) keeps parentheses under control.
+* [idle-highlight-mode](https://github.com/nonsequitur/idle-highlight-mode) for seeing everywhere else an identifier is used at a glance.
+* [find-file-in-project](https://github.com/technomancy/find-file-in-project) quick project-scoped navigation
+* [scpaste](http://p.hagelb.org) the pastebin of champions.
+
+You can drop some code into `init.el` to install these automatically when they are missing:
+
+```lisp
+(defvar my-packages '(better-defaults paredit idle-highlight-mode ido-ubiquitous
+                                      find-file-in-project magit smex scpaste))
+
+(package-initialize)
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+```
 
 ## Copyright
 
-Copyright © 2008-2013 Phil Hagelberg and contributors
+Copyright © 2008-2014 Phil Hagelberg and contributors
 
 Files are licensed under the same license as Emacs unless otherwise
 specified. See the file COPYING for details.
