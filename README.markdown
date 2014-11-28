@@ -33,6 +33,7 @@ installing the
 Place this in your `~/.emacs.d/init.el` file:
 
 ```lisp
+(require 'package)
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 ```
 
