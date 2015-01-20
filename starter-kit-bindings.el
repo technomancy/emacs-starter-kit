@@ -75,7 +75,7 @@
 
 ;; This is a little hacky since VC doesn't support git add internally
 (eval-after-load 'vc
-  (define-key vc-prefix-map "i" '(lambda () (interactive)
+  '(define-key vc-prefix-map "i" '(lambda () (interactive)
                                    (if (not (eq 'Git (vc-backend buffer-file-name)))
                                        (vc-register)
                                      (shell-command (format "git add %s" buffer-file-name))
