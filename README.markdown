@@ -43,7 +43,7 @@ Evaluate it with `M-x eval-buffer` and run `M-x package-install [RET] better-def
 
 These are all libraries that focus on doing one thing and do it consistently well.
 
-* [magit](http://magit.github.io/) use git without being driven insane.
+* [magit](https://magit.vc) use git without being driven insane.
 * [smex](https://github.com/nonsequitur/smex) for getting ido-style feedback in M-x.
 * [ido-ubiquitous](https://github.com/DarwinAwardWinner/ido-ubiquitous) for geting ido goodness everywhere else.
 * [paredit](http://www.emacswiki.org/emacs/ParEdit) keeps parentheses under control.
