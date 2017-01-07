@@ -1,0 +1,5 @@
+#-*- require-final-newline: nil -*-
+#contributor: ge.iams@gmail.com
+#name : name: has_and_belongs_to_many
+# --
+`(if (string-match ".+_spec.+rb$" (file-name-nondirectory (buffer-file-name))) "have_and_belong_to_many(:${1:assoc})" "has_and_belongs_to_many :${1:assoc}")`

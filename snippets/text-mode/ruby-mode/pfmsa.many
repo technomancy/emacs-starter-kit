@@ -1,0 +1,8 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#name : flexmock partial mock, safe w/multiple line block
+# --
+${1:var} = flexmock(:safe, ${2:real_object}) do |mock|
+             mock.should_receive(${3:meth})
+             $0
+           end

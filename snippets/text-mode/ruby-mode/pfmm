@@ -1,0 +1,6 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#name : flexmock partial mock w/methods
+# --
+${1:var} = flexmock(${2:real_object}, :${3:meth} => ${4:value})
+$0

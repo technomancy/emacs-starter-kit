@@ -1,0 +1,6 @@
+[submodule "snippets/contrib/yasnippets-rspec"]
+	path = snippets/contrib/yasnippets-rspec
+	url = git://github.com/gary/yasnippets-rspec.git
+[submodule "snippets/contrib/yasnippets-rails"]
+	path = snippets/contrib/yasnippets-rails
+	url = git://github.com/gary/yasnippets-rails.git
