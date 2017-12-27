@@ -51,7 +51,7 @@ work on share the same versions.
 (when (not (file-exists-p (concat user-emacs-directory "my-autoload.el")))
   (pnh-reinit-libs))
 
-(load (concat user-emacs-directory "my-autoload.el")))
+(load (concat user-emacs-directory "my-autoload.el"))
 ```
 
 ### If you liked ... you might also like
